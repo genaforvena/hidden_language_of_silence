@@ -1,86 +1,28 @@
-# The Silent Language Protocol (Minimal Spec)
+## The Silent Language System Spec
 
-## Overview:
-This protocol describes a minimal symbolic language designed explicitly for encoding word lengths from natural language sentences. The encoding contains no semantic, lexical, or grammatical information. Interpretation (decoding) is deliberately open-ended and context-dependent.
+### Protocol
 
----
+**Encoding (Writer):**
+- Each word is represented by a repeated sequence of a single non-linguistic symbol.
+- The symbol is chosen freely by the writer for each word; it can differ every time.
+- The number of repetitions equals the length of the word.
+- No restrictions on the choice of symbol other than that it cannot be part of an existing linguistic system.
+- Example: The sentence “silent languages fail” can become:
+```
+◆◆◆◆◆◆ ✦✦✦✦✦✦✦✦ ➤➤➤➤
+```
+or:
+```
+◼◼◼◼◼◼◼ ✖✖✖✖✖✖✖✖ ✿✿✿✿
+```
+Both are valid encodings.
 
-## Encoding Rules:
+**Decoding (Reader):**
+- Decoding relies on counting the length of each cluster.
+- The choice of symbol carries zero interpretative weight.
+- The reader generates coherent text by matching each cluster’s length with words, guided only by length and local coherence.
+- Reader systems may be language models, humans, or any generative mechanism.
 
-- **Symbol Definition:**
-  - Each word is encoded as a cluster of identical symbols. (Recommended default: ◼)
-  
-- **Word Encoding:**
-  - Words are represented by repeated symbols equal to their character length:
-    - Example: "dog" → ◼◼◼
-
-- **Sentence Encoding:**
-  - Spaces separate encoded words:
-    - Example sentence: "the quick fox"
-    - Encoded: ◼◼◼ ◼◼◼◼◼ ◼◼◼
-
-- **Punctuation and Special Characters:**
-  - Explicitly omitted from encoding by default.
-  - Optional: May encode punctuation as isolated symbols (e.g., punctuation → ◆).
-
-- **Capitalisation and Formatting:**
-  - Explicitly not encoded.
-
----
-
-## Decoding Rules (Constraints for Readers):
-
-- **Word-Length Constraint:**
-  - Decoded word must strictly match encoded length.
-
-- **Local Coherence Constraint:**
-  - Decoded word must fit coherently within immediate surrounding context (explicitly subjective).
-
-- **Global Coherence:**
-  - Explicitly secondary and non-essential.
-
-- **Diversity Encouraged:**
-  - Readers explicitly encouraged to maximise vocabulary diversity within constraints.
-
----
-
-## Implementation Guidelines:
-
-- **Open-ended Implementation:**
-  - Any capable model or reader (LLM, human, or algorithmic) may implement decoding.
-
-- **Prompt Recommendation for LLMs:**
-  ```
-  You will read sequences of symbols representing word lengths. Each word's length matches exactly the number of symbols.
-
-  Example:
-  ◼◼◼ ◼◼◼◼ ◼◼◼◼◼
-  "the moon rises"
-
-  Decode the following sequence. Prioritise local coherence. Maximise vocabulary diversity.
-  ```
-
----
-
-## Recommended Applications:
-
-- Generative reading interfaces
-- Interpretive installations
-- Experimental literary and linguistic research
-
----
-
-## Extensibility:
-
-- **Optional Extensions:**
-  - Private keys (interpretative conventions)
-  - Structural ambiguities or irregularities
-
----
-
-## Status:
-
-- Minimal and open specification explicitly designed for experimentation, diversity, and creative interpretation.
-- Protocol stability is ensured by strict encoding rules.
-- Interpretative freedom explicitly encouraged at decoding stage.
-
+**Re-encoding cycle:**
+- The resulting reading can be encoded again into a fresh symbolic form by a writer.
+- No stability or repetition of symbols is required.
