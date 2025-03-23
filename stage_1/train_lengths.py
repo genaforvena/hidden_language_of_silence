@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, Training
 with open("dataset.json", "r") as f:
     data = json.load(f)["examples"]
 
-inputs = [" ".join(map(str, item["lengths"])) for item in data]
+inputs = ["translate lengths to sentence: " + " ".join(map(str, item["lengths"])) for item in data]
 targets = [item["text"] for item in data]
 
 dataset = Dataset.from_dict({"input": inputs, "target": targets})
