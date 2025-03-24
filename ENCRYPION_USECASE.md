@@ -18,29 +18,39 @@ The Silent Language protocol encodes text as arbitrary non-linguistic symbols re
    - Word position within the sentence modifies interpretation (e.g., every third word’s interpretation comes from a reversed alphabetical index).
 4. **Synonym Indexing**:
    - Agree to always pick the second or third synonym from a particular thesaurus for each cluster.
+5. **Interpretive Key as Instruction Transmission**:
+   - The encoded line can transmit not a message but instructions on how to read external existing material.
+   - This creates an interpretive cipher: the structure points the reader to extract meaning from agreed-upon external sources.
 
 ## Advantages Over Traditional Cryptography
 - High plausibility of being dismissed as art or generative play.
 - No obvious ciphertext or noise patterns.
 - Interpretive variability makes interception and decoding by outsiders effectively impossible.
 - Easy to vary protocols by changing symbol sets and interpretive agreements.
+- Instructions can point to shifting external references, making the system dynamic.
 
 ## LLM Involvement
-- The reader process can be handed off to an LLM fed with a structured prompt and the agreed interpretation rules.
+- The reader process can be handed off to an LLM fed with a structured prompt and agreed interpretation rules.
 - Outsiders using the same LLM without the secret prompt will generate meaningless or divergent readings.
-- This adds a dynamic layer of security: interpretive instructions are part of the private key.
+- Interpretive instructions can be given inside prompts, allowing covert communication without explicit cipher text.
+
+## No Strict Rules Principle
+- While there are various protocol suggestions, secure communication does not depend on strict adherence to them.
+- Writers and readers can improvise, distort, or abandon structure as long as both sides understand the deviation.
+- The entire system is fluid: security emerges from shared interpretive context, not rigid formulas.
+- The absence of strict rules increases plausible deniability and creative unpredictability.
 
 ## Risks
 - If the interpretive key is leaked, all encoded messages are compromised.
 - Sophisticated observers might detect patterns if the same key is used too frequently.
-- Excessively strict structural repetition might attract attention in formal communication channels.
+- Excessively uniform repetition or visible systematisation could attract scrutiny.
 
 ## Best Practices
 - Change interpretation keys regularly.
-- Use varied symbols and randomised positions.
-- Never rely on symbol repetition patterns alone; always pair with contextual interpretive keys.
-- Use decoy readings and public-facing explanations to strengthen deniability.
+- Vary symbol choices and lengths creatively.
+- Use decoy structures and public-facing artistic explanations.
+- Build layers of ambiguity that confuse any potential interceptors.
 
 ## Conclusion
-The Silent Language system, though not a novel cryptographic method in theory, reframes covert communication in aesthetic, deniable structures. It allows secret exchanges hidden in plain sight, readable only through mutually agreed interpretive protocols. In the context of LLMs and generative readers, it becomes both a steganographic tool and a demonstration of interpretive fragility.
+The Silent Language system, while not introducing new cryptographic primitives, reframes secure communication as interpretive play. It allows transmission not only of secret messages but of reading instructions for external, unrelated texts. Its beauty lies in flexibility: no strict rules, no obvious keys — only structures, shifting agreements, and ephemeral meaning understood by those who share context.
 
