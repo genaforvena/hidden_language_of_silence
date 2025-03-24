@@ -64,4 +64,5 @@ Own rhythm so cold
 - Public galleries showcasing diverse hallucinations.
 - Recursion experiments (reader → writer → reader cycles).
 - Visual installations where text structures remain static but readings rotate.
+- Evidence of my insanity.
 
