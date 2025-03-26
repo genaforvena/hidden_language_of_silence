@@ -66,3 +66,7 @@ Own rhythm so cold
 - Visual installations where text structures remain static but readings rotate.
 - Evidence of my insanity.
 
+## Interactive Demo
+
+https://genaforvena.github.io/hidden_language_of_silence/
+
