@@ -1,0 +1,343 @@
+{
+  "provenance": {
+    "at_start": {
+      "utc": "2026-08-30T04:04:34+00:00",
+      "script_sha256": "16f716c8c65315841b71d855f5e83604e4d3f9c8714356ea1ca5b5e467405201",
+      "git_head": "21f344b2007cc07348e20f44923d7b93c1a1bfb4",
+      "instrument_dirty": false,
+      "tree_dirty_files": 0
+    },
+    "at_write": {
+      "utc": "2026-08-30T04:21:06+00:00",
+      "script_sha256": "16f716c8c65315841b71d855f5e83604e4d3f9c8714356ea1ca5b5e467405201",
+      "git_head": "79594e146ff4346a35a7003de76e175a351c2efc",
+      "instrument_dirty": false,
+      "tree_dirty_files": 0
+    },
+    "changed_mid_run": [
+      "git_head"
+    ],
+    "note": "the instrument changed under this run \u2014 at_start is what produced these numbers",
+    "argv": [
+      "measure/silent_channel.py",
+      "--text",
+      "The night is long and the city keeps its silence",
+      "-n",
+      "20",
+      "--seed",
+      "20260830",
+      "--out",
+      "measure/result-msg1-stamped.json"
+    ],
+    "relay": "mesh-relay",
+    "embed_model": null,
+    "python": "3.12.3"
+  },
+  "message": "The night is long and the city keeps its silence",
+  "lengths": [
+    3,
+    5,
+    2,
+    4,
+    3,
+    3,
+    4,
+    5,
+    3,
+    7
+  ],
+  "alt_lengths": [
+    3,
+    4,
+    5,
+    5,
+    3,
+    3,
+    7,
+    3,
+    3,
+    3
+  ],
+  "readings_requested": 20,
+  "seed": 20260830,
+  "random_basis_alphabet": {
+    "source": "reader-vocabulary+B",
+    "words": 303
+  },
+  "compliance": {
+    "A": {
+      "valid": 20,
+      "misses": 0,
+      "mean_attempts": 1.3
+    },
+    "B": {
+      "valid": 20,
+      "misses": 0,
+      "mean_attempts": 1.05
+    }
+  },
+  "arms": {
+    "A_treatment": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.11157894736842106,
+        "ci": [
+          0.09578947368421054,
+          0.12736842105263158
+        ]
+      },
+      "jaccard": {
+        "mean": 0.08685072135964265,
+        "ci": [
+          0.07629044554109732,
+          0.09801401077513185
+        ]
+      }
+    },
+    "B_prior_control": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.09894736842105263,
+        "ci": [
+          0.08421052631578947,
+          0.11473684210526316
+        ]
+      },
+      "jaccard": {
+        "mean": 0.09495662506070686,
+        "ci": [
+          0.08571249932603199,
+          0.1049263086866965
+        ]
+      }
+    },
+    "C_random_basis": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.023157894736842106,
+        "ci": [
+          0.016842105263157894,
+          0.030000000000000002
+        ]
+      },
+      "jaccard": {
+        "mean": 0.03264262306954176,
+        "ci": [
+          0.027221045389531618,
+          0.0384290188836384
+        ]
+      }
+    }
+  },
+  "where_the_agreement_sits": {
+    "A_treatment": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.5157894736842106
+        },
+        {
+          "len": 5,
+          "agreement": 0.07894736842105263
+        },
+        {
+          "len": 2,
+          "agreement": 0.13157894736842105
+        },
+        {
+          "len": 4,
+          "agreement": 0.03684210526315789
+        },
+        {
+          "len": 3,
+          "agreement": 0.06315789473684211
+        },
+        {
+          "len": 3,
+          "agreement": 0.042105263157894736
+        },
+        {
+          "len": 4,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 5,
+          "agreement": 0.0
+        },
+        {
+          "len": 3,
+          "agreement": 0.12631578947368421
+        },
+        {
+          "len": 7,
+          "agreement": 0.1
+        }
+      ],
+      "short_words_le3": 0.17578947368421052,
+      "content_words_ge5": 0.05964912280701754
+    },
+    "B_prior_control": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.38421052631578945
+        },
+        {
+          "len": 4,
+          "agreement": 0.031578947368421054
+        },
+        {
+          "len": 5,
+          "agreement": 0.03684210526315789
+        },
+        {
+          "len": 5,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 3,
+          "agreement": 0.10526315789473684
+        },
+        {
+          "len": 3,
+          "agreement": 0.07368421052631578
+        },
+        {
+          "len": 7,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 3,
+          "agreement": 0.09473684210526316
+        },
+        {
+          "len": 3,
+          "agreement": 0.2
+        },
+        {
+          "len": 3,
+          "agreement": 0.02631578947368421
+        }
+      ],
+      "short_words_le3": 0.14736842105263157,
+      "content_words_ge5": 0.02456140350877193
+    },
+    "C_random_basis": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.005263157894736842
+        },
+        {
+          "len": 5,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 2,
+          "agreement": 0.05263157894736842
+        },
+        {
+          "len": 4,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 3,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 3,
+          "agreement": 0.010526315789473684
+        },
+        {
+          "len": 4,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 5,
+          "agreement": 0.031578947368421054
+        },
+        {
+          "len": 3,
+          "agreement": 0.010526315789473684
+        },
+        {
+          "len": 7,
+          "agreement": 0.03684210526315789
+        }
+      ],
+      "short_words_le3": 0.021052631578947368,
+      "content_words_ge5": 0.028070175438596492
+    }
+  },
+  "texts": {
+    "A": [
+      "The world of hope can aid your brave new journey",
+      "The quick is very sly cat also hound win triumph",
+      "The river is calm yet the wind blows low tonight.",
+      "The quick is blue cat sat down quiet and whisper",
+      "The brave of love and you must dream now forever.",
+      "The space we keep may not have voice but meaning",
+      "You never go away and lie near daily for comfort",
+      "All birds in blue sky can sing sweet for forever",
+      "The early to rise the new will bring the sunrise",
+      "The quick is fast but you must trust now forever",
+      "The words we send are not just words but silence",
+      "The magic of love can end evil deeds now forever",
+      "All right to live and see more today for freedom",
+      "The brave is bold and you must honor the journey.",
+      "All birds in blue sky fly high above the horizon",
+      "The quick of mind can see true peace for forever",
+      "The quiet in this may not have space for meaning",
+      "All birds of blue the sea rise again now forever",
+      "The quick ox leap out sly wolf storm the sunrise",
+      "You never be late for the next event and triumph."
+    ],
+    "B": [
+      "The lazy brown horse and the gazelle hop the bar",
+      "The only right paths can win success and joy now",
+      "The word stays quiet but the meaning has its own",
+      "You must solve every day and riddles for the fun",
+      "The wild river flows and the horizon for all men",
+      "The blue ocean waves the old summits and the sky",
+      "All good deeds bring joy and charity for all you",
+      "The fast brown foxes are not starved for the pie",
+      "The best ideas arise via new novices and the sun",
+      "You have never heard the way silence can say yes",
+      "The only quick brown fox and breezes hug sky now",
+      "One fine young woman can see nothing but her own",
+      "The fast brown foxes can hop quickly the old dog",
+      "All fast green vines the old orchard and the sky",
+      "The blue quick brown fox ran through the old dog.",
+      "Not what these marks say but silence you can see",
+      "The next words leave and the silence has the say.",
+      "All dogs chase birds and the bunnies out the pen",
+      "The lazy brown foxes and cat friends run the sun",
+      "All four silly joker can eat popcorn and run far"
+    ],
+    "C": [
+      "let stays me fear why ran hate right who website",
+      "had paths he real hug new weak green ran cooking",
+      "off smile on four joy lie slow light its orchard",
+      "but movie my what run can must angry let starved",
+      "joy woman so hour let joy risk these hop reading",
+      "why never at fine yes for have right hop charity",
+      "has small he dark eat cry next light eat breezes",
+      "run music no dark cry yes four house fun charity",
+      "bar smile on must way why wild angry win evening",
+      "cry heard he best hug man fake quiet but charity",
+      "dog smile we good can but loss house out between",
+      "you after go next can any fine among run reading",
+      "fun right up wild ran see week river and popcorn",
+      "ran river to wild you get have foxes own meaning",
+      "see arise on slow she fun time happy way brother",
+      "say among of weak lie own wild angry sky bunnies",
+      "cat solve my hate get and lazy deeds has charity",
+      "bar light it week cry win slow today pen through",
+      "how these my risk pie but fast arise off student",
+      "own birds no wild cry new time horse own finance"
+    ]
+  }
+}

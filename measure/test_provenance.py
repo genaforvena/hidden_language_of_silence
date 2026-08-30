@@ -130,6 +130,39 @@ def main():
               "write-time would record " + p["at_write"]["git_head"][:12] + ", which did not run")
         check("the shas differ too", p["at_start"]["script_sha256"] != p["at_write"]["script_sha256"])
 
+        # ---- BOUNDING ARM: an UNRELATED commit is not an instrument change ------
+        # This arm did not exist in the first version and that is exactly why the
+        # false positive shipped: the only mutation ever driven was the one that
+        # edits the instrument itself, so the test could confirm the alarm but never
+        # bound it. Keyed on git_head, this arm goes red — and on a run of any
+        # length an unrelated commit is near-certain, so the field would be
+        # permanently true and therefore permanently ignored.
+        d3 = os.path.join(tmp, "unrelated")
+        head_b = clone(d3)
+        write_relay(relay, delay=0.25)
+        out3 = os.path.join(tmp, "unrelated.json")
+        proc = run(d3, relay, out3, n=10, bg=True)
+        time.sleep(3.0)
+        still_running = proc.poll() is None
+        with open(os.path.join(d3, "UNRELATED.md"), "w") as f:
+            f.write("a commit that does not touch the instrument\n")
+        git(d3, "add", "-A")
+        git(d3, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "unrelated commit")
+        head_a = git(d3, "rev-parse", "HEAD").stdout.strip()
+        proc.wait(timeout=600)
+
+        check("BOUNDING ARM IS VALID: the unrelated commit landed mid-run",
+              still_running and head_b != head_a)
+        p = json.load(open(out3))["provenance"]
+        check("an unrelated commit is NOT reported as an instrument change",
+              p["changed_mid_run"] is False, repr(p["changed_mid_run"]))
+        check("the instrument's own bytes are unchanged across it",
+              p["at_start"]["script_sha256"] == p["at_write"]["script_sha256"])
+        check("the HEAD move is still reported, as context",
+              p.get("tree_moved_mid_run") is True, repr(p.get("tree_moved_mid_run")))
+        check("and the note says so rather than crying instrument change",
+              "instrument's own bytes did not" in p["note"], p["note"])
+
         # ---- the recovery metric names its own direction -----------------------
         src = open(os.path.join(HERE, "silent_channel.py")).read()
         check("recovery block declares metric and direction",

@@ -128,15 +128,30 @@ def provenance(argv, relay, embed_model, used_embed):
     """The block written into every artifact. Compares the start stamp against a
     fresh one so a mid-run edit of the instrument is ASSERTED, not merely absent."""
     now = stamp()
-    changed = [k for k in ("script_sha256", "git_head", "instrument_dirty")
+    # The verdict keys on the INSTRUMENT'S OWN BYTES, never on git_head. HEAD is a
+    # property of the TREE: any commit anywhere in the repo moves it, and on a run
+    # that takes hours that is a near-certainty. Keyed on HEAD this field would be
+    # permanently true, therefore permanently ignored, and a REAL instrument change
+    # would ride in under exactly that suppression.
+    #
+    # Measured here, not reasoned about: the two runs of 2026-08-30 were launched at
+    # 21f344b, and committing the TEST FILE mid-run moved HEAD to 79594e1 while
+    # `git rev-parse 21f344b:measure/silent_channel.py` and `79594e1:...` are the
+    # same blob a1c4c8a8. The first version of this function called that "the
+    # instrument changed under this run", which was false.
+    changed = [k for k in ("script_sha256", "instrument_dirty")
                if PROVENANCE_AT_START.get(k) != now.get(k)]
+    tree_moved = PROVENANCE_AT_START.get("git_head") != now.get("git_head")
     return {
         "at_start": PROVENANCE_AT_START,
         "at_write": now,
         "changed_mid_run": changed or False,
+        "tree_moved_mid_run": tree_moved,   # context, never the alarm
         "note": ("the instrument changed under this run — at_start is what produced "
                  "these numbers" if changed else
-                 "instrument identical at start and at write"),
+                 "instrument identical at start and at write"
+                 + (" (HEAD moved, but the instrument's own bytes did not)"
+                    if tree_moved else "")),
         "argv": list(argv),
         "relay": relay,
         "embed_model": embed_model if used_embed else None,
@@ -517,7 +532,8 @@ def main():
     print(f"instrument: {pv['at_start']['git_head'][:12]}"
           f"{'+dirty' if pv['at_start']['instrument_dirty'] else ''}"
           f" sha {pv['at_start']['script_sha256'][:12]}"
-          f"{'  CHANGED MID-RUN: ' + ','.join(pv['changed_mid_run']) if pv['changed_mid_run'] else ''}")
+          f"{'  INSTRUMENT CHANGED MID-RUN: ' + ','.join(pv['changed_mid_run']) if pv['changed_mid_run'] else ''}"
+          f"{'  (tree HEAD moved; instrument bytes did not)' if pv['tree_moved_mid_run'] and not pv['changed_mid_run'] else ''}")
 
 
 if __name__ == "__main__":

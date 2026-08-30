@@ -1,0 +1,355 @@
+{
+  "provenance": {
+    "at_start": {
+      "utc": "2026-08-30T04:21:07+00:00",
+      "script_sha256": "16f716c8c65315841b71d855f5e83604e4d3f9c8714356ea1ca5b5e467405201",
+      "git_head": "79594e146ff4346a35a7003de76e175a351c2efc",
+      "instrument_dirty": false,
+      "tree_dirty_files": 1
+    },
+    "at_write": {
+      "utc": "2026-08-30T04:40:19+00:00",
+      "script_sha256": "16f716c8c65315841b71d855f5e83604e4d3f9c8714356ea1ca5b5e467405201",
+      "git_head": "79594e146ff4346a35a7003de76e175a351c2efc",
+      "instrument_dirty": false,
+      "tree_dirty_files": 1
+    },
+    "changed_mid_run": false,
+    "note": "instrument identical at start and at write",
+    "argv": [
+      "measure/silent_channel.py",
+      "--text",
+      "Rain fell across the empty market and nobody counted the hours",
+      "-n",
+      "20",
+      "--seed",
+      "771",
+      "--out",
+      "measure/result-msg2-stamped.json"
+    ],
+    "relay": "mesh-relay",
+    "embed_model": null,
+    "python": "3.12.3"
+  },
+  "message": "Rain fell across the empty market and nobody counted the hours",
+  "lengths": [
+    4,
+    4,
+    6,
+    3,
+    5,
+    6,
+    3,
+    6,
+    7,
+    3,
+    5
+  ],
+  "alt_lengths": [
+    3,
+    6,
+    6,
+    6,
+    3,
+    4,
+    5,
+    5,
+    3,
+    6,
+    7
+  ],
+  "readings_requested": 20,
+  "seed": 771,
+  "random_basis_alphabet": {
+    "source": "reader-vocabulary+B",
+    "words": 337
+  },
+  "compliance": {
+    "A": {
+      "valid": 20,
+      "misses": 0,
+      "mean_attempts": 1.2
+    },
+    "B": {
+      "valid": 20,
+      "misses": 0,
+      "mean_attempts": 1.3
+    }
+  },
+  "arms": {
+    "A_treatment": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.12870813397129185,
+        "ci": [
+          0.10861244019138756,
+          0.14976076555023923
+        ]
+      },
+      "jaccard": {
+        "mean": 0.12269231614799482,
+        "ci": [
+          0.1086222586911034,
+          0.13767114708657807
+        ]
+      }
+    },
+    "B_prior_control": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.12248803827751197,
+        "ci": [
+          0.10717703349282297,
+          0.13732057416267943
+        ]
+      },
+      "jaccard": {
+        "mean": 0.09624283231298059,
+        "ci": [
+          0.08579493431721719,
+          0.1061144573249429
+        ]
+      }
+    },
+    "C_random_basis": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.01674641148325359,
+        "ci": [
+          0.011483253588516746,
+          0.02200956937799043
+        ]
+      },
+      "jaccard": {
+        "mean": 0.026957965088158994,
+        "ci": [
+          0.022150112122411292,
+          0.03215406938398628
+        ]
+      }
+    }
+  },
+  "where_the_agreement_sits": {
+    "A_treatment": {
+      "per_position": [
+        {
+          "len": 4,
+          "agreement": 0.2736842105263158
+        },
+        {
+          "len": 4,
+          "agreement": 0.2
+        },
+        {
+          "len": 6,
+          "agreement": 0.042105263157894736
+        },
+        {
+          "len": 3,
+          "agreement": 0.3105263157894737
+        },
+        {
+          "len": 5,
+          "agreement": 0.04736842105263158
+        },
+        {
+          "len": 6,
+          "agreement": 0.05789473684210526
+        },
+        {
+          "len": 3,
+          "agreement": 0.2736842105263158
+        },
+        {
+          "len": 6,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 7,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 3,
+          "agreement": 0.1368421052631579
+        },
+        {
+          "len": 5,
+          "agreement": 0.031578947368421054
+        }
+      ],
+      "short_words_le3": 0.24035087719298248,
+      "content_words_ge5": 0.0368421052631579
+    },
+    "B_prior_control": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.6368421052631579
+        },
+        {
+          "len": 6,
+          "agreement": 0.18421052631578946
+        },
+        {
+          "len": 6,
+          "agreement": 0.031578947368421054
+        },
+        {
+          "len": 6,
+          "agreement": 0.06315789473684211
+        },
+        {
+          "len": 3,
+          "agreement": 0.06842105263157895
+        },
+        {
+          "len": 4,
+          "agreement": 0.031578947368421054
+        },
+        {
+          "len": 5,
+          "agreement": 0.010526315789473684
+        },
+        {
+          "len": 5,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 3,
+          "agreement": 0.2
+        },
+        {
+          "len": 6,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 7,
+          "agreement": 0.08421052631578947
+        }
+      ],
+      "short_words_le3": 0.3017543859649123,
+      "content_words_ge5": 0.058646616541353384
+    },
+    "C_random_basis": {
+      "per_position": [
+        {
+          "len": 4,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 4,
+          "agreement": 0.010526315789473684
+        },
+        {
+          "len": 6,
+          "agreement": 0.005263157894736842
+        },
+        {
+          "len": 3,
+          "agreement": 0.031578947368421054
+        },
+        {
+          "len": 5,
+          "agreement": 0.010526315789473684
+        },
+        {
+          "len": 6,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 3,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 6,
+          "agreement": 0.010526315789473684
+        },
+        {
+          "len": 7,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 3,
+          "agreement": 0.031578947368421054
+        },
+        {
+          "len": 5,
+          "agreement": 0.005263157894736842
+        }
+      ],
+      "short_words_le3": 0.028070175438596492,
+      "content_words_ge5": 0.012280701754385965
+    }
+  },
+  "texts": {
+    "A": [
+      "This code always has inner secret for simple puzzles and games",
+      "When time shifts the great planet and future journey for minds",
+      "Hope lies within the clear future and shapes destiny for world",
+      "This code unveil the crypt within the simple message and words",
+      "When cats wander the quiet garden and listen whisper all birds",
+      "What they cannot say aloud speaks the purest meaning all along.",
+      "Love will always end after hushes and secret letters are coded.",
+      "Read your secret and solve puzzle now within silence the codes",
+      "This code hidden and solve within the answer message now again",
+      "When cats wander the quiet garden and listen murmurs the birds",
+      "This code hidden the magic within the silent message and words",
+      "When snow covers the quiet forest and hidden secrets are alive",
+      "Love will sprout and bring bright sun across rolling sky today",
+      "This code puzzle has crypt secret for gamers solving the quest",
+      "This code hidden the quest unfold and within signals for users.",
+      "Life gets harder but still brings new dreams awaited for folks.",
+      "This code yields the inner secret you decode puzzles now today.",
+      "This code solved the magic secret and riddle mystery now again",
+      "This note covers the whole system and builds meaning for users",
+      "This code always can solve puzzle and unlock answers for minds"
+    ],
+    "B": [
+      "The bright golden sunray and soft light fills the hushed caverns",
+      "The hidden secret within the deep river still and bright sunrise",
+      "The shapes remain silent but each count gives you hidden meaning",
+      "All dreams awaken inside you love sweet quiet sky bright horizon",
+      "The bright yellow sunset was very quiet still and softly glimmer",
+      "The secret garden within the aged trunk holds old golden mystery",
+      "All people should always act with peace share and ensure harmony",
+      "The silent letter puzzle has many crypt coded and unveil meaning",
+      "The secret hidden within all code gives quick and solved mystery.",
+      "The silent forest shapes can form crypt codes and secret letters",
+      "The silent spaces inside our talk speak truth our tongue refuses.",
+      "The silent cipher counts its word sizes alone and yields meaning",
+      "The silent spaces within our talk shape every new hidden meaning",
+      "The hidden pauses inside our talk carry words our voices refused",
+      "The silent cipher hidden are very often found and rarely decoded.",
+      "The secret garden offers the deep river winds and shapes forever",
+      "The hidden number inside our mute marks tells the entire meaning",
+      "The silent cipher speaks not with noisy words but hidden meaning",
+      "You always choose wisely and show great heart for others society",
+      "Our silent pauses reveal the true inner truth she cannot explain"
+    ],
+    "C": [
+      "soft year wisely how where pauses way solved caverns now where",
+      "part true follow way shape cannot you yellow several new there",
+      "were time bright all again ensure its letter morning and marks",
+      "work with system has quick father has golden refuses she crypt",
+      "year that cipher out house shapes two school glimmer had first",
+      "deep mute hidden not quiet secret but hushed caverns the quiet",
+      "love mute voices the tells tongue how spaces evening she inner",
+      "make than rarely who shape happen two though support for carry",
+      "year been yields and codes little can remain because but great",
+      "over come number not where happen all better between can place",
+      "also been little sky every school for cannot country was heart",
+      "time very hushed and still school day father another can young",
+      "some some around she sweet tongue out wisely letters way holds",
+      "well deep tongue the truth voices are around several now shape",
+      "some your yellow why world should sky reveal country its would",
+      "what said better way large forest who happen mystery out there",
+      "make form remain the often always its school decoded had under",
+      "your each family had other though two others nothing the small",
+      "code this system was light silent few sunray forever how still",
+      "from when friend day alone happen new hushed student way quick"
+    ]
+  }
+}

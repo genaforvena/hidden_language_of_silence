@@ -80,6 +80,43 @@ Every artifact now carries a `provenance` block, and the stamp is taken **twice*
 Each field fails to a string beginning `unknown:` naming which probe failed; a
 provenance field that quietly reports a plausible default is worse than none.
 
+### What the field must NOT key on, learned from its own first run
+
+`changed_mid_run` keys on the **instrument's own bytes** (`script_sha256`,
+`instrument_dirty`) and never on `git_head`. HEAD is a property of the *tree*: any
+commit anywhere in the repo moves it, so on a run of any length it fires almost
+always, the field goes permanently true, and a real instrument change then rides in
+under exactly that suppression.
+
+This was measured, not reasoned about, and the artifacts in this directory are the
+evidence. Both re-runs were launched at `21f344b`; committing the *test file* as
+`79594e1` mid-run moved HEAD while
+`git rev-parse 21f344b:measure/silent_channel.py` and `79594e1:…` are the same blob
+`a1c4c8a8`. `result-msg1-stamped.json` therefore carries
+`changed_mid_run: ["git_head"]` and the sentence "the instrument changed under this
+run" — **which is false, and it is left in place on purpose.** Its own
+`at_start.script_sha256` is `16f716c8…`, which names the pre-fix instrument, so a
+reader can date the verdict and disregard it. That is the feature working on itself:
+a wrong derived field stays interpretable because the raw stamp under it is intact,
+which is why both halves are kept rather than only the verdict.
+
+The arm that would have caught this did not exist, because the only mutation ever
+driven was the one that edits the instrument itself — the test could confirm the
+alarm but never bound it. `test_provenance.py` now drives both directions.
+
+## Recovery was not measured in these two runs
+
+Convergence is model-free and always lands. Recovery needs an embedding backend, and
+both re-runs hit an ollama mid-upgrade: every `/api/embeddings` returned HTTP 500
+because the `llama-server` binary had been removed before its replacement arrived.
+The artifacts carry `cosine: null` and **no** `recovery` block — the harness said so
+instead of writing a plausible number.
+
+It does not cost the readings again. `recover_recompute.py` computes the block from
+the stored `texts.A` once a backend returns, and tags it with its own provenance so
+the file still says which instrument produced which number. It exits non-zero and
+loudly if no backend is available.
+
 ## The recovery numbers are similarities, not distances
 
 `recovery.to_true` and `recovery.to_decoy` are **cosine similarities: higher means
