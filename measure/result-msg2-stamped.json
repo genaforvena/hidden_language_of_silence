@@ -355,21 +355,55 @@
   "recovery": {
     "metric": "cosine_similarity",
     "direction": "higher = closer to the target",
-    "reading": "to_decoy >= to_true means the readings are no nearer the intended message than a length-matched decoy: no recovery",
-    "computed_by": "recover_recompute.py (post-hoc; the run itself had no embedding backend)",
-    "computed_provenance": {
-      "utc": "2026-08-30T05:41:04+00:00",
-      "script_sha256": "77066286e9726558449585138bb08b72f08ce68c47fe024c1a3cbc649861163e",
-      "git_head": "019808cb91f20f767865cd56781500efe6a2f64e",
-      "instrument_dirty": false,
-      "tree_dirty_files": 1
-    },
-    "n_readings": 20,
+    "reading": "RECOVERY is A minus B_prior. to_decoy and to_chance are floors for context, not the test: a length-matched decoy is a CHANCE floor, and beating it only says the reading is fluent English rather than word salad. B_prior is real readings of a DIFFERENT length sequence by the same model under the same framing \u2014 the prior with no channel behind it. If A - B_prior includes 0, nothing was recovered.",
+    "verdict": "NO recovery above the prior (A - B_prior includes 0)",
     "to_true": {
-      "mean": 0.11224366535817122
+      "mean": 0.11224366535817122,
+      "ci": [
+        0.08561360208565853,
+        0.13762346368092943
+      ],
+      "n": 20
+    },
+    "to_prior": {
+      "mean": 0.12403262310988372,
+      "ci": [
+        0.0961262008787104,
+        0.15412851762899488
+      ],
+      "n": 20
+    },
+    "to_chance": {
+      "mean": 0.11599717270167886,
+      "ci": [
+        0.08305325281312766,
+        0.15027268021415352
+      ],
+      "n": 20
     },
     "to_decoy": {
-      "mean": 0.19335876390976167
+      "mean": 0.19335876390976167,
+      "ci": [
+        0.17428156301134443,
+        0.21186998108822006
+      ],
+      "n": 20
+    },
+    "A_minus_prior": {
+      "delta": -0.0117889577517125,
+      "ci": [
+        -0.05163236773159015,
+        0.027048645156168033
+      ],
+      "excludes_zero": false
+    },
+    "A_minus_chance": {
+      "delta": -0.003753507343507642,
+      "ci": [
+        -0.045898851040194616,
+        0.038323502958969705
+      ],
+      "excludes_zero": false
     },
     "decoys": [
       "true love entire not place bright had happen refuses but sweet",
@@ -380,6 +414,15 @@
       "mute than number all there cannot all secret meaning for light",
       "when said hidden few place school but inside morning day every",
       "true true father new heart system all shapes because you share"
-    ]
+    ],
+    "computed_by": "recover_recompute.py (post-hoc; the run itself had no embedding backend)",
+    "computed_provenance": {
+      "utc": "2026-08-30T06:40:47+00:00",
+      "script_sha256": "7933622f554c6e1098a7e1c001067e116fb95862c70bf10059ec096303b1a503",
+      "git_head": "0ffebc0fc6c1acf20aa56a488b8af222ee061c73",
+      "instrument_dirty": true,
+      "tree_dirty_files": 7
+    },
+    "decoy_alphabet": "PROXY rebuilt from texts C+B: 187 words of the run's 337 \u2014 the run did not store its lexicon, so this floor is not drawn from the alphabet the run used"
   }
 }

@@ -343,6 +343,109 @@ def boot_ci(xs, rng, iters=2000, alpha=0.05):
     return (means[int(iters * alpha / 2)], means[int(iters * (1 - alpha / 2))])
 
 
+def boot_diff_ci(xs, ys, rng, iters=20000, alpha=0.05):
+    """Interval on mean(xs) - mean(ys) for two INDEPENDENT arms.
+
+    Unlike boot_ci above, this one does carry an argument: arm A and arm B are
+    separate readings by separate processes of two different length sequences, so
+    resampling each arm on its own is legitimate. An interval containing 0 says the
+    treatment arm is no closer to the message than an arm that never saw it."""
+    if not xs or not ys:
+        return (None, None)
+    ds = sorted(mean(rng.choice(xs) for _ in range(len(xs)))
+                - mean(rng.choice(ys) for _ in range(len(ys)))
+                for _ in range(iters))
+    return (ds[int(iters * alpha / 2)], ds[int(iters * (1 - alpha / 2))])
+
+
+def recovery_block(message, A, B, C_texts, lens, lex, rng, embed_fn=None):
+    """The RECOVERY arm, as ONE entry point.
+
+    It lives here rather than at each call site because there were two copies — the
+    inline run and the post-hoc recompute — and they had already drifted: the
+    recompute shipped bare means with no interval at all.
+
+    THE FLOOR THIS ARM IS MEASURED AGAINST WAS THE WRONG ONE, and it was wrong in
+    the direction that manufactures a result. The original arm compared arm-A
+    readings to the true message against **length-matched decoys**, which is a
+    CHANCE floor: measured on `result-msg1-stamped.json` the decoy floor is 0.153
+    and the model-free arm C sits at 0.159, the same number. But arm B — real
+    readings, by the same model, under the same framing, of a DIFFERENT length
+    sequence — sits at 0.220. A reading can beat random word salad purely because
+    it is fluent English about a plausible scene, having recovered nothing.
+
+    So the verdict keys on **A - B**, and the decoy and arm-C floors are kept as
+    context rather than as the test. This is the repository's own headline lesson
+    about the convergence arm ("agreement above chance requires the chance arm to
+    share the lengths AND the alphabet") applied one ring out: the convergence arm
+    always had both a prior control and a chance basis, and the recovery arm beside
+    it had only the chance basis."""
+    e = embed_fn or embed
+    v_true = e(message)
+    decoys = [" ".join(rng.choice(lex[l]) if lex.get(l) else "x" * l for l in lens)
+              for _ in range(8)]
+    v_dec = [e(x) for x in decoys]
+
+    def against_true(texts):
+        return [c for c in (cosine(e(t), v_true) for t in texts) if c is not None]
+
+    to_true, to_prior, to_chance = against_true(A), against_true(B), against_true(C_texts)
+    to_decoy = []
+    for t in A:
+        v = e(t)
+        ds = [x for x in (cosine(v, w) for w in v_dec) if x is not None]
+        if ds:
+            to_decoy.append(mean(ds))
+
+    def arm(xs):
+        return {"mean": mean(xs) if xs else None, "ci": boot_ci(xs, rng), "n": len(xs)}
+
+    d_prior = boot_diff_ci(to_true, to_prior, rng)
+    d_chance = boot_diff_ci(to_true, to_chance, rng)
+
+    # An arm with no readings is BLINDNESS, and it must not wear a verdict. Found by
+    # the first live drive of this code: at n=6 the reader missed the length profile
+    # on all six control readings, so to_prior was n=0 — and the block still said
+    # "NO recovery above the prior (A - B_prior includes 0)", which is a claim about
+    # an interval that does not exist. The failure direction is the bad one: no
+    # recovery is also the true answer, so a blind run agrees with the real ones and
+    # is indistinguishable from them. `excludes_zero` is None, never False, for the
+    # same reason — False is a measured negative.
+    if not to_true or not to_prior:
+        missing = [n for n, xs in (("A_treatment", to_true), ("B_prior", to_prior)) if not xs]
+        verdict = ("UNKNOWN — no verdict is possible: "
+                   + " and ".join(missing) + " has no valid readings")
+        beats = None
+    else:
+        beats = (d_prior[0] is not None and d_prior[0] > 0)
+        verdict = ("recovered above the prior" if beats else
+                   "NO recovery above the prior (A - B_prior includes 0)")
+
+    return {
+        "metric": "cosine_similarity",
+        "direction": "higher = closer to the target",
+        "reading": ("RECOVERY is A minus B_prior. to_decoy and to_chance are floors for "
+                    "context, not the test: a length-matched decoy is a CHANCE floor, and "
+                    "beating it only says the reading is fluent English rather than word "
+                    "salad. B_prior is real readings of a DIFFERENT length sequence by the "
+                    "same model under the same framing — the prior with no channel behind "
+                    "it. If A - B_prior includes 0, nothing was recovered."),
+        "verdict": verdict,
+        "to_true":   arm(to_true),
+        "to_prior":  arm(to_prior),
+        "to_chance": arm(to_chance),
+        "to_decoy":  arm(to_decoy),
+        "A_minus_prior":  {"delta": (mean(to_true) - mean(to_prior)) if to_true and to_prior else None,
+                           "ci": d_prior, "excludes_zero": beats},
+        "A_minus_chance": {"delta": (mean(to_true) - mean(to_chance)) if to_true and to_chance else None,
+                           "ci": d_chance,
+                           "excludes_zero": (None if not (to_true and to_chance) else
+                                             d_chance[0] is not None
+                                             and (d_chance[0] > 0 or d_chance[1] < 0))},
+        "decoys": decoys,
+    }
+
+
 # ---------------------------------------------------------------- the run
 def run_arm(lens, n, rng, label, relay):
     texts, attempts, misses = [], [], 0
@@ -454,7 +557,11 @@ def main():
         "provenance": provenance(sys.argv, a.relay, EMBED_MODEL, use_embed),
         "message": a.text, "lengths": lens, "alt_lengths": alt,
         "readings_requested": a.readings, "seed": a.seed,
-        "random_basis_alphabet": {"source": lex_src, "words": lex_size},
+        # The WORDS, not only the count. recover_recompute.py used to rebuild this
+        # pool from texts C+B, which is a strict subset — measured 163 of 303 words
+        # on msg1 and 187 of 337 on msg2 — so a post-hoc floor was drawn from a
+        # different alphabet than the run's own and was not comparable to it.
+        "random_basis_alphabet": {"source": lex_src, "words": lex_size, "lexicon": lex},
         "compliance": {  # can the reader even hit the length profile? a finding in itself
             "A": {"valid": len(A), "misses": A_miss, "mean_attempts": mean(A_att)},
             "B": {"valid": len(B), "misses": B_miss, "mean_attempts": mean(B_att)},
@@ -472,38 +579,11 @@ def main():
         "texts": {"A": A, "B": B, "C": C_texts},
     }
 
-    # RECOVERY is a different question from CONVERGENCE: decoys carry the SAME length
-    # profile, so a reading closer to the truth than to a decoy cannot be explained by
-    # length alone. Requires the semantic metric.
+    # RECOVERY is a different question from CONVERGENCE, and it needs the SAME two
+    # floors the convergence arm has. One entry point, shared with the post-hoc
+    # recompute, so the two cannot drift again — see recovery_block().
     if use_embed and A:
-        decoys = [" ".join(rng.choice(lex[l]) if lex.get(l) else "x" * l for l in lens)
-                  for _ in range(8)]
-        v_true = embed(a.text)
-        v_dec = [embed(d) for d in decoys]
-        to_true, to_decoy = [], []
-        for t in A:
-            v = embed(t)
-            c = cosine(v, v_true)
-            if c is not None:
-                to_true.append(c)
-            ds = [cosine(v, d) for d in v_dec]
-            ds = [d for d in ds if d is not None]
-            if ds:
-                to_decoy.append(mean(ds))
-        # These are cosine SIMILARITIES, not distances: HIGHER means CLOSER. The
-        # direction is stated in the artifact because the sentence a reader quotes
-        # is "the readings sit 0.210 from the true original", which inverts it. A
-        # number whose direction lives only in the source is a number that will be
-        # reported backwards.
-        out["recovery"] = {
-            "metric": "cosine_similarity",
-            "direction": "higher = closer to the target",
-            "reading": ("to_decoy >= to_true means the readings are no nearer the "
-                        "intended message than a length-matched decoy: no recovery"),
-            "to_true":  {"mean": mean(to_true) if to_true else None, "ci": boot_ci(to_true, rng)},
-            "to_decoy": {"mean": mean(to_decoy) if to_decoy else None, "ci": boot_ci(to_decoy, rng)},
-            "decoys": decoys,
-        }
+        out["recovery"] = recovery_block(a.text, A, B, C_texts, lens, lex, rng)
 
     os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
     with open(a.out, "w") as f:
@@ -530,10 +610,20 @@ def main():
               f"   content words (>=5)={f(w['content_words_ge5'])}")
     if "recovery" in out:
         r = out["recovery"]
-        print("\n== recovery of the INTENDED message (matched-length decoys) ==")
-        print("  cosine SIMILARITY — higher = closer. Decoy >= true means no recovery.")
-        print(f"  similarity to TRUE original     : {r['to_true']['mean']:.3f}  CI {r['to_true']['ci']}")
-        print(f"  similarity to DECOY (same lens) : {r['to_decoy']['mean']:.3f}  CI {r['to_decoy']['ci']}")
+        print("\n== recovery of the INTENDED message ==")
+        print("  cosine SIMILARITY — higher = closer. The test is A vs the PRIOR arm;")
+        print("  the decoy and random floors are chance, and beating chance is not recovery.")
+        def row(label, k, note=""):
+            a = r[k]
+            v = f"{a['mean']:.3f}  CI {a['ci']}" if a["mean"] is not None else "n/a — no valid readings"
+            print(f"  {label} : {v}   n={a['n']}{note}")
+        row("A treatment  -> true", "to_true")
+        row("B prior ctrl -> true", "to_prior", "   <- the floor that decides")
+        row("C random     -> true", "to_chance")
+        row("matched decoys      ", "to_decoy")
+        dp = r["A_minus_prior"]
+        d = f"{dp['delta']:+.4f}  CI {dp['ci']}" if dp["delta"] is not None else "n/a"
+        print(f"  A - B_prior = {d}  ->  {r['verdict']}")
     pv = out["provenance"]
     print(f"\nartifact: {a.out}")
     print(f"instrument: {pv['at_start']['git_head'][:12]}"

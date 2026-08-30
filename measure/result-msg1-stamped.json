@@ -343,21 +343,55 @@
   "recovery": {
     "metric": "cosine_similarity",
     "direction": "higher = closer to the target",
-    "reading": "to_decoy >= to_true means the readings are no nearer the intended message than a length-matched decoy: no recovery",
-    "computed_by": "recover_recompute.py (post-hoc; the run itself had no embedding backend)",
-    "computed_provenance": {
-      "utc": "2026-08-30T05:41:03+00:00",
-      "script_sha256": "77066286e9726558449585138bb08b72f08ce68c47fe024c1a3cbc649861163e",
-      "git_head": "019808cb91f20f767865cd56781500efe6a2f64e",
-      "instrument_dirty": false,
-      "tree_dirty_files": 0
-    },
-    "n_readings": 20,
+    "reading": "RECOVERY is A minus B_prior. to_decoy and to_chance are floors for context, not the test: a length-matched decoy is a CHANCE floor, and beating it only says the reading is fluent English rather than word salad. B_prior is real readings of a DIFFERENT length sequence by the same model under the same framing \u2014 the prior with no channel behind it. If A - B_prior includes 0, nothing was recovered.",
+    "verdict": "NO recovery above the prior (A - B_prior includes 0)",
     "to_true": {
-      "mean": 0.24023101709790443
+      "mean": 0.24023101709790443,
+      "ci": [
+        0.20548676472291075,
+        0.27792357029579906
+      ],
+      "n": 20
+    },
+    "to_prior": {
+      "mean": 0.21990088122580081,
+      "ci": [
+        0.17313266491153992,
+        0.2753653645558907
+      ],
+      "n": 20
+    },
+    "to_chance": {
+      "mean": 0.15938534900590773,
+      "ci": [
+        0.124627827022739,
+        0.19537480310359387
+      ],
+      "n": 20
     },
     "to_decoy": {
-      "mean": 0.1531403776341853
+      "mean": 0.1531403776341853,
+      "ci": [
+        0.14141114832215285,
+        0.16466734509948908
+      ],
+      "n": 20
+    },
+    "A_minus_prior": {
+      "delta": 0.02033013587210361,
+      "ci": [
+        -0.04531885578421255,
+        0.08352893221259272
+      ],
+      "excludes_zero": false
+    },
+    "A_minus_chance": {
+      "delta": 0.0808456680919967,
+      "ci": [
+        0.029452333598891378,
+        0.1325112715128186
+      ],
+      "excludes_zero": true
     },
     "decoys": [
       "are heard of dogs see she blue solve you riddles",
@@ -368,6 +402,15 @@
       "fun never he word see get must deeds men nothing",
       "its these we dark why her best small new charity",
       "out after he best via far four joker has cooking"
-    ]
+    ],
+    "computed_by": "recover_recompute.py (post-hoc; the run itself had no embedding backend)",
+    "computed_provenance": {
+      "utc": "2026-08-30T06:40:44+00:00",
+      "script_sha256": "7933622f554c6e1098a7e1c001067e116fb95862c70bf10059ec096303b1a503",
+      "git_head": "0ffebc0fc6c1acf20aa56a488b8af222ee061c73",
+      "instrument_dirty": true,
+      "tree_dirty_files": 7
+    },
+    "decoy_alphabet": "PROXY rebuilt from texts C+B: 163 words of the run's 303 \u2014 the run did not store its lexicon, so this floor is not drawn from the alphabet the run used"
   }
 }

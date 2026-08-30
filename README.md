@@ -90,8 +90,8 @@ Own rhythm so cold
 
 This section used to also assert **"they never recover intended meaning."** It was the
 most interesting sentence in the repository and nobody had ever checked it, so
-[`measure/`](measure/) checks it. The short answer is that the sentence is not wrong,
-but it is not what the first result looks like either — see below.
+[`measure/`](measure/) checks it. **The sentence holds**, and it took two wrong floors
+to establish that — see below.
 
 ## Is any of this measured?
 
@@ -104,22 +104,38 @@ length-matched, same-alphabet chance arm — message 1 said yes, about four time
 chance, with non-overlapping intervals. Then message 2 was run and the effect
 **reversed**. Two messages, opposite verdicts, same instrument.
 
-**Are the readings actually nearer the intended message than a length-matched decoy?**
-This is the recovery arm, and it agrees with the reversal:
+**Are the readings actually nearer the intended message?** This is the recovery arm,
+and the answer turns entirely on what you compare them against.
 
-| message | to true text | to decoy | verdict |
-|---|---|---|---|
-| msg 1 | 0.2402 | 0.1531 | nearer the true text |
-| msg 2 | 0.1122 | 0.1934 | **no recovery** |
+| message | A treatment | **B prior control** | C random | matched decoys |
+|---|---|---|---|---|
+| msg 1 "The night is long…" | 0.2402 | **0.2199** | 0.1594 | 0.1531 |
+| msg 2 "Rain fell across…" | 0.1122 | **0.1240** | 0.1160 | 0.1934 |
 
-Cosine similarity, n=20 readings each, computed from the stored readings by
+| message | A − B_prior | verdict |
+|---|---|---|
+| msg 1 | +0.0203, CI [−0.0453, +0.0835] | **no recovery** |
+| msg 2 | −0.0118, CI [−0.0516, +0.0270] | **no recovery** |
+
+Cosine similarity, n=20 readings per arm, computed from the stored readings by
 [`recover_recompute.py`](measure/recover_recompute.py) with no new model calls.
 
-What the pair of runs supports is not "the channel works" and not "the channel is
-empty". It is that **agreement between readers is not evidence of recovery** — two
-readers converging can be two readers sharing a prior, and the arm that separates
-those is a run on a *different* input. That arm is arm B, and it is the one that
-decides.
+The arm first shipped with matched decoys as its floor, and that floor is what made
+the two messages appear to disagree: msg 1 beat the decoys and msg 2 did not, so a
+reader could quote either. But a decoy is random words at the right lengths, and *any*
+fluent sentence about a plausible scene beats it. On msg 1 the decoy floor is 0.153 and
+the model-free arm C is 0.159 — the same number. The decoy floor was a **chance** floor
+wearing a **prior** floor's name.
+
+Arm B is the floor that decides: real readings, same model, same framing, of a length
+sequence that is not this message's. Against chance, msg 1 looks like recovery
+(+0.0808, interval excluding 0). Against the prior, the effect is gone, and both
+messages say the same thing.
+
+So what the runs support is not "the channel works" and not "the channel is empty". It
+is that **agreement between readers is not evidence of recovery, and neither is beating
+random text** — two readers converging can be two readers sharing a prior, and the only
+arm that separates those is a run on a *different* input.
 
 The full method, the failure modes it walked into, and every per-arm figure are in
 [`measure/README.md`](measure/README.md). Every artifact carries a provenance block

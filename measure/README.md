@@ -31,10 +31,12 @@ in an arm shares a length profile), **Jaccard** over word bags, and **cosine**
 over sentence embeddings.
 
 **Recovery is asked separately from convergence.** They are different claims:
-readings can agree with each other while all being wrong. So each arm-A reading
-is compared to the *true* original and to **decoys carrying the same length
-profile**. A reading no closer to the truth than to a matched decoy has
-recovered nothing, however convergent the arm is.
+readings can agree with each other while all being wrong. So each arm-A reading is
+compared to the *true* original — and the comparison that decides is against **arm
+B**, which read a different length sequence and never saw this message. Matched-length
+decoys and arm C are also scored, as chance floors for context. They are not the test;
+see "The recovery arm had the wrong floor" below, which is the main finding of this
+directory.
 
 ## Two things that will quietly ruin this measurement
 
@@ -104,26 +106,108 @@ The arm that would have caught this did not exist, because the only mutation eve
 driven was the one that edits the instrument itself — the test could confirm the
 alarm but never bound it. `test_provenance.py` now drives both directions.
 
-## Recovery was not measured in these two runs
+## Recovery, measured at last — and the answer is no
 
 Convergence is model-free and always lands. Recovery needs an embedding backend, and
 both re-runs hit an ollama mid-upgrade: every `/api/embeddings` returned HTTP 500
-because the `llama-server` binary had been removed before its replacement arrived.
-The artifacts carry `cosine: null` and **no** `recovery` block — the harness said so
-instead of writing a plausible number.
+because the `llama-server` binary had been removed before its replacement arrived. The
+artifacts carried `cosine: null` and no `recovery` block — the harness said so instead
+of writing a plausible number. That is the correct behaviour and it is why the numbers
+below exist at all: `recover_recompute.py` computes the block from the stored readings
+once a backend returns, with no new model calls, tagged with its own provenance so the
+file still says which instrument produced which number.
 
-It does not cost the readings again. `recover_recompute.py` computes the block from
-the stored `texts.A` once a backend returns, and tags it with its own provenance so
-the file still says which instrument produced which number. It exits non-zero and
-loudly if no backend is available.
+The backend came back on 2026-08-30 and both artifacts were recomputed. **The README's
+central claim survives.** Readings of the true length sequence are no nearer the
+intended message than readings of a *different* length sequence by the same model.
+
+| | msg1 "The night is long…" | msg2 "Rain fell across…" |
+|---|---|---|
+| A treatment → true | 0.2402 | 0.1122 |
+| **B prior control → true** | **0.2199** | **0.1240** |
+| C random basis → true | 0.1594 | 0.1160 |
+| matched decoys | 0.1531 | 0.1934 |
+| **A − B_prior** | **+0.0203, CI [−0.0453, +0.0835]** | **−0.0118, CI [−0.0516, +0.0270]** |
+
+Both intervals contain 0. n=20 readings per arm, cosine over `all-minilm`.
+
+## The recovery arm had the wrong floor, and the wrong floor manufactured a result
+
+This is the finding, and it is the same mistake this directory already documents for
+the *convergence* arm, made one ring out.
+
+The arm originally scored arm-A readings against **length-matched decoys** and called
+beating them recovery. A decoy is random words at the right lengths. Any fluent English
+sentence about a plausible scene beats it — having recovered nothing. Measured: on msg1
+the decoy floor is **0.153** and the model-free arm C is **0.159**, the same number. The
+decoy floor was a *chance* floor wearing a *prior* floor's name.
+
+Arm B is the floor that decides: real readings, same model, same framing, of a length
+sequence that is not this message's. It sits at **0.220** — two thirds of the way from
+the chance floor to the treatment arm. Against chance, msg1 reads as recovery
+(A − C = +0.0808, CI [+0.0287, +0.1321], excludes 0). Against the prior, the whole
+effect is gone.
+
+**The old floor also made the two messages appear to disagree**, which is worse than a
+wrong number because it invites picking one. Under the decoy floor msg1 read "recovery"
+(0.240 > 0.153) and msg2 read "no recovery" (0.112 < 0.193), and a reader would quote
+whichever suited. Under the prior floor both say the same thing.
+
+Two things were checked before blaming the floor, and one of them refuted the first
+guess:
+
+- **The decoy draw is not the free parameter.** `to_decoy` was recomputed over 24
+  independent decoy draws, and again over draws from half the pool: sd 0.012–0.026, and
+  the verdict was 24/24 stable in *both* directions. The floor is stable; it is
+  measuring the wrong thing.
+- **The post-hoc pool was not the run's own.** `recover_recompute.py` rebuilt the decoy
+  alphabet from texts C+B, because artifacts stored only the **size** of the run's basis
+  alphabet. That proxy is a strict subset — 163 of 303 words on msg1, 187 of 337 on
+  msg2. It did not change the verdict here (previous point), but a floor drawn from half
+  the alphabet is a different measurement wearing the same field name. Runs now store
+  the lexicon itself; on an older artifact the script falls back to the proxy and
+  **names it in the block**.
+
+### Two copies of the scoring code, already drifted
+
+The fix is also a de-duplication, and the duplication had already cost something. The
+inline arm and the post-hoc recompute were separate implementations of the same
+scoring, and the recompute shipped **bare means with no intervals** where the inline
+arm shipped means with intervals — so two files in this directory carried the same
+field name under two different standards of evidence, and the weaker one carried the
+headline. Scoring now lives in exactly one place, `silent_channel.recovery_block()`,
+which both call.
+
+### A blind arm was wearing a verdict, and the failure direction was the bad one
+
+Found by the first live drive of the fixed code, not by the unit tests — every fixture
+had readings in every arm. At `-n 6` the reader missed the length profile on **all six**
+control readings (`compliance.B.valid: 0`), so the prior arm was `n=0`. The block still
+printed **"NO recovery above the prior (A − B_prior includes 0)"**: a claim about an
+interval that does not exist.
+
+That is the worst possible direction for it to fail. No-recovery is also the *true*
+answer, so a completely blind run agrees with the real ones and cannot be told apart
+from them — a run that measured nothing would have corroborated the finding above.
+An empty treatment or prior arm now renders `UNKNOWN` naming which arm is missing, and
+`excludes_zero` is `None` rather than `False`, because `False` is a measured negative.
+The other arms still report their own numbers; only the verdict abstains.
+
+`test_recovery.py` covers it with 14 mutants driven red against a green control,
+including the original bug (verdict keyed on the decoy floor), the recompute's missing
+intervals, a one-sample difference interval, and each half of the blindness guard. Its fixture had to be fixed twice
+before it could discriminate: a single-bucket lexicon cannot tell a length-matched decoy
+from an unmatched one, and two identical arms give a zero-width interval that contains 0
+for free — an arm that cannot fail.
 
 ## The recovery numbers are similarities, not distances
 
-`recovery.to_true` and `recovery.to_decoy` are **cosine similarities: higher means
-closer.** "The readings sit 0.210 from the true original" inverts the direction and
-is the sentence a reader will quote, so the artifact carries `metric`, `direction`
-and `reading` fields spelling it out. `to_decoy >= to_true` is the no-recovery
-result.
+`recovery.to_true`, `to_prior`, `to_chance` and `to_decoy` are **cosine similarities:
+higher means closer.** "The readings sit 0.210 from the true original" inverts the
+direction and is the sentence a reader will quote, so the artifact carries `metric`,
+`direction` and `reading` fields spelling it out. The no-recovery result is
+`A_minus_prior.ci` containing 0 — not `to_decoy >= to_true`, which was the old and
+wrong test.
 
 ## Running it
 
