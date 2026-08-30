@@ -359,3 +359,64 @@ The lesson generalises past this file: **a bound is not a measurement of the thi
 bounds.** The same slack hid a docstring that stated the Miller–Madow term's magnitude ten
 orders of magnitude too low — the only assertion on it was that it is small, which a
 decorative claim satisfies as easily as a true one.
+
+---
+
+# Does the ceiling hold in another language?
+
+The 3.30 bits above is English. It is worth asking whether Silent Language is an English
+trick or a property of writing, and the answer is computable with the same instrument.
+
+Both corpora come from `wikimedia/wikipedia` (`20231101.en`, `20231101.ru`), streamed
+through **one pipeline, one tokeniser** (`\b\w+\b`, which is Unicode and sees Cyrillic and
+Latin alike), and **matched on token count to 0.006%** — 6,885,217 against 6,885,609.
+`measure/extract_corpus.py` does the streaming and stops on a budget counted in tokens
+*inside* the 3–12-word window, so the number budgeted is the number the estimator sees.
+
+| | English | Russian |
+|---|---:|---:|
+| mean word length | 4.93 | 6.12 |
+| word types | 305,105 | 538,964 |
+| **H(length) = I(word;length)** | **3.345** | **3.701** |
+| H(word) | 12.268 | 14.446 |
+| **H(word \| length)** — the reader's burden | **8.923** | **10.745** |
+| share the shape carries | 27.3% | 25.6% |
+| **equiprobable words per slot** | **485** | **1,716** |
+
+**Russian Silent Language is objectively harder to read.** Same protocol, and the slot the
+reader fills is 3.5× wider. A ten-word sentence leaves an English reader 89 bits to invent
+and a Russian reader 107.
+
+Two predictions were written down before the run and both held: Russian has higher H(length)
+(longer, more varied words; no articles piling up short tokens) and much higher H(word)
+(1.77× the vocabulary at equal N). The share was left genuinely open, and it came out
+*lower* — morphology inflates the vocabulary faster than it inflates length variety.
+
+## The control that makes this comparable
+
+English was **re-measured through this pipeline** even though wikitext-103 had already
+answered. It gives 3.345 here against 3.305 there. So corpus processing moves the number by
+0.04 bits and language moves it by 0.36 — the language effect is ~9× the pipeline artifact.
+Run on two differently-prepared corpora, those two would not be separable, and the
+difference would have been reported as language.
+
+## Three things this does not establish
+
+- **The share difference is the weakest number in the table**, at 1.7 percentage points.
+  Russian carries 1.77× the types at equal N, so its heavier tail is less well sampled and
+  *both* its entropies are underestimated by more. Which way that pushes a RATIO is not
+  settled here. The robust claims are H(length) — small support, tightly estimated — and the
+  1.82-bit absolute gap in H(word|length).
+- **The collision arm is not reported per language**, though the figure is tempting (a
+  Russian sentence lands in a group of 19.3 against 6.6). At equal tokens Russian yielded
+  more in-window sentences (868,465 vs 779,268), i.e. they are shorter in WORDS — 7.93
+  against 8.84. Fewer positions, smaller shape space, more collisions, mechanically. That is
+  a sentence-length difference wearing a language label, and it needs a length-controlled
+  comparison before it means anything.
+- **Morphology and word order cannot be separated.** The estimator is unigram; word order is
+  invisible to it. Russian's freer order constrains the next word less, which pushes the same
+  direction as the larger vocabulary and is folded into the same 1.82 bits. The difference is
+  nameable; its causes are not decomposable by this instrument.
+
+Artifacts: [`result-ceiling-en-wikipedia.json`](result-ceiling-en-wikipedia.json),
+[`result-ceiling-ru-wikipedia.json`](result-ceiling-ru-wikipedia.json).

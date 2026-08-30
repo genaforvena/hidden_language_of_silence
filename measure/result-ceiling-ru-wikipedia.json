@@ -1,0 +1,267 @@
+{
+ "corpus": {
+  "kind": "file",
+  "path": "/tmp/claude-1000/-home-mesh-home-lte-workstation/7ed08430-eb0b-4989-9b1f-4ffad3991346/scratchpad/corpus-ru.txt",
+  "rows": 26081
+ },
+ "window": [
+  3,
+  12
+ ],
+ "seed": 20260830,
+ "tokenisers": {
+  "stage_1": {
+   "distinct_sentences": 868465,
+   "word_arm_full": {
+    "tokens": 6885609,
+    "word_types": 538964,
+    "length_values": 46,
+    "H_word_bits": {
+     "plugin": 14.389284122369844,
+     "miller_madow": 14.44574675678044
+    },
+    "H_length_bits": {
+     "plugin": 3.7005146102939195,
+     "miller_madow": 3.7005193245666033
+    },
+    "H_word_given_length_bits": {
+     "plugin": 10.688769512075925,
+     "miller_madow": 10.745227432213829
+    },
+    "I_word_length_bits": {
+     "plugin": 3.7005146102939186,
+     "miller_madow": 3.7005193245666117
+    },
+    "identity_residual_bits": {
+     "plugin": -8.881784197001252e-16,
+     "miller_madow": 8.43769498715119e-15
+    },
+    "shape_share_of_word": {
+     "plugin": 0.2571715575857614,
+     "miller_madow": 0.2561667033813734
+    },
+    "effective_words_per_slot": {
+     "plugin": 1650.5939155562005,
+     "miller_madow": 1716.4682213850513
+    },
+    "length_distribution": {
+     "1": 814081,
+     "2": 464857,
+     "3": 442506,
+     "4": 752433,
+     "5": 665010,
+     "6": 713637,
+     "7": 709221,
+     "8": 598058,
+     "9": 511274,
+     "10": 417001,
+     "11": 287114,
+     "12": 211013,
+     "13": 129169,
+     "14": 72346,
+     "15": 48253,
+     "16": 24475,
+     "17": 11958,
+     "18": 6146,
+     "19": 3184,
+     "20": 1931,
+     "21": 1272,
+     "22": 358,
+     "23": 160,
+     "24": 59,
+     "25": 27,
+     "26": 10,
+     "27": 10,
+     "28": 4,
+     "29": 3,
+     "30": 3,
+     "31": 2,
+     "34": 4,
+     "35": 1,
+     "36": 1,
+     "38": 1,
+     "41": 2,
+     "42": 6,
+     "44": 1,
+     "45": 4,
+     "47": 2,
+     "51": 1,
+     "52": 1,
+     "55": 2,
+     "56": 3,
+     "58": 4,
+     "84": 1
+    }
+   },
+   "word_arm_half": {
+    "tokens": 3442989,
+    "I_word_length_bits": {
+     "plugin": 3.700744221428975,
+     "miller_madow": 3.7007523923970798
+    },
+    "H_word_given_length_bits": {
+     "plugin": 10.615987809020694,
+     "miller_madow": 10.693541819476529
+    }
+   },
+   "collisions_by_corpus_fraction": [
+    {
+     "fraction": 0.1,
+     "distinct_sentences": 86846,
+     "distinct_signatures": 77927,
+     "unique_signature_share_of_signatures": 0.9650185429953675,
+     "unique_signature_share_of_sentences": 0.8659120742463672,
+     "median_group_size": 1,
+     "max_group_size": 133,
+     "mean_group_size_a_sentence_lands_in": 2.9023098358013035
+    },
+    {
+     "fraction": 0.25,
+     "distinct_sentences": 217116,
+     "distinct_signatures": 188659,
+     "unique_signature_share_of_signatures": 0.9600814167360158,
+     "unique_signature_share_of_sentences": 0.8342452882330182,
+     "median_group_size": 1,
+     "max_group_size": 328,
+     "mean_group_size_a_sentence_lands_in": 5.476243114279924
+    },
+    {
+     "fraction": 0.5,
+     "distinct_sentences": 434232,
+     "distinct_signatures": 366048,
+     "unique_signature_share_of_signatures": 0.9555140309467611,
+     "unique_signature_share_of_sentences": 0.8054772563975018,
+     "median_group_size": 1,
+     "max_group_size": 682,
+     "mean_group_size_a_sentence_lands_in": 10.05738867702058
+    },
+    {
+     "fraction": 1.0,
+     "distinct_sentences": 868465,
+     "distinct_signatures": 708506,
+     "unique_signature_share_of_signatures": 0.9505706373693378,
+     "unique_signature_share_of_sentences": 0.7754889373780175,
+     "median_group_size": 1,
+     "max_group_size": 1405,
+     "mean_group_size_a_sentence_lands_in": 19.34804396262371
+    }
+   ],
+   "by_sentence_length": {
+    "3": {
+     "distinct_sentences": 64056,
+     "distinct_signatures": 3481,
+     "unique_signature_share_of_sentences": 0.01355064318721119,
+     "mean_group_size_a_sentence_lands_in": 179.15595728737355,
+     "shape_bits_ceiling": 11.10155797369981,
+     "word_bits_needed_unigram": 43.337240270341326
+    },
+    "4": {
+     "distinct_sentences": 79216,
+     "distinct_signatures": 21279,
+     "unique_signature_share_of_sentences": 0.1270450414057766,
+     "mean_group_size_a_sentence_lands_in": 51.53461421934963,
+     "shape_bits_ceiling": 14.802077298266413,
+     "word_bits_needed_unigram": 57.78298702712176
+    },
+    "5": {
+     "distinct_sentences": 75462,
+     "distinct_signatures": 53644,
+     "unique_signature_share_of_sentences": 0.5787813734064827,
+     "mean_group_size_a_sentence_lands_in": 4.348599295009409,
+     "shape_bits_ceiling": 18.502596622833018,
+     "word_bits_needed_unigram": 72.2287337839022
+    },
+    "6": {
+     "distinct_sentences": 84056,
+     "distinct_signatures": 74902,
+     "unique_signature_share_of_sentences": 0.8344912915199391,
+     "mean_group_size_a_sentence_lands_in": 2.6595127058151706,
+     "shape_bits_ceiling": 22.20311594739962,
+     "word_bits_needed_unigram": 86.67448054068265
+    },
+    "7": {
+     "distinct_sentences": 90705,
+     "distinct_signatures": 86411,
+     "unique_signature_share_of_sentences": 0.9255719089355603,
+     "mean_group_size_a_sentence_lands_in": 1.524182790364368,
+     "shape_bits_ceiling": 25.903635271966223,
+     "word_bits_needed_unigram": 101.12022729746309
+    },
+    "8": {
+     "distinct_sentences": 95143,
+     "distinct_signatures": 92456,
+     "unique_signature_share_of_sentences": 0.9555826492753013,
+     "mean_group_size_a_sentence_lands_in": 1.6612152234005655,
+     "shape_bits_ceiling": 29.604154596532826,
+     "word_bits_needed_unigram": 115.56597405424353
+    },
+    "9": {
+     "distinct_sentences": 96629,
+     "distinct_signatures": 95344,
+     "unique_signature_share_of_sentences": 0.9764459944737087,
+     "mean_group_size_a_sentence_lands_in": 1.0399052044417307,
+     "shape_bits_ceiling": 33.30467392109943,
+     "word_bits_needed_unigram": 130.01172081102396
+    },
+    "10": {
+     "distinct_sentences": 96187,
+     "distinct_signatures": 95300,
+     "unique_signature_share_of_sentences": 0.9843014128728415,
+     "mean_group_size_a_sentence_lands_in": 1.0415856612639962,
+     "shape_bits_ceiling": 37.005193245666035,
+     "word_bits_needed_unigram": 144.4574675678044
+    },
+    "11": {
+     "distinct_sentences": 95214,
+     "distinct_signatures": 94295,
+     "unique_signature_share_of_sentences": 0.9849496922721449,
+     "mean_group_size_a_sentence_lands_in": 1.084504379608041,
+     "shape_bits_ceiling": 40.705712570232635,
+     "word_bits_needed_unigram": 158.90321432458484
+    },
+    "12": {
+     "distinct_sentences": 91797,
+     "distinct_signatures": 91394,
+     "unique_signature_share_of_sentences": 0.9918733727681732,
+     "mean_group_size_a_sentence_lands_in": 1.0107193045524363,
+     "shape_bits_ceiling": 44.40623189479924,
+     "word_bits_needed_unigram": 173.3489610813653
+    }
+   }
+  }
+ },
+ "provenance": {
+  "at_start": {
+   "utc": "2026-08-30T17:21:15+00:00",
+   "script_sha256": "60b2a63c651a34ff35d712153cd7f468c72039e248406e8e4c71ab7be3f1450c",
+   "git_head": "e443a9bb8aef53cea76075c169251e4c159931be",
+   "instrument_dirty": false,
+   "tree_dirty_files": 0
+  },
+  "at_write": {
+   "utc": "2026-08-30T17:21:33+00:00",
+   "script_sha256": "60b2a63c651a34ff35d712153cd7f468c72039e248406e8e4c71ab7be3f1450c",
+   "git_head": "e443a9bb8aef53cea76075c169251e4c159931be",
+   "instrument_dirty": false,
+   "tree_dirty_files": 0
+  },
+  "changed_mid_run": false,
+  "tree_moved_mid_run": false,
+  "note": "instrument identical at start and at write",
+  "argv": [
+   "measure/ceiling.py",
+   "--corpus-file",
+   "../corpus-ru.txt",
+   "--tokenisers",
+   "stage_1",
+   "-o",
+   "/tmp/claude-1000/-home-mesh-home-lte-workstation/7ed08430-eb0b-4989-9b1f-4ffad3991346/scratchpad/ceil-ru.json"
+  ],
+  "python": "3.12.3",
+  "corpus": {
+   "kind": "file",
+   "path": "/tmp/claude-1000/-home-mesh-home-lte-workstation/7ed08430-eb0b-4989-9b1f-4ffad3991346/scratchpad/corpus-ru.txt",
+   "rows": 26081
+  }
+ }
+}
