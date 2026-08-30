@@ -1,0 +1,183 @@
+{
+  "message": "The night is long and the city keeps its silence",
+  "lengths": [
+    3,
+    5,
+    2,
+    4,
+    3,
+    3,
+    4,
+    5,
+    3,
+    7
+  ],
+  "alt_lengths": [
+    3,
+    4,
+    5,
+    5,
+    3,
+    3,
+    7,
+    3,
+    3,
+    3
+  ],
+  "readings_requested": 12,
+  "seed": 20260830,
+  "compliance": {
+    "A": {
+      "valid": 12,
+      "misses": 0,
+      "mean_attempts": 1.5833333333333333
+    },
+    "B": {
+      "valid": 7,
+      "misses": 5,
+      "mean_attempts": 2.6666666666666665
+    }
+  },
+  "arms": {
+    "A_treatment": {
+      "n_texts": 12,
+      "n_pairs": 66,
+      "positional": {
+        "mean": 0.0893939393939394,
+        "ci": [
+          0.06515151515151515,
+          0.11666666666666667
+        ]
+      },
+      "jaccard": {
+        "mean": 0.08352858155489734,
+        "ci": [
+          0.06716103240871042,
+          0.10027156795732647
+        ]
+      },
+      "cosine": {
+        "mean": 0.23200937236733737,
+        "ci": [
+          0.2001984965821499,
+          0.2641718840798795
+        ]
+      }
+    },
+    "B_prior_control": {
+      "n_texts": 7,
+      "n_pairs": 21,
+      "positional": {
+        "mean": 0.10952380952380952,
+        "ci": [
+          0.06190476190476191,
+          0.17142857142857143
+        ]
+      },
+      "jaccard": {
+        "mean": 0.16344897608166073,
+        "ci": [
+          0.12393647517486527,
+          0.20907918723044772
+        ]
+      },
+      "cosine": {
+        "mean": 0.2698293941935913,
+        "ci": [
+          0.18113390682908903,
+          0.36125966438082197
+        ]
+      }
+    },
+    "C_random_basis": {
+      "n_texts": 12,
+      "n_pairs": 66,
+      "positional": {
+        "mean": 0.10437710437710437,
+        "ci": [
+          0.07912457912457913,
+          0.1313131313131313
+        ]
+      },
+      "jaccard": {
+        "mean": 0.14195090040678277,
+        "ci": [
+          0.11980380730380731,
+          0.16420711641299876
+        ]
+      },
+      "cosine": {
+        "mean": 0.3912739185324931,
+        "ci": [
+          0.36166643693421163,
+          0.41974074736533235
+        ]
+      }
+    }
+  },
+  "texts": {
+    "A": [
+      "All birds in blue sky can sing sweet and forever",
+      "You never be sure the any plan today now forever",
+      "All roads to lead the new life await our destiny",
+      "She loves to read the old book every day tonight.",
+      "The brave of king and the wild river sun journey",
+      "The quick is over the red wolf jumps and quickly",
+      "The world is vast but all hold hopes the mystery",
+      "The quick is fast and not time ahead for success",
+      "All shiny of wild the sky wolf river sun horizon.",
+      "All hopes of love are not true thing yet forever",
+      "The quick of time and the wild birds can flyhigh",
+      "You daily be kind and aid each other for success"
+    ],
+    "B": [
+      "The lazy brown quick fox and cunning cat ate yum",
+      "The good hopes quiet sky and courage can end now",
+      "The wild quick jumps the cat sunrise can now end",
+      "All hope gives peace the new journey and you win",
+      "One fine apple taste and the orchard for all kid",
+      "All good deeds bring joy the silence can end now",
+      "All good dream await the sun silence and joy now."
+    ],
+    "C": [
+      "for jumps fine kid one hope taste sky orchard",
+      "joy apple lazy ate all wild peace sun cunning",
+      "end peace hope one kid fine deeds sun orchard",
+      "can dream fine ate all wild quiet ate journey",
+      "yum taste lazy joy you lazy apple and journey",
+      "one taste lazy sun win hope jumps the courage",
+      "sky peace wild one end fine hopes sun courage",
+      "yum quick good now sun wild quick joy sunrise",
+      "and brown fine ate the hope taste end cunning",
+      "win gives fine and end hope peace fox orchard",
+      "you apple good one ate hope peace one orchard",
+      "sun taste lazy you ate lazy hopes ate sunrise"
+    ]
+  },
+  "recovery": {
+    "to_true": {
+      "mean": 0.18723266601147312,
+      "ci": [
+        0.14999676210119822,
+        0.22229999747315676
+      ]
+    },
+    "to_decoy": {
+      "mean": 0.21563678963637226,
+      "ci": [
+        0.18926063247992939,
+        0.24219659948036493
+      ]
+    },
+    "decoys": [
+      "new apple xx hope all and wild brown all courage",
+      "the deeds xx lazy yum and hope taste now cunning",
+      "you deeds xx good all cat lazy bring end courage",
+      "can hopes xx lazy sky for fine await cat journey",
+      "the bring xx good all and fine hopes fox orchard",
+      "now gives xx good fox one hope jumps one sunrise",
+      "joy await xx fine end now good hopes one courage",
+      "sun bring xx fine can sky lazy gives can orchard"
+    ]
+  }
+}

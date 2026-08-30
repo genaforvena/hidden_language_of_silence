@@ -1,0 +1,343 @@
+{
+  "message": "The night is long and the city keeps its silence",
+  "lengths": [
+    3,
+    5,
+    2,
+    4,
+    3,
+    3,
+    4,
+    5,
+    3,
+    7
+  ],
+  "alt_lengths": [
+    3,
+    4,
+    5,
+    5,
+    3,
+    3,
+    7,
+    3,
+    3,
+    3
+  ],
+  "readings_requested": 20,
+  "seed": 20260830,
+  "random_basis_alphabet": {
+    "source": "reader-vocabulary+B",
+    "words": 134
+  },
+  "compliance": {
+    "A": {
+      "valid": 15,
+      "misses": 5,
+      "mean_attempts": 2.2
+    },
+    "B": {
+      "valid": 12,
+      "misses": 8,
+      "mean_attempts": 3.15
+    }
+  },
+  "arms": {
+    "A_treatment": {
+      "n_texts": 15,
+      "n_pairs": 105,
+      "positional": {
+        "mean": 0.17523809523809525,
+        "ci": [
+          0.15333333333333335,
+          0.1980952380952381
+        ]
+      },
+      "jaccard": {
+        "mean": 0.14249981864090666,
+        "ci": [
+          0.12877015133538797,
+          0.15733296827502932
+        ]
+      },
+      "cosine": {
+        "mean": 0.2520527661485056,
+        "ci": [
+          0.22609885372491817,
+          0.2799827996406713
+        ]
+      }
+    },
+    "B_prior_control": {
+      "n_texts": 12,
+      "n_pairs": 66,
+      "positional": {
+        "mean": 0.12878787878787878,
+        "ci": [
+          0.1,
+          0.1621212121212121
+        ]
+      },
+      "jaccard": {
+        "mean": 0.1285890580008227,
+        "ci": [
+          0.10900140164846048,
+          0.14942696192696192
+        ]
+      },
+      "cosine": {
+        "mean": 0.2679346674069266,
+        "ci": [
+          0.22691265196941077,
+          0.30987503481940815
+        ]
+      }
+    },
+    "C_random_basis": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.04421052631578948,
+        "ci": [
+          0.03473684210526316,
+          0.053157894736842105
+        ]
+      },
+      "jaccard": {
+        "mean": 0.04925773541180092,
+        "ci": [
+          0.042253951442072675,
+          0.05665537359911647
+        ]
+      },
+      "cosine": {
+        "mean": 0.23896216068107584,
+        "ci": [
+          0.222376669394383,
+          0.2564950417720119
+        ]
+      }
+    }
+  },
+  "texts": {
+    "A": [
+      "The story of love and war will alter the destiny",
+      "The music is loud and the soft notes for harmony",
+      "The small of hand and you must focus now forever",
+      "The quick on lazy fox ran over green the sunrise.",
+      "The quick ox hops the red lazy brown dog forever.",
+      "She sings to wind and sky over sunny new sunrise",
+      "The magic of moon sun and rise shiny for forever",
+      "The quick ox hops the old slow hound and snoozes",
+      "The quick of tiny can fly over light and horizon",
+      "The quick of lazy cat ate tiny mouse now quickly",
+      "All brave of mind see the deep stars and heavens",
+      "The brave of tiny ant and over mount out quietly",
+      "The quick of lazy the dog runs swift and quickly",
+      "The quick of love and all good dream you forever",
+      "One brave to rise and sky will again out forever"
+    ],
+    "B": [
+      "She will chase after the old sunrise and hug you",
+      "The dark quiet woods and the silence now fog all",
+      "The cold water flows and ice glacier for the sun",
+      "The hard shell crack and let lighten the sky now",
+      "The fast brown foxes can see nothing but the sky.",
+      "The slow brown foxes run far outside the zoo pig",
+      "The blue whale sings low yet ancient sea and joy",
+      "The over quick brown fox and mystery dog are not",
+      "All hope rises above sky and silence the low hum",
+      "The fast brown foxes can now capture the red egg",
+      "The only small birds can fly freedom and see sky",
+      "The fast brown foxes can not capture the old dog"
+    ],
+    "C": [
+      "pig would in dark yet fog look these far mystery",
+      "now shell of much yet for this woods you nothing",
+      "she birds of some sun now than quiet red capture",
+      "sun foxes to some you dog look after pig sunrise",
+      "one think on have pig one only quick sun sunrise",
+      "all whale by help use for once birds joy freedom",
+      "are chase do make see fox come water the mystery",
+      "are birds do over hug fly cold woods one lighten",
+      "run after he find not fly with about now outside",
+      "but water by from for was from begin can silence",
+      "you think in over two but blue begin joy capture",
+      "are begin by this hug you this small run silence",
+      "pig whale at tell yet zoo they rises hum freedom",
+      "joy these of dark one two open where hug nothing",
+      "new begin by work old one some these run capture",
+      "egg begin it give hum and hope could joy freedom",
+      "but shell in slow far now with where not mystery",
+      "not think by come dog sun work these egg mystery",
+      "the rises do than you old open these hug lighten",
+      "use right we with zoo red from begin are sunrise"
+    ]
+  },
+  "recovery": {
+    "to_true": {
+      "mean": 0.21015381848048914,
+      "ci": [
+        0.17466931229617594,
+        0.24474759153528047
+      ]
+    },
+    "to_decoy": {
+      "mean": 0.21615210139757973,
+      "ci": [
+        0.18883991060288757,
+        0.24295433760746665
+      ]
+    },
+    "decoys": [
+      "far flows in both and ice that there all silence",
+      "see crack in make see sea very birds but capture",
+      "way about it from his she than could was sunrise",
+      "hug foxes it take sea let will could but freedom",
+      "yet shell it know fly yet both about sun freedom",
+      "hum above of come ice far have begin joy freedom",
+      "for flows it make ice and tell flows for outside",
+      "way water we than far fly call quick far sunrise"
+    ]
+  },
+  "where_the_agreement_sits": {
+    "A_treatment": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.6285714285714286
+        },
+        {
+          "len": 5,
+          "agreement": 0.22857142857142856
+        },
+        {
+          "len": 2,
+          "agreement": 0.3619047619047619
+        },
+        {
+          "len": 4,
+          "agreement": 0.05714285714285714
+        },
+        {
+          "len": 3,
+          "agreement": 0.17142857142857143
+        },
+        {
+          "len": 3,
+          "agreement": 0.02857142857142857
+        },
+        {
+          "len": 4,
+          "agreement": 0.06666666666666667
+        },
+        {
+          "len": 5,
+          "agreement": 0.0
+        },
+        {
+          "len": 3,
+          "agreement": 0.09523809523809523
+        },
+        {
+          "len": 7,
+          "agreement": 0.11428571428571428
+        }
+      ],
+      "short_words_le3": 0.2571428571428571,
+      "content_words_ge5": 0.11428571428571428
+    },
+    "B_prior_control": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.6818181818181818
+        },
+        {
+          "len": 4,
+          "agreement": 0.045454545454545456
+        },
+        {
+          "len": 5,
+          "agreement": 0.09090909090909091
+        },
+        {
+          "len": 5,
+          "agreement": 0.09090909090909091
+        },
+        {
+          "len": 3,
+          "agreement": 0.13636363636363635
+        },
+        {
+          "len": 3,
+          "agreement": 0.015151515151515152
+        },
+        {
+          "len": 7,
+          "agreement": 0.030303030303030304
+        },
+        {
+          "len": 3,
+          "agreement": 0.16666666666666666
+        },
+        {
+          "len": 3,
+          "agreement": 0.015151515151515152
+        },
+        {
+          "len": 3,
+          "agreement": 0.015151515151515152
+        }
+      ],
+      "short_words_le3": 0.1717171717171717,
+      "content_words_ge5": 0.0707070707070707
+    },
+    "C_random_basis": {
+      "per_position": [
+        {
+          "len": 3,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 5,
+          "agreement": 0.04736842105263158
+        },
+        {
+          "len": 2,
+          "agreement": 0.1
+        },
+        {
+          "len": 4,
+          "agreement": 0.015789473684210527
+        },
+        {
+          "len": 3,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 3,
+          "agreement": 0.021052631578947368
+        },
+        {
+          "len": 4,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 5,
+          "agreement": 0.05789473684210526
+        },
+        {
+          "len": 3,
+          "agreement": 0.02631578947368421
+        },
+        {
+          "len": 7,
+          "agreement": 0.09473684210526316
+        }
+      ],
+      "short_words_le3": 0.04,
+      "content_words_ge5": 0.06666666666666667
+    }
+  }
+}
