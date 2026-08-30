@@ -5,19 +5,52 @@ Silent Language is a deliberately incomplete writing system. It encodes sentence
 
 ## Protocol
 ### Encoding (Writer)
-- Each word is encoded by repeating a chosen non-linguistic symbol.
-- Writers select any non-linguistic symbol for each word.
-- The number of repetitions equals word length.
-- Symbol choice carries no message.
+- Each word becomes a run of **spaces**, one space per letter.
+- Words are separated by a **tab**.
+- Nothing else is written. The encoded message is entirely whitespace.
 
-Example:
+The channel is the sequence of word lengths and nothing else — not because the symbols
+were chosen to carry no meaning, but because **there are no symbols**. A reader receives
+a shape of silence.
+
+The separator has to be something other than a space. If the gaps between words were
+spaces too, `6 + gap + 8` would be fifteen spaces in a row, and one fifteen-letter word
+would be indistinguishable from two words. That is not a legibility problem, it is the
+channel ceasing to be decodable.
+
+Example. The dot column is what is actually transmitted, with `·` standing in for each
+space — **the dots are not part of the encoding**; a real run of spaces cannot be shown on
+a page. The number is that run's length, which is the entire channel.
+
 ```
 Silent language fails beautifully
+
+Silent        ······         6
+language      ········       8
+fails         ·····          5
+beautifully   ···········   11
 ```
-Could become:
+
+Another:
+
 ```
-◆︎◆︎◆︎◆︎◆︎◆︎ ◇︎◇︎◇︎◇︎◇︎◇︎◇︎◇︎ ▷︎▷︎▷︎▷︎ ○︎○︎○︎○︎○︎○︎○︎○︎○︎○︎
+The night is long
+
+The     ···      3
+night   ·····    5
+is      ··       2
+long    ····     4
 ```
+
+Reference implementation: [`silent.py`](silent.py). `encode()` returns the real
+whitespace; `visible()` is a debug rendering only. A visible stand-in for a space is a
+symbol again, and symbols are what this encoding exists to remove.
+
+**A note on displaying it.** HTML and Markdown collapse consecutive spaces, so a raw
+encoded message pasted into a web page renders as a single space and looks like nothing
+at all. Anything that shows the channel must preserve whitespace — a fenced code block, a
+`<textarea>`, or `white-space: pre`. This is a property of the medium, not a defect in the
+encoding, but it will bite anyone who forgets it.
 
 ### Decoding (Reader)
 - The reader uses only length to guess words.
@@ -35,10 +68,14 @@ Could become:
 Original:
 ```
 The night is long
-```
-Writer output:
+
+The    ···  3
+night  ·····  5
+is     ··  2
+long   ····  4
 ```
 △︎△︎△︎ ◇︎◇︎◇︎◇︎◇︎ ◎︎◎︎ ◇︎◇︎◇︎◇︎
+ 3    5   2   4
 ```
 Reader interpretation:
 ```

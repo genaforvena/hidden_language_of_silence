@@ -8,6 +8,9 @@
     textarea, input, select, button { width: 100%; margin: 0.5rem 0; padding: 0.5rem; }
     .section { margin-bottom: 2rem; }
     .hint { font-size: 0.85rem; color: #555; line-height: 1.4; }
+    /* whitespace is the message; never let the browser collapse it */
+    .preview { white-space: pre; overflow-x: auto; background: #f4f4f4; padding: 0.5rem; }
+    #writerOutput, #readerInput { white-space: pre; font-family: monospace; }
   </style>
 </head>
 <body>
@@ -17,12 +20,16 @@
     <h2>Writer</h2>
     <textarea id="writerInput" placeholder="Enter natural language text..."></textarea>
     <button onclick="generateSilent()">Generate Silent Language</button>
-    <textarea id="writerOutput" readonly placeholder="Silent language output..."></textarea>
+    <textarea id="writerOutput" readonly placeholder="(whitespace only — there is nothing to see)"></textarea>
+    <pre id="writerPreview" class="preview"></pre>
+    <p class="hint">The box above holds the real message: spaces for letters, tabs between
+    words. It looks empty because it <em>is</em> whitespace. The line under it is a debug
+    rendering with a dot per space — the dots are not part of the encoding.</p>
   </div>
 
   <div class="section">
     <h2>Reader</h2>
-    <textarea id="readerInstruction" placeholder="Enter Groq instruction prompt...">You will decode a series of symbol clusters into a sentence. Each cluster's length equals a word length. Example: ■︎■︎■︎ ■︎■︎■︎■︎ = 'the road'. Use coherent words that match the structure.</textarea>
+    <textarea id="readerInstruction" placeholder="Enter Groq instruction prompt...">You will decode a series of symbol clusters into a sentence. Each cluster's length equals a word length. Example: word lengths 3, 4 = 'the road'. Use coherent words that match the structure.</textarea>
     <textarea id="readerInput" placeholder="Enter silent language input..."></textarea>
     <select id="modelSelect">
       <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
@@ -42,33 +49,37 @@
   </div>
 
   <script>
-    // Symbols are pinned to TEXT presentation with U+FE0E. Several of these -- U+25FC above
-    // all -- have DEFAULT emoji presentation, so a font may draw them coloured and at double
-    // width, which swallows the single space between clusters. Word boundaries are the whole
-    // channel; a reader who cannot see them got a different message, not a shorter one.
-    // U+2601 CLOUD and U+2717 BALLOT X were dropped outright: the protocol says symbol choice
-    // carries no message, and a cloud and a rejection mark both carry one.
-    const TEXT = '︎';
-    // Drawn from Geometric Shapes (U+25xx), which live in the TEXT font. The set used to
-    // include Dingbats (U+27xx) -- U+2726, U+2794, U+2756 -- and Android renders those from
-    // the EMOJI font whatever the intent, which is where this was being read. U+25FC was
-    // dropped for the same reason: it has Emoji_Presentation by default. U+25A0 does not.
-    const SYMBOLS = ['■', '◆', '◇', '▷', '○', '△', '▽', '◎', '⬟', '⬢']
-      .map(c => c + TEXT);
+    // A word is a run of SPACES, one per letter. Words are separated by a TAB.
+    // The encoded message is entirely whitespace -- there is nothing to look at, which
+    // is the point and what the project's name always claimed.
+    //
+    // The separator must not be a space. If it were, 6 + gap + 8 would be fifteen spaces
+    // in a row and one fifteen-letter word could not be told from two words: the channel
+    // would stop being decodable, which is worse than being hard to read.
+    const WORD_SEP = "\t";
+
+    function encode(sentence) {
+      return sentence.trim().split(/\s+/).map(w => " ".repeat(w.length)).join(WORD_SEP);
+    }
+
+    // Debug rendering ONLY, never the channel. A visible stand-in for a space is a symbol
+    // again, and symbols are what this encoding exists to remove.
+    function visible(encoded) {
+      return encoded.split(WORD_SEP).map(c => "·".repeat(c.length)).join("  ");
+    }
+
     let GROQ_API_KEY = null;
 
     function generateSilent() {
       const input = document.getElementById('writerInput').value.trim();
       if (!input) return;
-      const words = input.split(/\s+/);
-      const clusters = words.map(word => {
-        // Random per word, independent of length. A symbol chosen BY length would restate
-        // the one thing the channel transmits, and the reader could skip counting.
-        const symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
-        return symbol.repeat(word.length);
-      });
-      document.getElementById('writerOutput').value = clusters.join(' ');
-      document.getElementById('readerInput').value = clusters.join(' ');
+      const enc = encode(input);
+      // The textarea preserves whitespace; the preview beside it exists because a run of
+      // spaces is invisible, so without it the writer cannot tell success from a no-op.
+      document.getElementById('writerOutput').value = enc;
+      document.getElementById('writerPreview').textContent =
+        visible(enc) + "   (" + enc.split(WORD_SEP).map(c => c.length).join(", ") + ")";
+      document.getElementById('readerInput').value = enc;
     }
 
     async function oneReading(model, fullPrompt) {
@@ -88,8 +99,7 @@
         const data = await response.json();
         if (!response.ok) {
           // Name WHICH failure this is. A retired model id and a bad key used to render
-          // identically here, and every model this page used to offer had been retired
-          // by Groq -- so the demo failed silently and looked like a key problem.
+          // identically here, and every model this page once offered had been retired.
           return `[HTTP ${response.status}] ${data.error?.message || "unknown error"}`;
         }
         return data.choices?.[0]?.message?.content?.trim() || "[no response]";
@@ -108,13 +118,18 @@
       const model = document.getElementById('modelSelect').value;
       const n = Math.max(1, Math.min(8, parseInt(document.getElementById('nReads').value) || 1));
       const out = document.getElementById('readerOutput');
-      if (!silentInput.trim()) { out.value = "[nothing to read]"; return; }
-      const fullPrompt = `${instruction.trim()}\n\n${silentInput.trim()}`;
+      if (!silentInput.length) { out.value = "[nothing to read]"; return; }
+
+      // The lengths are spelled out for the model. Whitespace does not survive a JSON
+      // round trip through a chat API reliably, and a prompt that LOOKS empty gets an
+      // answer about emptiness -- which would be the reader hallucinating about our bug
+      // rather than about the message.
+      const lens = silentInput.split(WORD_SEP).map(c => c.length);
+      const fullPrompt = `${instruction.trim()}\n\nWord lengths: ${lens.join(", ")}`;
 
       out.value = `reading ${n}x ...`;
-      // Each reading is its OWN request. Asking one call for a list of n guesses is one
-      // reading of a list, not n independent readings -- the whole measurement in measure/
-      // turns on that distinction.
+      // Each reading is its OWN request. One call asked for n guesses is one reading of a
+      // list, not n independent readings -- the distinction the measurement turns on.
       const results = await Promise.all(
         Array.from({ length: n }, () => oneReading(model, fullPrompt))
       );
