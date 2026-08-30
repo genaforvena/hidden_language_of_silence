@@ -145,6 +145,35 @@ version of the code that no longer existed in the tree.
 An essay about what went wrong on the way to these numbers:
 [*Your models agreed with each other. They were agreeing with themselves.*](https://dev.to/ilya_mozerov_867dbdd91feb/your-models-agreed-with-each-other-they-were-agreeing-with-themselves-3jb0)
 
+## The ceiling — measured without asking a model anything
+
+The recovery result above says readers do not recover the message. The obvious next
+question is whether they *could*, and it is answered by counting, not by prompting.
+
+A word's shape is its length. On wikitext-103 (6.89M tokens in the 3–12-word window,
+761,273 distinct sentences), a word's length is worth **3.42 bits** and a word carries
+**11.72**. What survives encoding is **28.1%** of the word; the reader supplies the
+other **8.42 bits**, which is **343 equiprobable words per slot**. A ten-word sentence
+leaves ~84 bits to invent.
+
+So the null result is not a failure of the readers — **it is the prediction**. Two
+readers handed the same shape are choosing inside the same 343-wide slot with the same
+prior, which is exactly what the prior control caught them doing.
+
+One number in that measurement is a trap, and it is the quotable one. Counting how many
+distinct corpus sentences share a signature says 84% of signatures are unique — which
+invites "then the shape nearly identifies the sentence". It does not: the same count run
+at 10%, 25%, 50% and 100% of the corpus gives 91.8% → 88.8% → 86.5% → 83.9%, falling
+monotonically with no sign of settling, and the average group a sentence lands in grows
+1.4 → 4.8. In-corpus uniqueness is a statement about the corpus's size. A 12-word shape
+indexes 2⁴¹ possibilities against 10⁵ available sentences, so its uniqueness is
+arithmetically forced and measures nothing at all.
+
+Method, every caveat, the per-length table, and the estimator direction the arm got
+backwards until a test caught it: [`measure/README.md`](measure/README.md#the-ceiling-how-much-can-the-channel-carry-at-all).
+Artifact: [`measure/result-ceiling.json`](measure/result-ceiling.json). No model, no
+network — this arm cannot be wrong about a reader, because it never asks one.
+
 ## Philosophical Grounding
 - No text carries meaning inherently.
 - Meaning is projection, hallucination, negotiation.

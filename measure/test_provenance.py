@@ -60,9 +60,19 @@ def git(cwd, *a):
 
 def clone(dst):
     subprocess.run(["git", "clone", "-q", REPO, dst], check=True, capture_output=True)
-    # the working copy may be ahead of HEAD; test the instrument as it stands on disk
-    subprocess.run(["cp", os.path.join(HERE, "silent_channel.py"),
-                    os.path.join(dst, "measure", "silent_channel.py")], check=True)
+    # The working copy may be ahead of HEAD; test the instrument as it stands on disk.
+    #
+    # EVERY .py in measure/, not just silent_channel.py. It used to be just that one
+    # file, and that was correct only while the instrument WAS one file: the day the
+    # provenance block moved into provenance.py, a one-file copy would have run the
+    # working-tree instrument against the COMMITTED helper -- a hybrid that exists
+    # nowhere, reported as "the instrument as it stands on disk". A brand-new helper
+    # would not have been in the clone at all and the run would have died; a helper
+    # merely EDITED is the quiet case, and is the one this guards.
+    for f in sorted(os.listdir(HERE)):
+        if f.endswith(".py"):
+            subprocess.run(["cp", os.path.join(HERE, f),
+                            os.path.join(dst, "measure", f)], check=True)
     git(dst, "add", "-A")
     git(dst, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "baseline")
     return git(dst, "rev-parse", "HEAD").stdout.strip()

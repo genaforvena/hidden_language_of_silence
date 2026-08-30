@@ -219,3 +219,119 @@ Needs a reader command taking a prompt as `argv[1]` and printing the reply
 (`--relay`, default `mesh-relay`), and any embedding endpoint for the semantic
 metric (`--no-embed` to skip). Every reading, arm and pair lands in the JSON
 artifact so the numbers can be recomputed without re-running the models.
+
+---
+
+# The ceiling: how much can the channel carry at all?
+
+`silent_channel.py` asked whether readers recover the message and answered **no**.
+That is a result about two messages, one reader family, one framing — and it leaves
+the obvious question unasked. `ceiling.py` asks it, and needs **no model at all**:
+
+> A word's shape is its length. How many bits is that, against how many bits a word
+> carries?
+
+Measured on **wikitext-103** (the corpus `stage_1/` trains on), 6.89M tokens inside
+the 3–12-word sentence window, 761,273 distinct sentences, `[A-Za-z']+` tokenisation:
+
+| quantity | bits | what it is |
+|---|---:|---|
+| **H(length)** | **3.42** | hard ceiling on the channel, per word |
+| H(word) | 11.72 | what a word carries, unigram |
+| **H(word \| length)** | **8.42** | **what the READER must supply** |
+| I(word; length) | 3.30 | what the shape actually delivers = **28.1%** of the word |
+
+**343 words fit each slot.** Not 343 plausible ones — 343 *equiprobable* ones, which
+is what 8.42 residual bits means. A ten-word sentence therefore leaves ~84 bits for
+the reader to invent: about 10²⁵ word-sequences match the shape, under an
+independence assumption that only ever *overstates* the count.
+
+So the null result is not a failure of the readers. **It is the prediction.** Two
+readers handed the same shape are choosing inside the same 343-wide slot with the
+same prior, and that is precisely what the prior-control arm found them doing.
+
+## Where the estimate is solid and where it is not
+
+**Converged.** I(word; length) recomputed on a random half of the tokens moves by
+0.000 bits. An estimate still drifting between N/2 and N is not converged whatever
+its correction says, so this is reported rather than assumed.
+
+**H(L) carries the headline, and not I or the ratio.** H(L) has ~20 values and
+millions of samples. H(word) and H(word|length) both sit on a heavy tail whose mass
+is in types this corpus never saw; both are underestimated by an amount no
+first-order correction can see, and the conditional's bins are smaller so its unseen
+mass is proportionally larger. The direction of the *ratio's* bias is genuinely
+unknown.
+
+**The Miller–Madow correction is not where the uncertainty lives, and the arm was
+built believing the opposite.** It was written expecting the plug-in estimator to
+*inflate* I — "biased down, and biased down harder on the conditional, because each
+length bin holds fewer samples". The test asserting that direction failed on its
+first run. Every word has exactly one length, so the observed types partition across
+the bins: the conditional's corrections sum to (K−L)/2N against the marginal's
+(K−1)/2N, and therefore
+
+    I_plugin = I_MillerMadow − (L−1)/(2N ln2)
+
+— the plug-in *understates* I, by ~10⁻¹⁶ bits at this N. The direction was a guess.
+The identity is not. Both figures are in the artifact.
+
+## The collision arm, and why its most quotable number is worthless
+
+Arm 3 counts how many **distinct corpus sentences share one exact signature**. Pooled
+over the window it looks like this:
+
+| corpus fraction | distinct sentences | unique signature | group a sentence lands in |
+|---:|---:|---:|---:|
+| 10% | 76,127 | 91.8% | 1.4 |
+| 25% | 190,318 | 88.8% | 2.0 |
+| 50% | 380,636 | 86.5% | 2.9 |
+| 100% | 761,273 | 83.9% | 4.8 |
+
+**Read the first column, not the third.** "84% of signatures are unique" invites
+"then the shape nearly identifies the sentence", and the subsample control is there
+to kill that reading: uniqueness *falls* and group size *grows* monotonically as the
+corpus grows, with no sign of settling. In-corpus uniqueness is a statement about the
+corpus's size, not about English.
+
+Per sentence length the sparsity is naked:
+
+| n | distinct sentences | unique signature | group | shape bits ≤ | word bits (unigram) |
+|---:|---:|---:|---:|---:|---:|
+| 3 | 35,880 | 1.3% | 63.5 | 10.3 | 35.2 |
+| 5 | 45,223 | 46.1% | 2.8 | 17.1 | 58.6 |
+| 8 | 77,629 | 96.3% | 1.3 | 27.4 | 93.7 |
+| 12 | 129,195 | 98.9% | 1.0 | 41.0 | 140.6 |
+
+A 12-word shape indexes 2⁴¹ ≈ 2·10¹² possibilities and the corpus offers 1.3·10⁵
+sentences to spread over them, so uniqueness at n=12 is *arithmetically forced* and
+measures nothing. At n=3 there is no room to hide and 63 sentences share the average
+shape. The two arms are wrong in opposite directions **on purpose**: arm 2 assumes
+positions are independent and so overstates how many sentences fit a shape; arm 3
+counts only what this corpus held and so understates.
+
+The `shape bits ≤` / `word bits` ratio is constant at 29.2% down the table. That is a
+tautology — both columns are per-word quantities times n — and is printed only so
+nobody mistakes its constancy for a finding.
+
+## What this changes for `stage_1/`
+
+`stage_1/README.md` frames success as "the model reconstructs plausible, grammatical,
+context-appropriate sentences" and failure as "collapses to repetitive nonsense". Both
+outcomes are compatible with the channel being nearly empty, so neither is a
+measurement of the model. The target is the **ceiling**: a model given only lengths
+cannot do better than 3.42 bits per word, and the question worth asking is how close
+to that it gets — against a model given *no* input at all, which is the same prior
+control that dissolved the recovery result.
+
+## Running it
+
+```bash
+python3 measure/ceiling.py                                  # wikitext-103, both tokenisers
+python3 measure/ceiling.py --hf-config wikitext-2-raw-v1    # small and fast
+python3 measure/ceiling.py --corpus-file mytext.txt         # no huggingface at all
+python3 measure/test_ceiling.py                             # 11 arms, 6 mutants driven red
+```
+
+Needs `datasets` only for the huggingface path. No model, no network, no API key —
+which is the point: this arm cannot be wrong about a reader, because it never asks one.
