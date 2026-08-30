@@ -2,8 +2,8 @@
 
 A deliberately incomplete writing system. A sentence is transmitted as its word lengths
 and nothing else. The writer supplies rhythm; the reader supplies everything else, and
-`measure/ceiling.py` says how much everything else is: about 8.42 bits per word, roughly
-343 equiprobable words per slot. No reading is a decoding, because the sentence is not in
+`measure/ceiling.py` says how much everything else is: about 7.99 bits per word, roughly
+253 equiprobable words per slot. No reading is a decoding, because the sentence is not in
 the channel.
 
 The normative document is [`SPEC.md`](SPEC.md). This file is the tour.
@@ -146,13 +146,17 @@ question is whether they *could*, and it is answered by counting, not by prompti
 
 A word's shape is its length. On wikitext-103 (6.89M tokens in the 3–12-word window,
 761,273 distinct sentences), a word's length is worth **3.30 bits** and a word carries
-**11.72**. What survives encoding is **28.1%** of the word; the reader supplies the
-other **8.42 bits**, which is **343 equiprobable words per slot**. A ten-word sentence
-leaves ~84 bits to invent.
+**11.28**. What survives encoding is **29.2%** of the word; the receiver supplies the
+other **7.99 bits**, which is **253 equiprobable words per slot**. A ten-word sentence
+leaves ~80 bits to supply.
 
 So the null result is not a failure of the readers — **it is the prediction**. Two
-readers handed the same shape are choosing inside the same 343-wide slot with the same
+readers handed the same shape are choosing inside the same 253-wide slot with the same
 prior, which is exactly what the prior control caught them doing.
+
+That slot size is a **size, not a verdict**: it is how big the admissible set is. Call it
+difficulty if you want to recover the original, or room if you want to invent one — this
+project says reading is invention, so by its own values a wider slot is richer, not worse.
 
 One number in that measurement is a trap, and it is the quotable one. Counting how many
 distinct corpus sentences share a signature says 84% of signatures are unique — which

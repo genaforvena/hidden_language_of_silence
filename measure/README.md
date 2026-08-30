@@ -237,17 +237,23 @@ the 3–12-word sentence window, 761,273 distinct sentences, `[A-Za-z']+` tokeni
 | quantity | bits | what it is |
 |---|---:|---|
 | **H(length)** | **3.30** | hard ceiling on the channel, per word |
-| H(word) | 11.72 | what a word carries, unigram |
-| **H(word \| length)** | **8.42** | **what the READER must supply** |
-| I(word; length) | 3.30 | what the shape actually delivers = **28.1%** of the word |
+| H(word) | 11.28 | what a word carries, unigram |
+| **H(word \| length)** | **7.99** | **what the RECEIVER must supply** |
+| I(word; length) | 3.30 | what the shape actually delivers = **29.2%** of the word |
 
-**343 words fit each slot.** Not 343 plausible ones — 343 *equiprobable* ones, which
-is what 8.42 residual bits means. A ten-word sentence therefore leaves ~84 bits for
-the reader to invent: about 10²⁵ word-sequences match the shape, under an
+**253 words fit each slot.** Not 253 plausible ones — 253 *equiprobable* ones, which
+is what 7.99 residual bits means. A ten-word sentence therefore leaves ~80 bits for
+the receiver to supply: about 10²⁴ word-sequences match the shape, under an
 independence assumption that only ever *overstates* the count.
 
+That figure is a **size, not a verdict**. It is how big the admissible set is, and the
+word for it depends on what you want from the channel: difficulty if you mean to recover
+the original, room if you mean to invent one. This project says reading is invention, so
+on its own terms a wider slot is richer rather than worse. Both readings are correct and
+neither is named here as the true one.
+
 So the null result is not a failure of the readers. **It is the prediction.** Two
-readers handed the same shape are choosing inside the same 343-wide slot with the
+readers handed the same shape are choosing inside the same 253-wide slot with the
 same prior, and that is precisely what the prior-control arm found them doing.
 
 ## Where the estimate is solid and where it is not
@@ -298,10 +304,10 @@ Per sentence length the sparsity is naked:
 
 | n | distinct sentences | unique signature | group | shape bits ≤ | word bits (unigram) |
 |---:|---:|---:|---:|---:|---:|
-| 3 | 35,880 | 1.3% | 63.5 | 9.9 | 35.2 |
-| 5 | 45,223 | 46.1% | 2.8 | 16.5 | 58.6 |
-| 8 | 77,629 | 96.3% | 1.3 | 26.4 | 93.7 |
-| 12 | 129,195 | 98.9% | 1.0 | 39.6 | 140.6 |
+| 3 | 35,880 | 1.3% | 63.5 | 9.9 | 33.8 |
+| 5 | 45,223 | 46.1% | 2.8 | 16.5 | 56.4 |
+| 8 | 77,629 | 96.3% | 1.3 | 26.4 | 90.3 |
+| 12 | 129,195 | 98.9% | 1.0 | 39.6 | 135.4 |
 
 A 12-word shape indexes 2⁴¹ ≈ 2·10¹² possibilities and the corpus offers 1.3·10⁵
 sentences to spread over them, so uniqueness at n=12 is *arithmetically forced* and
@@ -310,7 +316,7 @@ shape. The two arms are wrong in opposite directions **on purpose**: arm 2 assum
 positions are independent and so overstates how many sentences fit a shape; arm 3
 counts only what this corpus held and so understates.
 
-The `shape bits ≤` / `word bits` ratio is constant at 28.1% down the table. That is a
+The `shape bits ≤` / `word bits` ratio is constant at 29.2% down the table. That is a
 tautology — both columns are per-word quantities times n — and is printed only so
 nobody mistakes its constancy for a finding.
 
@@ -376,21 +382,27 @@ Latin alike), and **matched on token count to 0.006%** — 6,885,217 against 6,8
 | | English | Russian |
 |---|---:|---:|
 | mean word length | 4.93 | 6.12 |
-| word types | 305,105 | 538,964 |
+| word types (case folded) | 267,592 | 474,623 |
 | **H(length) = I(word;length)** | **3.345** | **3.701** |
-| H(word) | 12.268 | 14.446 |
-| **H(word \| length)** — the reader's burden | **8.923** | **10.745** |
-| share the shape carries | 27.3% | 25.6% |
-| **equiprobable words per slot** | **485** | **1,716** |
+| H(word) | 11.821 | 14.064 |
+| **H(word \| length)** — what the receiver supplies | **8.476** | **10.364** |
+| share the shape carries | 28.3% | 26.3% |
+| **equiprobable words per slot** | **356** | **1,318** |
 
-**Russian Silent Language is objectively harder to read.** Same protocol, and the slot the
-reader fills is 3.5× wider. A ten-word sentence leaves an English reader 89 bits to invent
-and a Russian reader 107.
+The receiver's slot is **3.7× wider in Russian**. A ten-word sentence leaves an English
+receiver ~85 bits to supply and a Russian one ~104.
 
-Two predictions were written down before the run and both held: Russian has higher H(length)
-(longer, more varied words; no articles piling up short tokens) and much higher H(word)
-(1.77× the vocabulary at equal N). The share was left genuinely open, and it came out
-*lower* — morphology inflates the vocabulary faster than it inflates length variety.
+**That number is a size, not a verdict.** It is the size of the admissible set, and which
+word you use for it depends on what you want. If you want to RECOVER the original it is
+difficulty. If you want to INVENT — which is what this project says reading is — it is
+room: the same skeleton supports 3.7× more different coherent readings. By the repository's
+own stated values the Russian channel is not worse, it is richer. Both readings of the same
+number are correct and the table names neither as the true one.
+
+Two predictions were written down before the run and both held: Russian has higher
+H(length) (longer, more varied words; no articles piling up short tokens) and much higher
+H(word) (1.8× the vocabulary at equal N). The share was left genuinely open, and it came
+out *lower* — morphology inflates the vocabulary faster than it inflates length variety.
 
 ## The control that makes this comparable
 
@@ -420,3 +432,69 @@ difference would have been reported as language.
 
 Artifacts: [`result-ceiling-en-wikipedia.json`](result-ceiling-en-wikipedia.json),
 [`result-ceiling-ru-wikipedia.json`](result-ceiling-ru-wikipedia.json).
+
+---
+
+# One ruler, several constraints
+
+Silent Language is not a subject, it is a point in a space. `measure/constraints.py` puts
+the Oulipo forms beside it in ONE unit — bits per word, same corpus, same unigram model —
+with three columns kept deliberately apart:
+
+- **writer pays** — expressive freedom the constraint removes
+- **channel carries** — what the transmitted skeleton says *about this message*
+- **receiver supplies** — what is left to invent, given everything sent
+
+English (wikipedia, 6.89M tokens, case folded):
+
+| constraint | writer pays | channel carries | receiver supplies |
+|---|---:|---:|---:|
+| silent-language | 3.345 | **3.345** | 8.448 |
+| pilish | 3.345 | 0.000 | 8.448 |
+| snowball | 3.345 | 0.000 | 8.448 |
+| lipogram, no *e* | 1.522 | 0.000 | 10.271 |
+| lipogram, no *t* | 0.608 | 0.000 | 11.186 |
+| univocalic in *a* | 3.601 | 0.000 | 8.192 |
+| N+7 | 0.000 | 0.000 | 11.793 |
+
+Russian (same pipeline, script-appropriate predicates):
+
+| constraint | writer pays | channel carries | receiver supplies |
+|---|---:|---:|---:|
+| silent-language | 3.701 | **3.701** | 10.314 |
+| pilish / snowball | 3.701 | 0.000 | 10.314 |
+| lipogram, no *о* | 1.687 | 0.000 | 12.327 |
+| lipogram, no *т* | 1.038 | 0.000 | 12.977 |
+| univocalic in *а* | 4.970 | 0.000 | 9.044 |
+| N+7 | 0.000 | 0.000 | 14.015 |
+
+**The inversion, numerically.** Pilish and Snowball constrain word lengths exactly as
+Silent Language does and their writers pay exactly the same price. Their skeleton is π's
+digits, or 1,2,3,4… — a *public constant*, known before the text exists — so it carries
+nothing about this message. Same sacrifice; one buys a channel, the other buys only the
+discipline. Silent Language transmits **only** the skeleton; the Oulipo forms transmit
+everything else and never the skeleton.
+
+**The trade nobody had written down.** The harder the writer is constrained, the *less*
+the receiver must supply. Univocalism costs the writer most (3.601) and leaves the
+receiver least (8.192); N+7 costs nothing — a bijection removes no freedom — and leaves
+the receiver everything (11.793). Constraint and recoverability are one trade, and Silent
+Language sits in its strange corner: the vocabulary is barely constrained (any word of the
+right length will do) while the receiver is maximally adrift.
+
+## A predicate in the wrong alphabet does not fail, it admits everything
+
+The Russian rows were nonsense on the first run: a univocalism came out costing 0.12 bits
+and leaving 13.89 — admitting essentially the whole vocabulary — because the predicates
+tested for the *Latin* letters `e`, `t` and the Latin vowel set, which barely occur in
+Cyrillic. The constraint did not error. It quietly held for almost every word.
+
+This is the same failure as a Latin tokeniser over Cyrillic, which `ceiling.py` was taught
+to refuse earlier the same day, reintroduced two files later because the predicates were
+written as literals. So: the script is **detected from token mass**, the vowel set and
+lipogram targets come from it, and any constraint admitting more than 98% of tokens is
+reported `INAPPLICABLE` with its share — never as a cheap constraint. A near-zero cost is
+far more likely to mean the wrong alphabet than an easy rule.
+
+Artifacts: [`result-constraints-en.json`](result-constraints-en.json),
+[`result-constraints-ru.json`](result-constraints-ru.json).

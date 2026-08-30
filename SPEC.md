@@ -65,8 +65,8 @@ than of an ellipsis. That last step is taste, and is labelled as taste.
 - The reader may be a language model, a person, or anything else that generates text.
 - No reading is authoritative, and **no reading is a decoding** — the channel does not
   contain the sentence. `measure/ceiling.py` puts a number on that: a word's length is
-  worth 3.30 bits against the word's 11.72, so a reader supplies ~8.42 bits per word,
-  roughly 343 equiprobable words per slot.
+  worth 3.30 bits against the word's 11.28, so a reader supplies ~7.99 bits per word,
+  roughly 253 equiprobable words per slot.
 
 ## Re-encoding
 

@@ -72,6 +72,16 @@ THREE ARMS, in increasing order of how much they assume.
   independent, which real syntax is not, so it OVERSTATES how many sentences fit a
   shape. Arm 3 counts only what the corpus happened to contain, so it UNDERSTATES.
 
+CASE IS NOT PART OF THE CHANNEL, so it is folded by default.
+  len("The") == len("the"), so capitalisation cannot change H(L) and cannot change I(W;L)
+  -- the headline is untouched either way. What it does change is H(W) and H(W|L), which
+  move together by the same amount, and therefore the SHARE and the words-per-slot: on
+  English wikipedia, 27.3% / 485 words per slot with case kept, 28.4% / 349 folded. Those
+  are not two estimates of one quantity, they are two different questions, and the folded
+  one is the one this project asks: a reader filling a slot picks a WORD, not a word and
+  a capitalisation independently, so counting "The" and "the" as two candidates inflates
+  the slot by exactly the thing the reader never chooses. --keep-case asks the other one.
+
 TOKENISATION IS PART OF THE CHANNEL, so both live here.
   silent_channel.py splits words with [A-Za-z']+ and stage_1/ with \\b\\w+\\b. Those
   are different channels: "don't" is one 5-shape under the first and two shapes (3,1)
@@ -263,6 +273,9 @@ def main():
     ap.add_argument("--min-words", type=int, default=3)
     ap.add_argument("--max-words", type=int, default=12)
     ap.add_argument("--seed", type=int, default=20260830)
+    ap.add_argument("--keep-case", action="store_true",
+                    help="treat 'The' and 'the' as different words. OFF by default: see "
+                         "the note on case in the module docstring.")
     ap.add_argument("--tokenisers", default=",".join(TOKENISERS),
                     help="comma-separated subset of " + ",".join(TOKENISERS) +
                          ". A CROSS-LANGUAGE comparison must pin ONE of them: 'measure' is "
@@ -292,6 +305,8 @@ def main():
         seen = set()
         for sent, words in sentences_from(rows, a.min_words, a.max_words, tok):
             for w in words:
+                if not a.keep_case:
+                    w = w.lower()
                 full[w] += 1
                 if rng.random() < 0.5:
                     half[w] += 1

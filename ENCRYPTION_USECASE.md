@@ -11,7 +11,7 @@ lengths. There is no ciphertext, no noise, and nothing that looks like a key.
 ## Where the covert capacity actually lives
 
 Not in the marks. **`measure/ceiling.py` puts a number on it:** a word's length carries
-3.30 bits, a word carries 11.72, so a reader supplies ~8.42 bits per word — about 343
+3.30 bits, a word carries 11.28, so a reader supplies ~7.99 bits per word — about 253
 equiprobable words per slot. That residual is the entire covert budget, and it belongs to
 the **shared interpretive key**, never to the transmission.
 
@@ -30,7 +30,7 @@ to a word-length skeleton.
    channel.
 2. **"Interception and decoding by outsiders is effectively impossible."** Backwards. The
    channel is *weak*, not strong: an outsider reconstructing "some plausible sentence"
-   succeeds trivially, because ~343 words fit each slot and most of them read fine. What
+   succeeds trivially, because ~253 words fit each slot and most of them read fine. What
    an outsider cannot get is the key — and that is a statement about the key, not about
    this encoding. Do not call it cryptography; it has no primitive.
 3. **"Vary symbol choices and lengths creatively."** Varying LENGTHS is varying the

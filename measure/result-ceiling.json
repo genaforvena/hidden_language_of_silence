@@ -17,35 +17,35 @@
    "distinct_sentences": 761273,
    "word_arm_full": {
     "tokens": 6885209,
-    "word_types": 198898,
+    "word_types": 169892,
     "length_values": 32,
     "H_word_bits": {
-     "plugin": 11.69752381276544,
-     "miller_madow": 11.718361794266633
+     "plugin": 11.263762808246817,
+     "miller_madow": 11.281561897801808
     },
     "H_length_bits": {
      "plugin": 3.295940924000498,
      "miller_madow": 3.295944171799241
     },
     "H_word_given_length_bits": {
-     "plugin": 8.40158288876494,
-     "miller_madow": 8.422417622467387
+     "plugin": 7.96782188424632,
+     "miller_madow": 7.985617726002566
     },
     "I_word_length_bits": {
-     "plugin": 3.295940924000499,
-     "miller_madow": 3.2959441717992455
+     "plugin": 3.2959409240004964,
+     "miller_madow": 3.295944171799242
     },
     "identity_residual_bits": {
-     "plugin": 8.881784197001252e-16,
-     "miller_madow": 4.440892098500626e-15
+     "plugin": -1.7763568394002505e-15,
+     "miller_madow": 8.881784197001252e-16
     },
     "shape_share_of_word": {
-     "plugin": 0.2817639849900248,
-     "miller_madow": 0.2812632200357418
+     "plugin": 0.2926145534232448,
+     "miller_madow": 0.2921531789353964
     },
     "effective_words_per_slot": {
-     "plugin": 338.1648476697919,
-     "miller_madow": 343.0839016615569
+     "plugin": 250.3533385629868,
+     "miller_madow": 253.4606063161496
     },
     "length_distribution": {
      "1": 279598,
@@ -85,12 +85,12 @@
    "word_arm_half": {
     "tokens": 3442793,
     "I_word_length_bits": {
-     "plugin": 3.295612103166988,
-     "miller_madow": 3.2956181793609627
+     "plugin": 3.2956121031669907,
+     "miller_madow": 3.2956181793609653
     },
     "H_word_given_length_bits": {
-     "plugin": 8.374722314836431,
-     "miller_madow": 8.404883284597899
+     "plugin": 7.945281026684239,
+     "miller_madow": 7.971060432016032
     }
    },
    "collisions_by_corpus_fraction": [
@@ -142,7 +142,7 @@
      "unique_signature_share_of_sentences": 0.013071348940914159,
      "mean_group_size_a_sentence_lands_in": 63.4633779264214,
      "shape_bits_ceiling": 9.887832515397722,
-     "word_bits_needed_unigram": 35.155085382799896
+     "word_bits_needed_unigram": 33.844685693405424
     },
     "4": {
      "distinct_sentences": 41157,
@@ -150,7 +150,7 @@
      "unique_signature_share_of_sentences": 0.11072235585684088,
      "mean_group_size_a_sentence_lands_in": 12.490584833685643,
      "shape_bits_ceiling": 13.183776687196964,
-     "word_bits_needed_unigram": 46.87344717706653
+     "word_bits_needed_unigram": 45.12624759120723
     },
     "5": {
      "distinct_sentences": 45223,
@@ -158,7 +158,7 @@
      "unique_signature_share_of_sentences": 0.4609380182650421,
      "mean_group_size_a_sentence_lands_in": 2.8358357472967297,
      "shape_bits_ceiling": 16.479720858996206,
-     "word_bits_needed_unigram": 58.591808971333165
+     "word_bits_needed_unigram": 56.40780948900904
     },
     "6": {
      "distinct_sentences": 53858,
@@ -166,7 +166,7 @@
      "unique_signature_share_of_sentences": 0.7835233391511011,
      "mean_group_size_a_sentence_lands_in": 1.6565041405176575,
      "shape_bits_ceiling": 19.775665030795444,
-     "word_bits_needed_unigram": 70.31017076559979
+     "word_bits_needed_unigram": 67.68937138681085
     },
     "7": {
      "distinct_sentences": 64295,
@@ -174,7 +174,7 @@
      "unique_signature_share_of_sentences": 0.9205381444902403,
      "mean_group_size_a_sentence_lands_in": 1.1983669025585193,
      "shape_bits_ceiling": 23.071609202594686,
-     "word_bits_needed_unigram": 82.02853255986643
+     "word_bits_needed_unigram": 78.97093328461266
     },
     "8": {
      "distinct_sentences": 77629,
@@ -182,7 +182,7 @@
      "unique_signature_share_of_sentences": 0.9629777531592575,
      "mean_group_size_a_sentence_lands_in": 1.3049118241894138,
      "shape_bits_ceiling": 26.36755337439393,
-     "word_bits_needed_unigram": 93.74689435413306
+     "word_bits_needed_unigram": 90.25249518241446
     },
     "9": {
      "distinct_sentences": 91050,
@@ -190,7 +190,7 @@
      "unique_signature_share_of_sentences": 0.9780669961559583,
      "mean_group_size_a_sentence_lands_in": 1.098077979132345,
      "shape_bits_ceiling": 29.66349754619317,
-     "word_bits_needed_unigram": 105.46525614839969
+     "word_bits_needed_unigram": 101.53405708021627
     },
     "10": {
      "distinct_sentences": 104581,
@@ -198,7 +198,7 @@
      "unique_signature_share_of_sentences": 0.9858482898423232,
      "mean_group_size_a_sentence_lands_in": 1.0447882502557826,
      "shape_bits_ceiling": 32.95944171799241,
-     "word_bits_needed_unigram": 117.18361794266633
+     "word_bits_needed_unigram": 112.81561897801808
     },
     "11": {
      "distinct_sentences": 118405,
@@ -206,7 +206,7 @@
      "unique_signature_share_of_sentences": 0.9838604788649128,
      "mean_group_size_a_sentence_lands_in": 1.1184747265740467,
      "shape_bits_ceiling": 36.255385889791654,
-     "word_bits_needed_unigram": 128.90197973693296
+     "word_bits_needed_unigram": 124.09718087581989
     },
     "12": {
      "distinct_sentences": 129195,
@@ -214,7 +214,7 @@
      "unique_signature_share_of_sentences": 0.9891017454235845,
      "mean_group_size_a_sentence_lands_in": 1.0299082781841402,
      "shape_bits_ceiling": 39.55133006159089,
-     "word_bits_needed_unigram": 140.62034153119959
+     "word_bits_needed_unigram": 135.3787427736217
     }
    }
   },
@@ -222,46 +222,46 @@
    "distinct_sentences": 709690,
    "word_arm_full": {
     "tokens": 6421181,
-    "word_types": 208743,
+    "word_types": 180859,
     "length_values": 35,
     "H_word_bits": {
-     "plugin": 11.918372207279402,
-     "miller_madow": 11.94182202501739
+     "plugin": 11.499976455785731,
+     "miller_madow": 11.520293819500061
     },
     "H_length_bits": {
-     "plugin": 3.3046478952950196,
-     "miller_madow": 3.304651714812908
+     "plugin": 3.304648516059467,
+     "miller_madow": 3.3046523355773556
     },
     "H_word_given_length_bits": {
-     "plugin": 8.613724311984383,
-     "miller_madow": 8.637170310204484
+     "plugin": 8.195327939726262,
+     "miller_madow": 8.215641483922706
     },
     "I_word_length_bits": {
-     "plugin": 3.3046478952950196,
-     "miller_madow": 3.3046517148129055
+     "plugin": 3.304648516059469,
+     "miller_madow": 3.304652335577355
     },
     "identity_residual_bits": {
-     "plugin": 0.0,
-     "miller_madow": -2.6645352591003757e-15
+     "plugin": 2.220446049250313e-15,
+     "miller_madow": -4.440892098500626e-16
     },
     "shape_share_of_word": {
-     "plugin": 0.2772734260872164,
-     "miller_madow": 0.27672927195614383
+     "plugin": 0.28736132884836246,
+     "miller_madow": 0.28685486562709606
     },
     "effective_words_per_slot": {
-     "plugin": 391.73230886624475,
-     "miller_madow": 398.1505692875608
+     "plugin": 293.1160058860506,
+     "miller_madow": 297.27235270320915
     },
     "length_distribution": {
      "1": 344400,
      "2": 951146,
      "3": 1156174,
      "4": 957710,
-     "5": 710542,
-     "6": 597987,
-     "7": 579134,
-     "8": 438590,
-     "9": 303415,
+     "5": 710534,
+     "6": 597995,
+     "7": 579133,
+     "8": 438588,
+     "9": 303418,
      "10": 185900,
      "11": 94122,
      "12": 57037,
@@ -293,12 +293,12 @@
    "word_arm_half": {
     "tokens": 3211223,
     "I_word_length_bits": {
-     "plugin": 3.3044819776040253,
-     "miller_madow": 3.304489165868633
+     "plugin": 3.3044826171836146,
+     "miller_madow": 3.3044898054482257
     },
     "H_word_given_length_bits": {
-     "plugin": 8.583748265128373,
-     "miller_madow": 8.617281968812922
+     "plugin": 8.168990650850757,
+     "miller_madow": 8.19801776188971
     }
    },
    "collisions_by_corpus_fraction": [
@@ -349,98 +349,98 @@
      "distinct_signatures": 2038,
      "unique_signature_share_of_sentences": 0.014823022099778402,
      "mean_group_size_a_sentence_lands_in": 59.7391148110439,
-     "shape_bits_ceiling": 9.913955144438724,
-     "word_bits_needed_unigram": 35.82546607505217
+     "shape_bits_ceiling": 9.913957006732067,
+     "word_bits_needed_unigram": 34.560881458500184
     },
     "4": {
      "distinct_sentences": 38891,
      "distinct_signatures": 10505,
      "unique_signature_share_of_sentences": 0.11642796533902446,
      "mean_group_size_a_sentence_lands_in": 11.29091563600833,
-     "shape_bits_ceiling": 13.218606859251633,
-     "word_bits_needed_unigram": 47.76728810006956
+     "shape_bits_ceiling": 13.218609342309422,
+     "word_bits_needed_unigram": 46.081175278000245
     },
     "5": {
      "distinct_sentences": 44150,
      "distinct_signatures": 27941,
      "unique_signature_share_of_sentences": 0.45959229898074744,
      "mean_group_size_a_sentence_lands_in": 10.089966024915062,
-     "shape_bits_ceiling": 16.523258574064542,
-     "word_bits_needed_unigram": 59.709110125086944
+     "shape_bits_ceiling": 16.52326167788678,
+     "word_bits_needed_unigram": 57.601469097500306
     },
     "6": {
      "distinct_sentences": 50363,
      "distinct_signatures": 43651,
      "unique_signature_share_of_sentences": 0.7864503703115382,
      "mean_group_size_a_sentence_lands_in": 3.9058237197942933,
-     "shape_bits_ceiling": 19.827910288877447,
-     "word_bits_needed_unigram": 71.65093215010434
+     "shape_bits_ceiling": 19.827914013464135,
+     "word_bits_needed_unigram": 69.12176291700037
     },
     "7": {
      "distinct_sentences": 59292,
      "distinct_signatures": 56384,
      "unique_signature_share_of_sentences": 0.9181508466572219,
      "mean_group_size_a_sentence_lands_in": 1.226303717196249,
-     "shape_bits_ceiling": 23.132562003690357,
-     "word_bits_needed_unigram": 83.59275417512173
+     "shape_bits_ceiling": 23.13256634904149,
+     "word_bits_needed_unigram": 80.64205673650042
     },
     "8": {
      "distinct_sentences": 71552,
      "distinct_signatures": 69573,
      "unique_signature_share_of_sentences": 0.9572338998211091,
      "mean_group_size_a_sentence_lands_in": 1.227806350626118,
-     "shape_bits_ceiling": 26.437213718503266,
-     "word_bits_needed_unigram": 95.53457620013911
+     "shape_bits_ceiling": 26.437218684618845,
+     "word_bits_needed_unigram": 92.16235055600049
     },
     "9": {
      "distinct_sentences": 84126,
      "distinct_signatures": 83028,
      "unique_signature_share_of_sentences": 0.9783657846563488,
      "mean_group_size_a_sentence_lands_in": 1.055963673537313,
-     "shape_bits_ceiling": 29.741865433316175,
-     "word_bits_needed_unigram": 107.4763982251565
+     "shape_bits_ceiling": 29.7418710201962,
+     "word_bits_needed_unigram": 103.68264437550056
     },
     "10": {
      "distinct_sentences": 97293,
      "distinct_signatures": 96229,
      "unique_signature_share_of_sentences": 0.9832362040434564,
      "mean_group_size_a_sentence_lands_in": 1.1013022519605726,
-     "shape_bits_ceiling": 33.046517148129084,
-     "word_bits_needed_unigram": 119.41822025017389
+     "shape_bits_ceiling": 33.04652335577356,
+     "word_bits_needed_unigram": 115.20293819500061
     },
     "11": {
      "distinct_sentences": 110014,
      "distinct_signatures": 109195,
      "unique_signature_share_of_sentences": 0.9877197447597579,
      "mean_group_size_a_sentence_lands_in": 1.029214463613722,
-     "shape_bits_ceiling": 36.35116886294199,
-     "word_bits_needed_unigram": 131.3600422751913
+     "shape_bits_ceiling": 36.35117569135091,
+     "word_bits_needed_unigram": 126.72323201450067
     },
     "12": {
      "distinct_sentences": 120615,
      "distinct_signatures": 119913,
      "unique_signature_share_of_sentences": 0.9902499689093396,
      "mean_group_size_a_sentence_lands_in": 1.0237118103055176,
-     "shape_bits_ceiling": 39.655820577754895,
-     "word_bits_needed_unigram": 143.30186430020868
+     "shape_bits_ceiling": 39.65582802692827,
+     "word_bits_needed_unigram": 138.24352583400074
     }
    }
   }
  },
  "provenance": {
   "at_start": {
-   "utc": "2026-08-30T17:00:24+00:00",
-   "script_sha256": "be9f62a39027d1985c108fc989c97c5ef5ff733860ef59f50838ddb3812afca0",
-   "git_head": "f2166ae4ffcb1d152ba162034e07f324fdba29b3",
+   "utc": "2026-08-30T17:33:37+00:00",
+   "script_sha256": "8017cdcdf62596cdd12b9041372f7485776938c3c6ff152d12bea302ae646e7e",
+   "git_head": "72e668ca4fbae69755eed303b8b674aff302501d",
    "instrument_dirty": true,
    "tree_dirty_files": 2
   },
   "at_write": {
-   "utc": "2026-08-30T17:01:50+00:00",
-   "script_sha256": "be9f62a39027d1985c108fc989c97c5ef5ff733860ef59f50838ddb3812afca0",
-   "git_head": "f2166ae4ffcb1d152ba162034e07f324fdba29b3",
+   "utc": "2026-08-30T17:35:09+00:00",
+   "script_sha256": "8017cdcdf62596cdd12b9041372f7485776938c3c6ff152d12bea302ae646e7e",
+   "git_head": "72e668ca4fbae69755eed303b8b674aff302501d",
    "instrument_dirty": true,
-   "tree_dirty_files": 2
+   "tree_dirty_files": 7
   },
   "changed_mid_run": false,
   "tree_moved_mid_run": false,

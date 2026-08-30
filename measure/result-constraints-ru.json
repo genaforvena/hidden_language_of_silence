@@ -1,0 +1,197 @@
+{
+ "corpus": "/tmp/claude-1000/-home-mesh-home-lte-workstation/7ed08430-eb0b-4989-9b1f-4ffad3991346/scratchpad/corpus-ru.txt",
+ "tokeniser": "stage_1",
+ "tokens": 6885609,
+ "types": 474623,
+ "H_word_bits": 14.014636832381253,
+ "H_length_bits": 3.70051463785361,
+ "H_word_given_length_bits": 10.314122194527643,
+ "I_word_length_bits": 3.70051463785361,
+ "constraints": {
+  "silent-language": {
+   "writer_pays_bits_per_word": 3.70051463785361,
+   "channel_carries_bits_per_word": 3.70051463785361,
+   "reader_supplies_bits_per_word": 10.314122194527643,
+   "what_it_removes": "everything but one length slice",
+   "note": "The skeleton VARIES with the message and is the only thing transmitted. Writer's cost and channel capacity are the same number, which is what it means for the constraint to BE the message."
+  },
+  "pilish": {
+   "writer_pays_bits_per_word": 3.70051463785361,
+   "channel_carries_bits_per_word": 0.0,
+   "reader_supplies_bits_per_word": 10.314122194527643,
+   "what_it_removes": "everything but one length slice",
+   "note": "Identical per-word cost to silent-language: a word of an exactly required length. But the required lengths are pi's digits, a public constant known before the text exists, so the skeleton carries nothing about THIS text. Same sacrifice, no channel. (The digit 0 is conventionally a ten-letter word; that convention changes which lengths appear, never the fact that they are fixed.)"
+  },
+  "snowball": {
+   "writer_pays_bits_per_word": 3.70051463785361,
+   "channel_carries_bits_per_word": 0.0,
+   "reader_supplies_bits_per_word": 10.314122194527643,
+   "what_it_removes": "everything but one length slice, ascending",
+   "note": "Cost per word is the same length rule; what differs is that the required length CLIMBS, and long words are rare. See per_position below: the writer's remaining freedom collapses with position, and the form ends where the corpus runs out of words.",
+   "per_position": {
+    "1": {
+     "words_available": 383,
+     "token_share": 0.11822933890088734,
+     "writer_freedom_bits": 3.709666784994903
+    },
+    "2": {
+     "words_available": 2202,
+     "token_share": 0.06751138497698606,
+     "writer_freedom_bits": 6.188282202094863
+    },
+    "3": {
+     "words_available": 10273,
+     "token_share": 0.06426519426241019,
+     "writer_freedom_bits": 8.557137459095639
+    },
+    "4": {
+     "words_available": 23357,
+     "token_share": 0.109276027726814,
+     "writer_freedom_bits": 10.114786600057913
+    },
+    "5": {
+     "words_available": 37601,
+     "token_share": 0.09657954728477902,
+     "writer_freedom_bits": 11.11045124210398
+    },
+    "6": {
+     "words_available": 49866,
+     "token_share": 0.1036422486377022,
+     "writer_freedom_bits": 12.026853103952678
+    },
+    "7": {
+     "words_available": 59088,
+     "token_share": 0.10300047533921836,
+     "writer_freedom_bits": 12.500255724301768
+    },
+    "8": {
+     "words_available": 60046,
+     "token_share": 0.08685564341512857,
+     "writer_freedom_bits": 12.759833939318877
+    },
+    "9": {
+     "words_available": 55684,
+     "token_share": 0.0742531270654491,
+     "writer_freedom_bits": 12.79103481927469
+    },
+    "10": {
+     "words_available": 48875,
+     "token_share": 0.06056123721227854,
+     "writer_freedom_bits": 12.480174282964718
+    },
+    "11": {
+     "words_available": 38707,
+     "token_share": 0.04169769151864418,
+     "writer_freedom_bits": 12.571381596484814
+    },
+    "12": {
+     "words_available": 28730,
+     "token_share": 0.030645510077612598,
+     "writer_freedom_bits": 11.864518677178713
+    },
+    "13": {
+     "words_available": 20200,
+     "token_share": 0.01875927024029392,
+     "writer_freedom_bits": 11.818447931723027
+    },
+    "14": {
+     "words_available": 14439,
+     "token_share": 0.010506841152322184,
+     "writer_freedom_bits": 11.732899946614221
+    },
+    "15": {
+     "words_available": 9667,
+     "token_share": 0.007007804247961219,
+     "writer_freedom_bits": 10.804653122122168
+    },
+    "16": {
+     "words_available": 6309,
+     "token_share": 0.0035545149310685516,
+     "writer_freedom_bits": 10.683769781120056
+    },
+    "17": {
+     "words_available": 3850,
+     "token_share": 0.0017366655585584368,
+     "writer_freedom_bits": 10.26421214725541
+    },
+    "18": {
+     "words_available": 2330,
+     "token_share": 0.0008925862621592367,
+     "writer_freedom_bits": 9.97995469790629
+    },
+    "19": {
+     "words_available": 1383,
+     "token_share": 0.00046241370952082816,
+     "writer_freedom_bits": 9.40388762917436
+    },
+    "20": {
+     "words_available": 796,
+     "token_share": 0.0002804399727024872,
+     "writer_freedom_bits": 8.16588956199322
+    }
+   }
+  },
+  "lipogram-no-о": {
+   "writer_pays_bits_per_word": 1.6871794028307878,
+   "channel_carries_bits_per_word": 0.0,
+   "reader_supplies_bits_per_word": 12.327457429550465,
+   "what_it_removes": "every word containing 'о'",
+   "note": "Removes a REGION of the vocabulary rather than all but a slice. The constraint is public, and the text is transmitted in full, so it carries nothing about the message either.",
+   "token_share_admissible": 0.584459994751372,
+   "type_share_admissible": 0.499215166563778
+  },
+  "lipogram-no-т": {
+   "writer_pays_bits_per_word": 1.0378936517707409,
+   "channel_carries_bits_per_word": 0.0,
+   "reader_supplies_bits_per_word": 12.976743180610512,
+   "what_it_removes": "every word containing 'т'",
+   "note": "Removes a REGION of the vocabulary rather than all but a slice. The constraint is public, and the text is transmitted in full, so it carries nothing about the message either.",
+   "token_share_admissible": 0.7225967957227893,
+   "type_share_admissible": 0.673492435048449
+  },
+  "univocalic-а": {
+   "writer_pays_bits_per_word": 4.970205896271535,
+   "channel_carries_bits_per_word": 0.0,
+   "reader_supplies_bits_per_word": 9.044430936109718,
+   "what_it_removes": "every word whose vowels are not only 'а'",
+   "note": "Removes a REGION of the vocabulary rather than all but a slice. The constraint is public, and the text is transmitted in full, so it carries nothing about the message either.",
+   "token_share_admissible": 0.22158766203541327,
+   "type_share_admissible": 0.1494807457708539
+  },
+  "n-plus-7": {
+   "writer_pays_bits_per_word": 0.0,
+   "channel_carries_bits_per_word": 0.0,
+   "reader_supplies_bits_per_word": 14.014636832381253,
+   "what_it_removes": "nothing",
+   "note": "A dictionary shift is a BIJECTION, so it removes no freedom and destroys no entropy: the same distribution wearing different labels. It is in this table to mark the zero, and because being told a transformation costs nothing is worth a row."
+  }
+ },
+ "script": "cyrillic",
+ "provenance": {
+  "at_start": {
+   "utc": "2026-08-30T17:35:53+00:00",
+   "script_sha256": "43fb8cecc7d7cb55626058b5e52e13acb1c026ea43eef1c35552ce787d1bfdfe",
+   "git_head": "72e668ca4fbae69755eed303b8b674aff302501d",
+   "instrument_dirty": true,
+   "tree_dirty_files": 8
+  },
+  "at_write": {
+   "utc": "2026-08-30T17:36:07+00:00",
+   "script_sha256": "43fb8cecc7d7cb55626058b5e52e13acb1c026ea43eef1c35552ce787d1bfdfe",
+   "git_head": "72e668ca4fbae69755eed303b8b674aff302501d",
+   "instrument_dirty": true,
+   "tree_dirty_files": 8
+  },
+  "changed_mid_run": false,
+  "tree_moved_mid_run": false,
+  "note": "instrument identical at start and at write",
+  "argv": [
+   "measure/constraints.py",
+   "--corpus-file",
+   "../corpus-ru.txt",
+   "-o",
+   "measure/result-constraints-ru.json"
+  ],
+  "python": "3.12.3"
+ }
+}

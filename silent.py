@@ -28,7 +28,7 @@ The separator must differ from the mark, and a space does. Were both the same, 6
 two. That is not a legibility problem; the channel stops being decodable.
 
 The channel is the LENGTHS. measure/ceiling.py says what that is worth: 3.30 bits per
-word against the word's 11.72, so a reader supplies ~8.42 bits -- about 343 equiprobable
+word against the word's 11.28, so a reader supplies ~7.99 bits -- about 253 equiprobable
 words per slot. No reading is a decoding, because the sentence was never sent.
 """
 
