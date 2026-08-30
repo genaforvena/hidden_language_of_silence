@@ -263,6 +263,12 @@ def main():
     ap.add_argument("--min-words", type=int, default=3)
     ap.add_argument("--max-words", type=int, default=12)
     ap.add_argument("--seed", type=int, default=20260830)
+    ap.add_argument("--tokenisers", default=",".join(TOKENISERS),
+                    help="comma-separated subset of " + ",".join(TOKENISERS) +
+                         ". A CROSS-LANGUAGE comparison must pin ONE of them: 'measure' is "
+                         "[A-Za-z']+ and matches nothing at all in Cyrillic, so running the "
+                         "default pair on a Russian corpus would silently report an empty "
+                         "arm beside a real one.")
     ap.add_argument("-o", "--out", default="measure/result-ceiling.json")
     a = ap.parse_args()
 
@@ -271,7 +277,11 @@ def main():
     result = {"corpus": source, "window": [a.min_words, a.max_words], "seed": a.seed,
               "tokenisers": {}}
 
-    for tok in TOKENISERS:
+    _toks = [t.strip() for t in a.tokenisers.split(",") if t.strip()]
+    for t in _toks:
+        if t not in TOKENISERS:
+            raise SystemExit(f"unknown tokeniser {t!r}; known: {', '.join(TOKENISERS)}")
+    for tok in _toks:
         full = Counter()
         # convergence arm: an independent coin per TOKEN OCCURRENCE, not per type --
         # sampling types would keep every type and only shrink counts, which is not
@@ -292,6 +302,11 @@ def main():
             sigs.append(tuple(len(w) for w in words))
         del seen
 
+        if not full:
+            raise SystemExit(
+                f"tokeniser {tok!r} matched ZERO tokens in this corpus. That is not a "
+                f"result, it is the wrong instrument: 'measure' is [A-Za-z']+ and cannot "
+                f"see Cyrillic. Pick one with --tokenisers.")
         word_arm = arm_capacity_and_word(full)
         half_arm = arm_capacity_and_word(half)
 
