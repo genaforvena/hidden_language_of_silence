@@ -51,13 +51,97 @@ Everything the run produces — every reading, every arm, every pair — is writ
 the JSON artifact, so the numbers can be recomputed without re-running the models.
 """
 
-import argparse, json, os, random, re, subprocess, sys, urllib.request
+import argparse, datetime, hashlib, json, os, random, re, subprocess, sys, urllib.request
 from statistics import mean
 
 WORD_RE = re.compile(r"[A-Za-z']+")
 OLLAMA = os.environ.get("SILENT_OLLAMA", "http://127.0.0.1:11434")
 EMBED_MODEL = os.environ.get("SILENT_EMBED_MODEL", "all-minilm")
 SYMBOLS = "◆✦➤✿✶✪✧◼✖▲●■◇☙❖⬟⬢⧫"
+
+
+# ------------------------------------------------------------- provenance
+# A result file that cannot name the instrument that wrote it is not evidence.
+#
+# This is not hypothetical here. measure/result-msg2.json — the replication that
+# REVERSES the headline of run 1 — was written 03:28:14Z by a process launched
+# before the 03:24:31Z commit that added by_position(). Python reads its source
+# once, at start, so that run executed the OLD code to completion and produced
+# output from an instrument that no longer exists in the tree. The only trace was
+# a MISSING KEY, which reads exactly like a run that had nothing to report.
+#
+# So the stamp is taken TWICE and both halves are kept:
+#
+#   at_start  is what actually ran. Taken at import, before main() does anything,
+#             because the tree can move under a run that takes twenty minutes —
+#             and in the case above it did. A stamp taken only at WRITE time would
+#             have recorded 50bac6b for msg2: the commit that was NOT running.
+#   at_write  is the tree as it stands when the artifact lands.
+#
+# When they disagree, `changed_mid_run` says so IN the file. That converts the
+# weakest possible signal (an absent key) into a positive assertion, which is the
+# whole point: absence and "nothing to report" must not render identically.
+#
+# Every field fails to a string beginning "unknown:" that names which probe failed.
+# A provenance field that quietly reports a plausible default is worse than none.
+
+SCRIPT = os.path.abspath(__file__)
+
+
+def _git(*args):
+    try:
+        p = subprocess.run(["git", "-C", os.path.dirname(SCRIPT)] + list(args),
+                           capture_output=True, text=True, timeout=15)
+        return p.stdout.strip() if p.returncode == 0 else None
+    except Exception:
+        return None
+
+
+def _script_sha():
+    """sha256 of the source on disk. Read as early as possible: the interpreter has
+    already loaded and compiled these bytes, so at import time this is what is
+    running. Read it at write time instead and you hash whatever the file became."""
+    try:
+        with open(SCRIPT, "rb") as f:
+            return hashlib.sha256(f.read()).hexdigest()
+    except Exception:
+        return "unknown:script-unreadable"
+
+
+def stamp():
+    head = _git("rev-parse", "HEAD")
+    inst = _git("status", "--porcelain", "--", SCRIPT)
+    tree = _git("status", "--porcelain")
+    return {
+        "utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "script_sha256": _script_sha(),
+        "git_head": head or "unknown:not-a-repo-or-git-failed",
+        "instrument_dirty": None if inst is None else bool(inst.strip()),
+        "tree_dirty_files": None if tree is None else len([l for l in tree.splitlines() if l.strip()]),
+    }
+
+
+PROVENANCE_AT_START = stamp()
+
+
+def provenance(argv, relay, embed_model, used_embed):
+    """The block written into every artifact. Compares the start stamp against a
+    fresh one so a mid-run edit of the instrument is ASSERTED, not merely absent."""
+    now = stamp()
+    changed = [k for k in ("script_sha256", "git_head", "instrument_dirty")
+               if PROVENANCE_AT_START.get(k) != now.get(k)]
+    return {
+        "at_start": PROVENANCE_AT_START,
+        "at_write": now,
+        "changed_mid_run": changed or False,
+        "note": ("the instrument changed under this run — at_start is what produced "
+                 "these numbers" if changed else
+                 "instrument identical at start and at write"),
+        "argv": list(argv),
+        "relay": relay,
+        "embed_model": embed_model if used_embed else None,
+        "python": sys.version.split()[0],
+    }
 
 
 # ---------------------------------------------------------------- the protocol
@@ -345,6 +429,7 @@ def main():
             use_embed = False
 
     out = {
+        "provenance": provenance(sys.argv, a.relay, EMBED_MODEL, use_embed),
         "message": a.text, "lengths": lens, "alt_lengths": alt,
         "readings_requested": a.readings, "seed": a.seed,
         "random_basis_alphabet": {"source": lex_src, "words": lex_size},
@@ -383,7 +468,16 @@ def main():
             ds = [d for d in ds if d is not None]
             if ds:
                 to_decoy.append(mean(ds))
+        # These are cosine SIMILARITIES, not distances: HIGHER means CLOSER. The
+        # direction is stated in the artifact because the sentence a reader quotes
+        # is "the readings sit 0.210 from the true original", which inverts it. A
+        # number whose direction lives only in the source is a number that will be
+        # reported backwards.
         out["recovery"] = {
+            "metric": "cosine_similarity",
+            "direction": "higher = closer to the target",
+            "reading": ("to_decoy >= to_true means the readings are no nearer the "
+                        "intended message than a length-matched decoy: no recovery"),
             "to_true":  {"mean": mean(to_true) if to_true else None, "ci": boot_ci(to_true, rng)},
             "to_decoy": {"mean": mean(to_decoy) if to_decoy else None, "ci": boot_ci(to_decoy, rng)},
             "decoys": decoys,
@@ -415,9 +509,15 @@ def main():
     if "recovery" in out:
         r = out["recovery"]
         print("\n== recovery of the INTENDED message (matched-length decoys) ==")
-        print(f"  reading vs TRUE original : {r['to_true']['mean']:.3f}  CI {r['to_true']['ci']}")
-        print(f"  reading vs DECOY (same lengths) : {r['to_decoy']['mean']:.3f}  CI {r['to_decoy']['ci']}")
+        print("  cosine SIMILARITY — higher = closer. Decoy >= true means no recovery.")
+        print(f"  similarity to TRUE original     : {r['to_true']['mean']:.3f}  CI {r['to_true']['ci']}")
+        print(f"  similarity to DECOY (same lens) : {r['to_decoy']['mean']:.3f}  CI {r['to_decoy']['ci']}")
+    pv = out["provenance"]
     print(f"\nartifact: {a.out}")
+    print(f"instrument: {pv['at_start']['git_head'][:12]}"
+          f"{'+dirty' if pv['at_start']['instrument_dirty'] else ''}"
+          f" sha {pv['at_start']['script_sha256'][:12]}"
+          f"{'  CHANGED MID-RUN: ' + ','.join(pv['changed_mid_run']) if pv['changed_mid_run'] else ''}")
 
 
 if __name__ == "__main__":

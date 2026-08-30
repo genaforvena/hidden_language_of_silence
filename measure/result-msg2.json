@@ -1,0 +1,213 @@
+{
+  "message": "Rain fell across the empty market and nobody counted the hours",
+  "lengths": [
+    4,
+    4,
+    6,
+    3,
+    5,
+    6,
+    3,
+    6,
+    7,
+    3,
+    5
+  ],
+  "alt_lengths": [
+    3,
+    6,
+    6,
+    6,
+    3,
+    4,
+    5,
+    5,
+    3,
+    6,
+    7
+  ],
+  "readings_requested": 20,
+  "seed": 771,
+  "random_basis_alphabet": {
+    "source": "reader-vocabulary+B",
+    "words": 129
+  },
+  "compliance": {
+    "A": {
+      "valid": 20,
+      "misses": 0,
+      "mean_attempts": 1.55
+    },
+    "B": {
+      "valid": 15,
+      "misses": 5,
+      "mean_attempts": 2.5
+    }
+  },
+  "arms": {
+    "A_treatment": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.11531100478468899,
+        "ci": [
+          0.09904306220095693,
+          0.1320574162679426
+        ]
+      },
+      "jaccard": {
+        "mean": 0.11779328650275367,
+        "ci": [
+          0.10655212592885722,
+          0.1296326175544442
+        ]
+      },
+      "cosine": {
+        "mean": 0.2932574861040294,
+        "ci": [
+          0.2710075650428531,
+          0.31551591216139235
+        ]
+      }
+    },
+    "B_prior_control": {
+      "n_texts": 15,
+      "n_pairs": 105,
+      "positional": {
+        "mean": 0.16017316017316016,
+        "ci": [
+          0.14025974025974025,
+          0.18095238095238095
+        ]
+      },
+      "jaccard": {
+        "mean": 0.13607642472193557,
+        "ci": [
+          0.12119395126471641,
+          0.15302707047731373
+        ]
+      },
+      "cosine": {
+        "mean": 0.27294454280887065,
+        "ci": [
+          0.23916509385639076,
+          0.30780070076567356
+        ]
+      }
+    },
+    "C_random_basis": {
+      "n_texts": 20,
+      "n_pairs": 190,
+      "positional": {
+        "mean": 0.04736842105263158,
+        "ci": [
+          0.03875598086124402,
+          0.056459330143540674
+        ]
+      },
+      "jaccard": {
+        "mean": 0.053979608463884166,
+        "ci": [
+          0.04732445147957613,
+          0.06097312424508123
+        ]
+      },
+      "cosine": {
+        "mean": 0.28590977350168123,
+        "ci": [
+          0.27189936867634346,
+          0.30012977024013976
+        ]
+      }
+    }
+  },
+  "texts": {
+    "A": [
+      "Hope soul always and dream bright for future without the night",
+      "This code secret the words hidden and inside message now today",
+      "Many folk search the crypt puzzle and decode signals the truth",
+      "Life must remain odd while people can always succeed and dream",
+      "Time will change the world around and create newness for earth.",
+      "Time will change the earth before our people believe the truth",
+      "Life says always the small secret and bright journey for souls",
+      "Hope lies within the quiet forest and bright sunrise now glows",
+      "When will change the magic future and silent forever and peace.",
+      "Life gets easier you young people try harder efforts and laugh",
+      "This code yields the crypt cipher and decode quickly now today",
+      "When soft hushes has grown within the shades whisper and dream",
+      "Each code symbol rep means secret for people reading the world",
+      "When dusk bright the dream always the within silence and peace",
+      "When four simple are spelt proper you decode nothing and laugh",
+      "Time will linger but heart repair all wounds, forever and peace",
+      "When code hidden the dream within you always silence and peace.",
+      "This code hidden via three letter and unveil answers the quest",
+      "Life lies within the quiet garden and bright moments for peace",
+      "Life asks little but still hunger for bright forever and peace"
+    ],
+    "B": [
+      "The bright yellow tigers can leap above rocks and hungry lizards.",
+      "The speedy silver bounds and lazy brown hound now recent victory",
+      "The bright yellow tigers run fast agile swift the forest quietly",
+      "All bright summer dreams the soft river bloom and bright forever.",
+      "The bright yellow sunset and soft light glows all around tonight",
+      "The bright future offers the kind lives still and gentle murmurs",
+      "The silver turtle nimble and slow jumps above the bright giraffe",
+      "The silent forest murmur and soft light glows sun golden sunrise",
+      "The people always ignore the real facts every day search answers.",
+      "The bright orange summer sky glow light above the silent valleys",
+      "The secret garden yields and soft light quiet sky golden horizon",
+      "The bright silver shines the dark night above and glints forever",
+      "The hidden castle beyond the dark river dream and shines forever",
+      "All bright little people can read quiet texts and decode symbols",
+      "All bright yellow sunset and gold glows spark the shores tonight"
+    ],
+    "C": [
+      "this soft sunset are rocks shores you ignore symbols but would",
+      "soft they castle and above glints run secret tonight had agile",
+      "slow slow summer had light offers who search valleys can spark",
+      "gold with nimble you swift garden not glints forever one light",
+      "this were gentle now agile sunset his search victory one bloom",
+      "your real nimble the spark yellow not sunset lizards are above",
+      "from glow shines for still around day hungry quietly are quiet",
+      "this real beyond are above golden sky around answers run would",
+      "have will nimble but agile little who recent forever you swift",
+      "lazy lazy always for river summer all golden lizards but bloom",
+      "dark soft tigers the river castle run silent forever not glows",
+      "real leap nimble can still shores all shores tonight but jumps",
+      "glow lazy orange she river little who bright tonight now there",
+      "leap gold secret you brown murmur had bounds murmurs she light",
+      "they this shores one texts recent had hungry lizards are spark",
+      "with they castle you hound shores can shores murmurs run hound",
+      "have dark always are agile always had yields sunrise she still",
+      "from that tigers run still nimble not shines victory for brown",
+      "from will nimble and there decode and castle horizon sun hound",
+      "fast were turtle day texts silver who bright forever she brown"
+    ]
+  },
+  "recovery": {
+    "to_true": {
+      "mean": 0.1382013261365605,
+      "ci": [
+        0.1107510371496032,
+        0.16314086151552792
+      ]
+    },
+    "to_decoy": {
+      "mean": 0.16779741927389247,
+      "ci": [
+        0.14564157050679535,
+        0.1898359492861637
+      ]
+    },
+    "decoys": [
+      "fast leap turtle had there decode now yellow answers was hound",
+      "will with silver she still tigers one people answers for quiet",
+      "dark slow orange her jumps turtle was yellow tonight her hound",
+      "what glow beyond run light people sky always quietly all hound",
+      "slow with garden she agile sunset who hidden victory not hound",
+      "read kind summer was lives recent all hidden answers was jumps",
+      "with that nimble had still beyond one decode lizards you lives",
+      "dark kind recent had agile decode you speedy answers all about"
+    ]
+  }
+}

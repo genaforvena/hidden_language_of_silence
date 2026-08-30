@@ -56,6 +56,38 @@ Pairwise similarities share texts, so they are not independent; the bootstrap
 interval is descriptive, and the argument is carried by arm-against-arm on the
 same construction, never by one arm's interval alone.
 
+## A third thing, and it already bit this measurement
+
+**A result file that cannot name the instrument that wrote it is not evidence.**
+
+`result-msg2.json` — the replication that *reverses* the headline of run 1 — was
+written at 03:28:14Z by a process launched before the 03:24:31Z commit that added
+the per-position breakdown. Python reads its source once, at start: that run
+executed the old code to completion and its output came from an instrument that
+no longer exists in the tree. Nothing in the file said so. The only trace was a
+**missing key**, which is the weakest possible signal and reads exactly like a run
+that had nothing to report.
+
+Every artifact now carries a `provenance` block, and the stamp is taken **twice**:
+
+- `at_start` — taken at import, before anything runs. This is what actually
+  produced the numbers. A stamp taken only at write time would have recorded the
+  commit that was *not* running.
+- `at_write` — the tree as it stands when the file lands.
+- `changed_mid_run` — names the fields that moved between them, so a mid-run edit
+  is *asserted* rather than inferred from an absence.
+
+Each field fails to a string beginning `unknown:` naming which probe failed; a
+provenance field that quietly reports a plausible default is worse than none.
+
+## The recovery numbers are similarities, not distances
+
+`recovery.to_true` and `recovery.to_decoy` are **cosine similarities: higher means
+closer.** "The readings sit 0.210 from the true original" inverts the direction and
+is the sentence a reader will quote, so the artifact carries `metric`, `direction`
+and `reading` fields spelling it out. `to_decoy >= to_true` is the no-recovery
+result.
+
 ## Running it
 
 ```bash
