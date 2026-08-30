@@ -236,7 +236,7 @@ the 3–12-word sentence window, 761,273 distinct sentences, `[A-Za-z']+` tokeni
 
 | quantity | bits | what it is |
 |---|---:|---|
-| **H(length)** | **3.42** | hard ceiling on the channel, per word |
+| **H(length)** | **3.30** | hard ceiling on the channel, per word |
 | H(word) | 11.72 | what a word carries, unigram |
 | **H(word \| length)** | **8.42** | **what the READER must supply** |
 | I(word; length) | 3.30 | what the shape actually delivers = **28.1%** of the word |
@@ -298,10 +298,10 @@ Per sentence length the sparsity is naked:
 
 | n | distinct sentences | unique signature | group | shape bits ≤ | word bits (unigram) |
 |---:|---:|---:|---:|---:|---:|
-| 3 | 35,880 | 1.3% | 63.5 | 10.3 | 35.2 |
-| 5 | 45,223 | 46.1% | 2.8 | 17.1 | 58.6 |
-| 8 | 77,629 | 96.3% | 1.3 | 27.4 | 93.7 |
-| 12 | 129,195 | 98.9% | 1.0 | 41.0 | 140.6 |
+| 3 | 35,880 | 1.3% | 63.5 | 9.9 | 35.2 |
+| 5 | 45,223 | 46.1% | 2.8 | 16.5 | 58.6 |
+| 8 | 77,629 | 96.3% | 1.3 | 26.4 | 93.7 |
+| 12 | 129,195 | 98.9% | 1.0 | 39.6 | 140.6 |
 
 A 12-word shape indexes 2⁴¹ ≈ 2·10¹² possibilities and the corpus offers 1.3·10⁵
 sentences to spread over them, so uniqueness at n=12 is *arithmetically forced* and
@@ -310,7 +310,7 @@ shape. The two arms are wrong in opposite directions **on purpose**: arm 2 assum
 positions are independent and so overstates how many sentences fit a shape; arm 3
 counts only what this corpus held and so understates.
 
-The `shape bits ≤` / `word bits` ratio is constant at 29.2% down the table. That is a
+The `shape bits ≤` / `word bits` ratio is constant at 28.1% down the table. That is a
 tautology — both columns are per-word quantities times n — and is printed only so
 nobody mistakes its constancy for a finding.
 
@@ -320,7 +320,7 @@ nobody mistakes its constancy for a finding.
 context-appropriate sentences" and failure as "collapses to repetitive nonsense". Both
 outcomes are compatible with the channel being nearly empty, so neither is a
 measurement of the model. The target is the **ceiling**: a model given only lengths
-cannot do better than 3.42 bits per word, and the question worth asking is how close
+cannot do better than 3.30 bits per word, and the question worth asking is how close
 to that it gets — against a model given *no* input at all, which is the same prior
 control that dissolved the recovery result.
 
@@ -334,4 +334,28 @@ python3 measure/test_ceiling.py                             # 11 arms, 6 mutants
 ```
 
 Needs `datasets` only for the huggingface path. No model, no network, no API key —
-which is the point: this arm cannot be wrong about a reader, because it never asks one.
+which is the point — this arm cannot be wrong about a *reader*. It can still be wrong
+about the CORPUS, and it was.
+
+**THE HEADLINE SHIPPED 0.12 BITS HIGH FOR A DAY (found by outside review, 2026-08-30).**
+`arm_capacity_and_word` accepts a list or a Counter; `main()` passes only a Counter, and
+`Counter(len(w) for w in words)` iterates a Counter's KEYS. So H(L) was the entropy of a
+198,898-word type inventory instead of 6.89M running tokens: 3.42 reported against 3.30
+true. Two independent reasons no test saw it. Every test passed a LIST, so the only live
+path was never executed — and one of them names "reading H(length) off the wrong Counter"
+as a mutant it would catch, which it would have, on the branch it never took. And the
+assertion was `I <= H(L)`, while the truth is `I == H(L)` exactly (H(L|W)=0: every word has
+one length). The bug inflated H(L), so the *bound passed because of the defect*, and that
+test's own comment said a failure would mean "the two quantities were computed off
+different populations" — which is precisely what had happened.
+
+Fixed three ways rather than one: the counter is built from `wc.items()` with counts; the
+assertion is the identity to 12 places; and the artifact now publishes
+`identity_residual_bits` so any future population mismatch is VISIBLE in the output instead
+of hidden inside a satisfied inequality. Every test now runs over both input shapes through
+a `both_forms()` helper. Restoring the original bug turns three independent arms red.
+
+The lesson generalises past this file: **a bound is not a measurement of the thing it
+bounds.** The same slack hid a docstring that stated the Miller–Madow term's magnitude ten
+orders of magnitude too low — the only assertion on it was that it is small, which a
+decorative claim satisfies as easily as a true one.

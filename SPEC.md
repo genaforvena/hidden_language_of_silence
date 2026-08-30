@@ -26,26 +26,37 @@ two. That is not a legibility problem — the channel stops being decodable.
 
 ## Why this mark
 
-Measured, not preferred. `measure/transport.py` renders six candidate notations through
-a file, flowed HTML, `<pre>`, and GitHub's own markdown renderer read *at a reader*
-rather than at the wire. Full table in
-[`measure/result-transport.json`](measure/result-transport.json); the two rows that
-decided it:
+Measured, and then a choice. `measure/transport.py` renders six candidate notations
+through a file, flowed HTML, `<pre>`, and GitHub's own markdown renderer read *at a
+reader* (innerText after layout) rather than at the wire. Full table in
+[`measure/result-transport.json`](measure/result-transport.json); the deciding column:
 
 | notation | flowed HTML | GitHub markdown, as read |
 |---|---|---|
-| `(   ) (     )` brackets | **corrupted silently** | **corrupted silently** |
-| `___ _____` underscore | intact | **corrupted silently** |
+| `◆◆◆ ◇◇◇◇◇` symbols | intact | intact |
+| `"   \t     "` spaces | corrupted **loudly** | corrupted **loudly** |
+| `(   ) (     )` brackets | corrupted **SILENTLY** | corrupted **SILENTLY** |
+| `··· ·····` dots | intact | intact |
+| `___ _____` underscore | intact | corrupted **loudly** |
 | `▁▁▁ ▁▁▁▁▁` block | intact | intact |
 
-A run of spaces collapses to one space when a browser lays it out, so `(   )` arrives as
-`( )` — a *well-formed one-letter word*. The reader receives a different message and
-cannot tell. An ASCII underscore is worse in markdown: a line made only of underscores
-and spaces is a horizontal rule, so the message does not arrive at all. Appending a full
-stop rescues it, which is not a protocol.
+**The measurement eliminates three of the six; it does not pick among the other three.**
+`symbols`, `dots` and `block` are intact in every medium tested, and choosing `▁` over `·`
+is preference, not evidence. What the evidence does settle:
 
-`▁` draws the underscore's picture — repeated, the glyphs join into a continuous low
-line — while being ordinary text to every parser and non-collapsing in every renderer.
+- **Brackets fail SILENTLY, and that is the worst way to fail.** A run of spaces collapses
+  when a browser lays it out, so `(   )` arrives as `( )` — a *well-formed one-letter
+  word*. The reader receives a different message and has no way to know. Nothing else in
+  the table does this.
+- **An ASCII underscore line is a horizontal rule in markdown**, so the message does not
+  arrive at all. That is loud rather than silent — the reader sees a rule and no text —
+  but it is still a total loss, and appending a full stop to rescue it is not a protocol.
+- **`symbols` survives every medium and was still removed**, for a reason no transport
+  test can see: the writer's free choice of glyph is a side channel.
+
+So the field narrows to `dots` and `block` on evidence, and `▁` is chosen from those two
+because repeated it joins into a continuous low line — the picture of an elision rather
+than of an ellipsis. That last step is taste, and is labelled as taste.
 
 ## Decoding (reader)
 
@@ -54,7 +65,7 @@ line — while being ordinary text to every parser and non-collapsing in every r
 - The reader may be a language model, a person, or anything else that generates text.
 - No reading is authoritative, and **no reading is a decoding** — the channel does not
   contain the sentence. `measure/ceiling.py` puts a number on that: a word's length is
-  worth 3.42 bits against the word's 11.72, so a reader supplies ~8.42 bits per word,
+  worth 3.30 bits against the word's 11.72, so a reader supplies ~8.42 bits per word,
   roughly 343 equiprobable words per slot.
 
 ## Re-encoding

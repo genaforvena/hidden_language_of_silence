@@ -80,6 +80,16 @@ class TestClassify(unittest.TestCase):
         v, got = transport.classify("brackets", [3, 5], "(   ) oops (     )")
         self.assertEqual(v, "corrupted-loudly")
 
+    def test_zero_words_is_loud_not_silent(self):
+        """A decode that yields NOTHING is not a well-formed other message — there is no
+        sentence with no words, so a reader hits it at once. It used to fall through to
+        corrupted-silently, which put `spaces` under flowed HTML in the same bucket as the
+        bracket form and blunted the one verdict that means 'undetectable'.
+
+        RED under: returning corrupted-silently for an empty decode.
+        """
+        self.assertEqual(transport.classify("dots", [3, 5], "")[0], "corrupted-loudly")
+
     def test_absent_medium_is_na_never_a_pass(self):
         """A missing browser must not read as 'it survived'. The failure direction of a
         silently-skipped medium is a false all-clear.

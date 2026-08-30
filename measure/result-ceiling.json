@@ -24,8 +24,8 @@
      "miller_madow": 11.718361794266633
     },
     "H_length_bits": {
-     "plugin": 3.4186978873010707,
-     "miller_madow": 3.418810315646925
+     "plugin": 3.295940924000498,
+     "miller_madow": 3.295944171799241
     },
     "H_word_given_length_bits": {
      "plugin": 8.40158288876494,
@@ -34,6 +34,10 @@
     "I_word_length_bits": {
      "plugin": 3.295940924000499,
      "miller_madow": 3.2959441717992455
+    },
+    "identity_residual_bits": {
+     "plugin": 8.881784197001252e-16,
+     "miller_madow": 4.440892098500626e-15
     },
     "shape_share_of_word": {
      "plugin": 0.2817639849900248,
@@ -44,35 +48,35 @@
      "miller_madow": 343.0839016615569
     },
     "length_distribution": {
-     "1": 53,
-     "2": 1496,
-     "3": 7476,
-     "4": 14029,
-     "5": 22024,
-     "6": 29018,
-     "7": 30616,
-     "8": 28207,
-     "9": 22930,
-     "10": 16931,
-     "11": 10877,
-     "12": 6730,
-     "13": 3950,
-     "14": 2155,
-     "15": 1143,
-     "16": 577,
-     "17": 321,
-     "18": 145,
-     "19": 97,
-     "20": 42,
-     "21": 29,
-     "22": 22,
-     "23": 11,
+     "1": 279598,
+     "2": 1082120,
+     "3": 1259863,
+     "4": 924955,
+     "5": 783013,
+     "6": 667167,
+     "7": 644479,
+     "8": 490366,
+     "9": 335441,
+     "10": 204159,
+     "11": 102647,
+     "12": 62535,
+     "13": 29472,
+     "14": 12200,
+     "15": 4434,
+     "16": 1495,
+     "17": 655,
+     "18": 268,
+     "19": 170,
+     "20": 71,
+     "21": 38,
+     "22": 24,
+     "23": 12,
      "24": 7,
      "25": 2,
      "27": 1,
-     "28": 3,
-     "29": 1,
-     "31": 2,
+     "28": 6,
+     "29": 3,
+     "31": 5,
      "33": 1,
      "45": 1,
      "83": 1
@@ -137,7 +141,7 @@
      "distinct_signatures": 2034,
      "unique_signature_share_of_sentences": 0.013071348940914159,
      "mean_group_size_a_sentence_lands_in": 63.4633779264214,
-     "shape_bits_ceiling": 10.256430946940775,
+     "shape_bits_ceiling": 9.887832515397722,
      "word_bits_needed_unigram": 35.155085382799896
     },
     "4": {
@@ -145,7 +149,7 @@
      "distinct_signatures": 10729,
      "unique_signature_share_of_sentences": 0.11072235585684088,
      "mean_group_size_a_sentence_lands_in": 12.490584833685643,
-     "shape_bits_ceiling": 13.6752412625877,
+     "shape_bits_ceiling": 13.183776687196964,
      "word_bits_needed_unigram": 46.87344717706653
     },
     "5": {
@@ -153,7 +157,7 @@
      "distinct_signatures": 29131,
      "unique_signature_share_of_sentences": 0.4609380182650421,
      "mean_group_size_a_sentence_lands_in": 2.8358357472967297,
-     "shape_bits_ceiling": 17.094051578234627,
+     "shape_bits_ceiling": 16.479720858996206,
      "word_bits_needed_unigram": 58.591808971333165
     },
     "6": {
@@ -161,7 +165,7 @@
      "distinct_signatures": 46855,
      "unique_signature_share_of_sentences": 0.7835233391511011,
      "mean_group_size_a_sentence_lands_in": 1.6565041405176575,
-     "shape_bits_ceiling": 20.51286189388155,
+     "shape_bits_ceiling": 19.775665030795444,
      "word_bits_needed_unigram": 70.31017076559979
     },
     "7": {
@@ -169,7 +173,7 @@
      "distinct_signatures": 61311,
      "unique_signature_share_of_sentences": 0.9205381444902403,
      "mean_group_size_a_sentence_lands_in": 1.1983669025585193,
-     "shape_bits_ceiling": 23.931672209528475,
+     "shape_bits_ceiling": 23.071609202594686,
      "word_bits_needed_unigram": 82.02853255986643
     },
     "8": {
@@ -177,7 +181,7 @@
      "distinct_signatures": 75832,
      "unique_signature_share_of_sentences": 0.9629777531592575,
      "mean_group_size_a_sentence_lands_in": 1.3049118241894138,
-     "shape_bits_ceiling": 27.3504825251754,
+     "shape_bits_ceiling": 26.36755337439393,
      "word_bits_needed_unigram": 93.74689435413306
     },
     "9": {
@@ -185,7 +189,7 @@
      "distinct_signatures": 89802,
      "unique_signature_share_of_sentences": 0.9780669961559583,
      "mean_group_size_a_sentence_lands_in": 1.098077979132345,
-     "shape_bits_ceiling": 30.769292840822327,
+     "shape_bits_ceiling": 29.66349754619317,
      "word_bits_needed_unigram": 105.46525614839969
     },
     "10": {
@@ -193,7 +197,7 @@
      "distinct_signatures": 103675,
      "unique_signature_share_of_sentences": 0.9858482898423232,
      "mean_group_size_a_sentence_lands_in": 1.0447882502557826,
-     "shape_bits_ceiling": 34.18810315646925,
+     "shape_bits_ceiling": 32.95944171799241,
      "word_bits_needed_unigram": 117.18361794266633
     },
     "11": {
@@ -201,7 +205,7 @@
      "distinct_signatures": 117147,
      "unique_signature_share_of_sentences": 0.9838604788649128,
      "mean_group_size_a_sentence_lands_in": 1.1184747265740467,
-     "shape_bits_ceiling": 37.606913472116176,
+     "shape_bits_ceiling": 36.255385889791654,
      "word_bits_needed_unigram": 128.90197973693296
     },
     "12": {
@@ -209,7 +213,7 @@
      "distinct_signatures": 128337,
      "unique_signature_share_of_sentences": 0.9891017454235845,
      "mean_group_size_a_sentence_lands_in": 1.0299082781841402,
-     "shape_bits_ceiling": 41.0257237877631,
+     "shape_bits_ceiling": 39.55133006159089,
      "word_bits_needed_unigram": 140.62034153119959
     }
    }
@@ -225,8 +229,8 @@
      "miller_madow": 11.94182202501739
     },
     "H_length_bits": {
-     "plugin": 3.4559530871662196,
-     "miller_madow": 3.456070580043562
+     "plugin": 3.3046478952950196,
+     "miller_madow": 3.304651714812908
     },
     "H_word_given_length_bits": {
      "plugin": 8.613724311984383,
@@ -235,6 +239,10 @@
     "I_word_length_bits": {
      "plugin": 3.3046478952950196,
      "miller_madow": 3.3046517148129055
+    },
+    "identity_residual_bits": {
+     "plugin": 0.0,
+     "miller_madow": -2.6645352591003757e-15
     },
     "shape_share_of_word": {
      "plugin": 0.2772734260872164,
@@ -245,36 +253,36 @@
      "miller_madow": 398.1505692875608
     },
     "length_distribution": {
-     "1": 368,
-     "2": 2517,
-     "3": 9479,
-     "4": 17066,
-     "5": 24566,
-     "6": 29811,
-     "7": 30765,
-     "8": 28115,
-     "9": 22978,
-     "10": 16944,
-     "11": 10851,
-     "12": 6733,
-     "13": 3943,
-     "14": 2134,
-     "15": 1150,
-     "16": 583,
-     "17": 348,
-     "18": 150,
-     "19": 100,
-     "20": 46,
-     "21": 31,
-     "22": 24,
-     "23": 14,
+     "1": 344400,
+     "2": 951146,
+     "3": 1156174,
+     "4": 957710,
+     "5": 710542,
+     "6": 597987,
+     "7": 579134,
+     "8": 438590,
+     "9": 303415,
+     "10": 185900,
+     "11": 94122,
+     "12": 57037,
+     "13": 26670,
+     "14": 11395,
+     "15": 4229,
+     "16": 1465,
+     "17": 644,
+     "18": 268,
+     "19": 163,
+     "20": 75,
+     "21": 40,
+     "22": 25,
+     "23": 15,
      "24": 8,
      "25": 3,
      "26": 3,
      "27": 1,
-     "28": 4,
-     "29": 1,
-     "31": 2,
+     "28": 7,
+     "29": 3,
+     "31": 5,
      "33": 1,
      "45": 1,
      "48": 1,
@@ -341,7 +349,7 @@
      "distinct_signatures": 2038,
      "unique_signature_share_of_sentences": 0.014823022099778402,
      "mean_group_size_a_sentence_lands_in": 59.7391148110439,
-     "shape_bits_ceiling": 10.368211740130686,
+     "shape_bits_ceiling": 9.913955144438724,
      "word_bits_needed_unigram": 35.82546607505217
     },
     "4": {
@@ -349,7 +357,7 @@
      "distinct_signatures": 10505,
      "unique_signature_share_of_sentences": 0.11642796533902446,
      "mean_group_size_a_sentence_lands_in": 11.29091563600833,
-     "shape_bits_ceiling": 13.824282320174248,
+     "shape_bits_ceiling": 13.218606859251633,
      "word_bits_needed_unigram": 47.76728810006956
     },
     "5": {
@@ -357,7 +365,7 @@
      "distinct_signatures": 27941,
      "unique_signature_share_of_sentences": 0.45959229898074744,
      "mean_group_size_a_sentence_lands_in": 10.089966024915062,
-     "shape_bits_ceiling": 17.28035290021781,
+     "shape_bits_ceiling": 16.523258574064542,
      "word_bits_needed_unigram": 59.709110125086944
     },
     "6": {
@@ -365,7 +373,7 @@
      "distinct_signatures": 43651,
      "unique_signature_share_of_sentences": 0.7864503703115382,
      "mean_group_size_a_sentence_lands_in": 3.9058237197942933,
-     "shape_bits_ceiling": 20.736423480261372,
+     "shape_bits_ceiling": 19.827910288877447,
      "word_bits_needed_unigram": 71.65093215010434
     },
     "7": {
@@ -373,7 +381,7 @@
      "distinct_signatures": 56384,
      "unique_signature_share_of_sentences": 0.9181508466572219,
      "mean_group_size_a_sentence_lands_in": 1.226303717196249,
-     "shape_bits_ceiling": 24.192494060304934,
+     "shape_bits_ceiling": 23.132562003690357,
      "word_bits_needed_unigram": 83.59275417512173
     },
     "8": {
@@ -381,7 +389,7 @@
      "distinct_signatures": 69573,
      "unique_signature_share_of_sentences": 0.9572338998211091,
      "mean_group_size_a_sentence_lands_in": 1.227806350626118,
-     "shape_bits_ceiling": 27.648564640348496,
+     "shape_bits_ceiling": 26.437213718503266,
      "word_bits_needed_unigram": 95.53457620013911
     },
     "9": {
@@ -389,7 +397,7 @@
      "distinct_signatures": 83028,
      "unique_signature_share_of_sentences": 0.9783657846563488,
      "mean_group_size_a_sentence_lands_in": 1.055963673537313,
-     "shape_bits_ceiling": 31.10463522039206,
+     "shape_bits_ceiling": 29.741865433316175,
      "word_bits_needed_unigram": 107.4763982251565
     },
     "10": {
@@ -397,7 +405,7 @@
      "distinct_signatures": 96229,
      "unique_signature_share_of_sentences": 0.9832362040434564,
      "mean_group_size_a_sentence_lands_in": 1.1013022519605726,
-     "shape_bits_ceiling": 34.56070580043562,
+     "shape_bits_ceiling": 33.046517148129084,
      "word_bits_needed_unigram": 119.41822025017389
     },
     "11": {
@@ -405,7 +413,7 @@
      "distinct_signatures": 109195,
      "unique_signature_share_of_sentences": 0.9877197447597579,
      "mean_group_size_a_sentence_lands_in": 1.029214463613722,
-     "shape_bits_ceiling": 38.016776380479186,
+     "shape_bits_ceiling": 36.35116886294199,
      "word_bits_needed_unigram": 131.3600422751913
     },
     "12": {
@@ -413,7 +421,7 @@
      "distinct_signatures": 119913,
      "unique_signature_share_of_sentences": 0.9902499689093396,
      "mean_group_size_a_sentence_lands_in": 1.0237118103055176,
-     "shape_bits_ceiling": 41.472846960522745,
+     "shape_bits_ceiling": 39.655820577754895,
      "word_bits_needed_unigram": 143.30186430020868
     }
    }
@@ -421,18 +429,18 @@
  },
  "provenance": {
   "at_start": {
-   "utc": "2026-08-30T15:15:14+00:00",
-   "script_sha256": "d2c036cade2ea72a1943b9893338eb6b9e509c8afa40a269eecfdc5bf3b37353",
-   "git_head": "1d0abefb309cfaf5c6e96775f89f9af5ba7f8673",
-   "instrument_dirty": false,
-   "tree_dirty_files": 0
+   "utc": "2026-08-30T17:00:24+00:00",
+   "script_sha256": "be9f62a39027d1985c108fc989c97c5ef5ff733860ef59f50838ddb3812afca0",
+   "git_head": "f2166ae4ffcb1d152ba162034e07f324fdba29b3",
+   "instrument_dirty": true,
+   "tree_dirty_files": 2
   },
   "at_write": {
-   "utc": "2026-08-30T15:16:45+00:00",
-   "script_sha256": "d2c036cade2ea72a1943b9893338eb6b9e509c8afa40a269eecfdc5bf3b37353",
-   "git_head": "1d0abefb309cfaf5c6e96775f89f9af5ba7f8673",
-   "instrument_dirty": false,
-   "tree_dirty_files": 0
+   "utc": "2026-08-30T17:01:50+00:00",
+   "script_sha256": "be9f62a39027d1985c108fc989c97c5ef5ff733860ef59f50838ddb3812afca0",
+   "git_head": "f2166ae4ffcb1d152ba162034e07f324fdba29b3",
+   "instrument_dirty": true,
+   "tree_dirty_files": 2
   },
   "changed_mid_run": false,
   "tree_moved_mid_run": false,

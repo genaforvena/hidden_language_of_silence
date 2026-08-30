@@ -38,8 +38,15 @@ THREE ARMS, in increasing order of how much they assume.
 
          I_plugin = I_MillerMadow - (L-1)/(2N ln2)
 
-     -- the plug-in UNDERSTATES I, by a term that at N of 10^8 and L of ~20 is
-     around 1e-16 bits. So the correction is not where the uncertainty lives.
+     -- the plug-in UNDERSTATES I. At this corpus's own N and L (6.89e6 tokens, 32
+     distinct lengths) that term is 3.2e-6 bits, and it matches the artifact to eleven
+     digits. An earlier draft of this paragraph put it ten orders of magnitude lower --
+     the figure is deliberately NOT repeated here, because the gate that now pins this
+     value is a source-text check and a retraction that quotes its own retracted literal
+     re-arms the thing it retracts. Nothing had ever checked the stated size: the test
+     asserted only that the term is small, which a decorative claim satisfies as easily
+     as a true one. It is still far too small to matter, but a number nobody can be
+     wrong about is a number nobody is measuring.
 
      Where it does live: Miller-Madow keys on OBSERVED types, and a word
      distribution's mass sits in types this corpus never saw. Both entropies are
@@ -171,7 +178,15 @@ def arm_capacity_and_word(words):
     materialising that as a list of str costs more memory than the machine has. The
     caller streams."""
     wc = words if isinstance(words, Counter) else Counter(words)
-    lc = Counter(len(w) for w in words)
+    # TOKEN-weighted, and it must be built from wc.items(). `Counter(len(w) for w in
+    # words)` iterates a Counter's KEYS, so on the only path main() ever takes it counted
+    # each word TYPE once and H(L) became the entropy of a type inventory instead of the
+    # entropy of running text. It inflated the headline by 0.12 bits, and the artifact
+    # said so all along: length_distribution summed to 198,898 (the type count) and not
+    # to 6,885,209 (the tokens).
+    lc = Counter()
+    for _w, _c in wc.items():
+        lc[len(_w)] += _c
     joint = defaultdict(Counter)
     for w, c in wc.items():
         joint[len(w)][w] += c
@@ -188,6 +203,12 @@ def arm_capacity_and_word(words):
         "H_length_bits": {"plugin": hl_p, "miller_madow": hl_m},
         "H_word_given_length_bits": {"plugin": hwl_p, "miller_madow": hwl_m},
         "I_word_length_bits": {"plugin": hw_p - hwl_p, "miller_madow": hw_m - hwl_m},
+        # H(L|W) = 0 -- every word has exactly one length -- so I(W;L) == H(L) is an
+        # IDENTITY, not a bound. Publishing the residual makes any future population
+        # mismatch between the two estimates visible in the artifact instead of hiding
+        # inside an inequality that a bug can satisfy.
+        "identity_residual_bits": {"plugin": (hw_p - hwl_p) - hl_p,
+                                   "miller_madow": (hw_m - hwl_m) - hl_m},
         "shape_share_of_word": {
             "plugin": (hw_p - hwl_p) / hw_p if hw_p else 0.0,
             "miller_madow": (hw_m - hwl_m) / hw_m if hw_m else 0.0,

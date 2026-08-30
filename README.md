@@ -84,8 +84,8 @@ hand the same skeleton to twenty independent processes and the spread is the evi
 
 This section used to also assert **"they never recover intended meaning."** It was the
 most interesting sentence in the repository and nobody had ever checked it, so
-[`measure/`](measure/) checks it. **The sentence holds**, and it took two wrong floors
-to establish that — see below.
+[`measure/`](measure/) checks it. **The result is a null that is not yet a measured
+negative**, and saying so took two wrong floors and an outside review — see below.
 
 ## Is any of this measured?
 
@@ -145,7 +145,7 @@ The recovery result above says readers do not recover the message. The obvious n
 question is whether they *could*, and it is answered by counting, not by prompting.
 
 A word's shape is its length. On wikitext-103 (6.89M tokens in the 3–12-word window,
-761,273 distinct sentences), a word's length is worth **3.42 bits** and a word carries
+761,273 distinct sentences), a word's length is worth **3.30 bits** and a word carries
 **11.72**. What survives encoding is **28.1%** of the word; the reader supplies the
 other **8.42 bits**, which is **343 equiprobable words per slot**. A ten-word sentence
 leaves ~84 bits to invent.
@@ -166,7 +166,11 @@ arithmetically forced and measures nothing at all.
 Method, every caveat, the per-length table, and the estimator direction the arm got
 backwards until a test caught it: [`measure/README.md`](measure/README.md#the-ceiling-how-much-can-the-channel-carry-at-all).
 Artifact: [`measure/result-ceiling.json`](measure/result-ceiling.json). No model, no
-network — this arm cannot be wrong about a reader, because it never asks one.
+network — so this arm cannot be wrong about a *reader*. It can still be wrong about the
+CORPUS, and on 2026-08-30 it was: the length distribution was accumulated over word TYPES
+instead of TOKENS, and the headline shipped 0.12 bits high until an outside review caught
+it. That is the same failure this repository already documents twice — a quantity computed
+off the wrong population — arriving in the one arm described as unable to be wrong.
 
 ## What the project claims, and what it has stopped claiming
 
@@ -193,7 +197,7 @@ Withdrawn, because it was measured and did not survive contact:
 - A public gallery of readings of one skeleton, shown side by side.
 - Reader → writer → reader cycles: how fast does the shape itself drift?
 - `stage_1/` trains a model on lengths alone. The target is not "did it work" but **how
-  close to 3.42 bits per word it gets**, against a control given no input at all.
+  close to 3.30 bits per word it gets**, against a control given no input at all.
 
 ## Interactive Demo
 

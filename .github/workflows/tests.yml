@@ -1,0 +1,34 @@
+# The repository's thesis is that errors invisible to their authors need a machine to
+# check them. Until 2026-08-30 no machine checked anything here: the only workflow
+# published docs/. Four suites, no network, no model, no API key, ~0.02s.
+#
+# The one that needs anything at all is test_provenance.py, which clones THIS repo into a
+# temp dir and drives the instrument inside it, so it needs full history and a git identity.
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  offline-suites:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # test_provenance.py clones the repo and commits in it
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: git identity for the provenance harness
+        run: |
+          git config --global user.email ci@example.invalid
+          git config --global user.name  ci
+      - name: README worked examples encode their own sentences
+        run: python3 test_readme_examples.py
+      - name: ceiling arms
+        run: python3 measure/test_ceiling.py
+      - name: transport arms
+        run: python3 measure/test_transport.py
+      - name: provenance arms (includes its own red arm)
+        run: python3 measure/test_provenance.py

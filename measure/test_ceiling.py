@@ -10,6 +10,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import ceiling  # noqa: E402
+from collections import Counter  # noqa: E402
+
+
+def both_forms(words):
+    """EVERY arm runs on BOTH input shapes.
+
+    This helper is the whole lesson of the 2026-08-30 review. `arm_capacity_and_word`
+    accepts a list or a Counter, main() passes ONLY a Counter, and every test passed only
+    a list -- so the sole live path was never exercised once. The bug it hid was
+    `Counter(len(w) for w in words)`, which iterates a Counter's KEYS: H(L) was the
+    entropy of a 198,898-word type inventory instead of 6.89M running tokens, and the
+    headline shipped 0.12 bits too high into the README, SPEC.md and two other files.
+    A branch no test takes is not covered by the tests that take the other branch.
+    """
+    return [("list", list(words)), ("counter", Counter(words))]
 
 
 class TestPoles(unittest.TestCase):
@@ -33,13 +48,52 @@ class TestPoles(unittest.TestCase):
         self.assertAlmostEqual(r["I_word_length_bits"]["plugin"], 0.0, places=12)
         self.assertAlmostEqual(r["shape_share_of_word"]["plugin"], 0.0, places=12)
 
-    def test_channel_cannot_exceed_its_own_capacity(self):
-        # I(W;L) <= H(L) is an identity, not a hope. If it ever fails, the two
-        # quantities were computed off different populations.
+    def test_mutual_information_EQUALS_the_channel_capacity(self):
+        """I(W;L) == H(L) EXACTLY, because H(L|W)=0: every word has one length.
+
+        This assertion used to be `assertLessEqual`, and the inequality PASSED BECAUSE OF
+        the type-vs-token bug -- the defect inflated H(L), so a loose bound was satisfied
+        by the very thing it should have caught. Its own comment said a failure would mean
+        "the two quantities were computed off different populations". That is exactly what
+        had happened, and the assertion was too weak to say so.
+
+        RED under: building the length counter off the Counter's keys (the shipped bug).
+        """
         words = ["a", "bb", "bc", "ccc", "ccd", "cce", "dddd"] * 7 + ["zz"] * 3
-        r = ceiling.arm_capacity_and_word(words)
-        self.assertLessEqual(r["I_word_length_bits"]["plugin"],
-                             r["H_length_bits"]["plugin"] + 1e-12)
+        for name, form in both_forms(words):
+            with self.subTest(form=name):
+                r = ceiling.arm_capacity_and_word(form)
+                self.assertAlmostEqual(r["I_word_length_bits"]["plugin"],
+                                       r["H_length_bits"]["plugin"], places=12)
+                self.assertAlmostEqual(r["identity_residual_bits"]["plugin"], 0.0, places=12)
+
+    def test_the_length_distribution_counts_TOKENS_not_types(self):
+        """The artifact's own tell. length_distribution must sum to the token count; when
+        it summed to the TYPE count that was the bug, printed in the file, unread.
+
+        RED under: the shipped bug, directly.
+        """
+        words = ["aa"] * 500 + ["bb"] * 3 + ["ccc"]
+        for name, form in both_forms(words):
+            with self.subTest(form=name):
+                r = ceiling.arm_capacity_and_word(form)
+                self.assertEqual(sum(r["length_distribution"].values()), r["tokens"])
+                self.assertEqual(r["length_distribution"][2], 503)
+
+    def test_both_input_forms_agree_on_every_published_number(self):
+        """A list and a Counter of the same corpus ARE the same corpus.
+
+        RED under: any per-branch divergence, which is the class the review found.
+        """
+        words = ["a", "bb", "bb", "ccc", "ccc", "ccc", "dddd"] * 5
+        (_, as_list), (_, as_ctr) = both_forms(words)
+        a = ceiling.arm_capacity_and_word(as_list)
+        b = ceiling.arm_capacity_and_word(as_ctr)
+        for k in ("H_word_bits", "H_length_bits", "H_word_given_length_bits",
+                  "I_word_length_bits"):
+            self.assertAlmostEqual(a[k]["plugin"], b[k]["plugin"], places=12, msg=k)
+        self.assertEqual(a["length_distribution"], b["length_distribution"])
+        self.assertEqual(a["tokens"], b["tokens"])
 
 
 class TestBias(unittest.TestCase):
@@ -65,13 +119,23 @@ class TestBias(unittest.TestCase):
         self.assertAlmostEqual(i_m - i_p, (n_lengths - 1) / (2 * n * math.log(2)),
                                places=12)
 
-    def test_the_correction_is_negligible_at_corpus_scale(self):
-        """(L-1)/(2N ln2) with L~20 and N~1e8 is ~1e-16 bits. An arm whose headline
-        rests on a term that small is resting on nothing, which is why the ceiling
-        H(L) and the convergence arm carry the claim instead of the correction.
+    def test_the_stated_size_of_the_correction_is_the_measured_one(self):
+        """The docstring must quote the term's ACTUAL magnitude at this corpus's own
+        N and L, not a number nobody checked.
+
+        An earlier draft said "around 1e-16 bits". The real value at N=6.89e6, L=32 is
+        3.2e-6 -- wrong by ten orders of magnitude, and invisible because the only
+        assertion was `< 1e-6`, which a decorative claim satisfies as easily as a true
+        one. A bound is not a measurement of the thing it bounds.
+
+        RED under: restoring any 1e-1x claim, or drifting the corpus figures.
         """
-        n, n_lengths = 1e8, 20
-        self.assertLess((n_lengths - 1) / (2 * n * math.log(2)), 1e-6)
+        n, n_lengths = 6.89e6, 32
+        term = (n_lengths - 1) / (2 * n * math.log(2))
+        self.assertAlmostEqual(term, 3.2e-6, delta=0.1e-6)
+        src = open(os.path.join(HERE, "ceiling.py"), encoding="utf-8").read()
+        self.assertIn("3.2e-6 bits", src)
+        self.assertNotIn("1e-16", src)
 
     def test_plugin_never_exceeds_log2_of_types(self):
         words = ["x", "y", "zz"] * 10

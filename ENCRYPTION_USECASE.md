@@ -11,7 +11,7 @@ lengths. There is no ciphertext, no noise, and nothing that looks like a key.
 ## Where the covert capacity actually lives
 
 Not in the marks. **`measure/ceiling.py` puts a number on it:** a word's length carries
-3.42 bits, a word carries 11.72, so a reader supplies ~8.42 bits per word — about 343
+3.30 bits, a word carries 11.72, so a reader supplies ~8.42 bits per word — about 343
 equiprobable words per slot. That residual is the entire covert budget, and it belongs to
 the **shared interpretive key**, never to the transmission.
 
@@ -50,7 +50,7 @@ to a word-length skeleton.
 
 ## The risk nobody wrote down
 
-The length sequence is not a nothing. 3.42 bits per word is small, but it is not zero,
+The length sequence is not a nothing. 3.30 bits per word is small, but it is not zero,
 and it is *stable across every message you ever send*. A traffic analyst does not need to
 read you; they need to notice that your dot lines have a distribution, and word-length
 distributions differ by language, register and author. If this is ever used for something

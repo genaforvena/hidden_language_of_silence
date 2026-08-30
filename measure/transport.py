@@ -174,6 +174,13 @@ def classify(form, sent_lengths, received):
         return "corrupted-loudly", None
     if got == sent_lengths:
         return "intact", got
+    # ZERO WORDS IS LOUD. A decode that yields nothing at all is not a well-formed other
+    # message -- there is no sentence with no words, so a reader hits it immediately. This
+    # used to fall through to corrupted-silently, which put `spaces` under flowed HTML in
+    # the same bucket as the bracket form, and the whole point of the middle verdict is
+    # that it names the case a reader CANNOT detect.
+    if not got:
+        return "corrupted-loudly", got
     return "corrupted-silently", got
 
 
