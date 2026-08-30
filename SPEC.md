@@ -9,11 +9,11 @@
 - No restrictions on the choice of symbol other than that it cannot be part of an existing linguistic system.
 - Example: The sentence “silent languages fail” can become:
 ```
-◆◆◆◆◆◆ ✦✦✦✦✦✦✦✦ ➤➤➤➤
+◆︎◆︎◆︎◆︎◆︎◆︎ ◇︎◇︎◇︎◇︎◇︎◇︎◇︎◇︎ ▷︎▷︎▷︎▷︎
 ```
 or:
 ```
-◼︎◼︎◼︎◼︎◼︎◼︎◼︎ ✖︎✖︎✖︎✖︎✖︎✖︎✖︎✖︎ ✿︎✿︎✿︎✿︎
+■︎■︎■︎■︎■︎■︎■︎ ⨯︎⨯︎⨯︎⨯︎⨯︎⨯︎⨯︎⨯︎ ○︎○︎○︎○︎
 ```
 Both are valid encodings.
 

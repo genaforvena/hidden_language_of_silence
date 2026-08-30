@@ -16,7 +16,7 @@ Silent language fails beautifully
 ```
 Could become:
 ```
-◆◆◆◆◆◆ ✦✦✦✦✦✦✦✦ ➤➤➤➤ ✿✿✿✿✿✿✿✿✿✿
+◆︎◆︎◆︎◆︎◆︎◆︎ ◇︎◇︎◇︎◇︎◇︎◇︎◇︎◇︎ ▷︎▷︎▷︎▷︎ ○︎○︎○︎○︎○︎○︎○︎○︎○︎○︎
 ```
 
 ### Decoding (Reader)
@@ -38,7 +38,7 @@ The night is long
 ```
 Writer output:
 ```
-✶✶✶ ✦✦✦✦✦ ✪✪ ✧✧✧✧
+△︎△︎△︎ ◇︎◇︎◇︎◇︎◇︎ ◎︎◎︎ ◇︎◇︎◇︎◇︎
 ```
 Reader interpretation:
 ```

@@ -57,6 +57,13 @@ from statistics import mean
 WORD_RE = re.compile(r"[A-Za-z']+")
 OLLAMA = os.environ.get("SILENT_OLLAMA", "http://127.0.0.1:11434")
 EMBED_MODEL = os.environ.get("SILENT_EMBED_MODEL", "all-minilm")
+# FROZEN. The docs and the demo moved off Dingbats (U+27xx) and U+25FC because Android
+# draws those from the emoji font, at double width, which swallows the space between
+# clusters. This alphabet is deliberately NOT updated to match: these are the exact
+# glyphs that were sent to the models in the runs stored beside this file. Changing them
+# would leave the tree describing an instrument that produced none of the artifacts --
+# the failure the provenance block below exists to catch. Change it only together with a
+# re-run, and the script_sha256 stamp will correctly mark the artifacts as older.
 SYMBOLS = "◆✦➤✿✶✪✧◼✖▲●■◇☙❖⬟⬢⧫"
 
 

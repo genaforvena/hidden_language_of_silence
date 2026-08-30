@@ -22,7 +22,7 @@
 
   <div class="section">
     <h2>Reader</h2>
-    <textarea id="readerInstruction" placeholder="Enter Groq instruction prompt...">You will decode a series of symbol clusters into a sentence. Each cluster's length equals a word length. Example: ◼︎◼︎◼︎ ◼︎◼︎◼︎◼︎ = 'the road'. Use coherent words that match the structure.</textarea>
+    <textarea id="readerInstruction" placeholder="Enter Groq instruction prompt...">You will decode a series of symbol clusters into a sentence. Each cluster's length equals a word length. Example: ■︎■︎■︎ ■︎■︎■︎■︎ = 'the road'. Use coherent words that match the structure.</textarea>
     <textarea id="readerInput" placeholder="Enter silent language input..."></textarea>
     <select id="modelSelect">
       <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
@@ -49,7 +49,11 @@
     // U+2601 CLOUD and U+2717 BALLOT X were dropped outright: the protocol says symbol choice
     // carries no message, and a cloud and a rejection mark both carry one.
     const TEXT = '︎';
-    const SYMBOLS = ['◼', '◆', '✦', '➔', '❖', '⏃', '△', '⨿', '◇', '▽']
+    // Drawn from Geometric Shapes (U+25xx), which live in the TEXT font. The set used to
+    // include Dingbats (U+27xx) -- U+2726, U+2794, U+2756 -- and Android renders those from
+    // the EMOJI font whatever the intent, which is where this was being read. U+25FC was
+    // dropped for the same reason: it has Emoji_Presentation by default. U+25A0 does not.
+    const SYMBOLS = ['■', '◆', '◇', '▷', '○', '△', '▽', '◎', '⬟', '⬢']
       .map(c => c + TEXT);
     let GROQ_API_KEY = null;
 

@@ -13,7 +13,7 @@ The Silent Language protocol encodes text as arbitrary non-linguistic symbols re
    - Pre-agreed domains per word length (e.g., all 4-letter words are nautical terms; all 6-letter words are scientific).
 2. **Symbol-Specific Dictionaries**:
    - The symbol itself determines which dictionary or thematic set to use.
-   - Example: `◆` = botanical dictionary; `✦` = political jargon.
+   - Example: `◆` = botanical dictionary; `◇︎` = political jargon.
 3. **Position-Based Modifiers**:
    - Word position within the sentence modifies interpretation (e.g., every third word’s interpretation comes from a reversed alphabetical index).
 4. **Synonym Indexing**:
