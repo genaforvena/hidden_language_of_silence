@@ -351,5 +351,35 @@
       "code this system was light silent few sunray forever how still",
       "from when friend day alone happen new hushed student way quick"
     ]
+  },
+  "recovery": {
+    "metric": "cosine_similarity",
+    "direction": "higher = closer to the target",
+    "reading": "to_decoy >= to_true means the readings are no nearer the intended message than a length-matched decoy: no recovery",
+    "computed_by": "recover_recompute.py (post-hoc; the run itself had no embedding backend)",
+    "computed_provenance": {
+      "utc": "2026-08-30T05:41:04+00:00",
+      "script_sha256": "77066286e9726558449585138bb08b72f08ce68c47fe024c1a3cbc649861163e",
+      "git_head": "019808cb91f20f767865cd56781500efe6a2f64e",
+      "instrument_dirty": false,
+      "tree_dirty_files": 1
+    },
+    "n_readings": 20,
+    "to_true": {
+      "mean": 0.11224366535817122
+    },
+    "to_decoy": {
+      "mean": 0.19335876390976167
+    },
+    "decoys": [
+      "true love entire not place bright had happen refuses but sweet",
+      "this true speaks she again sunset two awaken student act count",
+      "with talk should old large happen but sunset support its river",
+      "over were ensure are great secret new hidden because way river",
+      "very true rarely and peace hidden and ensure another how codes",
+      "mute than number all there cannot all secret meaning for light",
+      "when said hidden few place school but inside morning day every",
+      "true true father new heart system all shapes because you share"
+    ]
   }
 }

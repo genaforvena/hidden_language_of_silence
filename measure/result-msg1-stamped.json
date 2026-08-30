@@ -339,5 +339,35 @@
       "how these my risk pie but fast arise off student",
       "own birds no wild cry new time horse own finance"
     ]
+  },
+  "recovery": {
+    "metric": "cosine_similarity",
+    "direction": "higher = closer to the target",
+    "reading": "to_decoy >= to_true means the readings are no nearer the intended message than a length-matched decoy: no recovery",
+    "computed_by": "recover_recompute.py (post-hoc; the run itself had no embedding backend)",
+    "computed_provenance": {
+      "utc": "2026-08-30T05:41:03+00:00",
+      "script_sha256": "77066286e9726558449585138bb08b72f08ce68c47fe024c1a3cbc649861163e",
+      "git_head": "019808cb91f20f767865cd56781500efe6a2f64e",
+      "instrument_dirty": false,
+      "tree_dirty_files": 0
+    },
+    "n_readings": 20,
+    "to_true": {
+      "mean": 0.24023101709790443
+    },
+    "to_decoy": {
+      "mean": 0.1531403776341853
+    },
+    "decoys": [
+      "are heard of dogs see she blue solve you riddles",
+      "why joker on hate why you best happy now silence",
+      "out young on hate why off next today eat reading",
+      "her every to what dog day time woman has finance",
+      "say light he fine her hug dark arise own cooking",
+      "fun never he word see get must deeds men nothing",
+      "its these we dark why her best small new charity",
+      "out after he best via far four joker has cooking"
+    ]
   }
 }

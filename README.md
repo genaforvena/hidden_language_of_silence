@@ -47,10 +47,50 @@ Own rhythm so cold
 
 ## Why LLMs?
 - LLMs act as reflection engines.
-- They never recover intended meaning.
 - They generate from structure and bias.
 - They demonstrate linguistic drift.
 - Their outputs embody unpredictable projections.
+
+This section used to also assert **"they never recover intended meaning."** It was the
+most interesting sentence in the repository and nobody had ever checked it, so
+[`measure/`](measure/) checks it. The short answer is that the sentence is not wrong,
+but it is not what the first result looks like either — see below.
+
+## Is any of this measured?
+
+Yes, now. [`measure/`](measure/) encodes a known text, takes N *independent* readings
+(separate processes — one sampled list is not N readings) and asks two questions the
+project had only ever asserted answers to.
+
+**Do independent readings agree with each other more than chance?** Against a
+length-matched, same-alphabet chance arm — message 1 said yes, about four times above
+chance, with non-overlapping intervals. Then message 2 was run and the effect
+**reversed**. Two messages, opposite verdicts, same instrument.
+
+**Are the readings actually nearer the intended message than a length-matched decoy?**
+This is the recovery arm, and it agrees with the reversal:
+
+| message | to true text | to decoy | verdict |
+|---|---|---|---|
+| msg 1 | 0.2402 | 0.1531 | nearer the true text |
+| msg 2 | 0.1122 | 0.1934 | **no recovery** |
+
+Cosine similarity, n=20 readings each, computed from the stored readings by
+[`recover_recompute.py`](measure/recover_recompute.py) with no new model calls.
+
+What the pair of runs supports is not "the channel works" and not "the channel is
+empty". It is that **agreement between readers is not evidence of recovery** — two
+readers converging can be two readers sharing a prior, and the arm that separates
+those is a run on a *different* input. That arm is arm B, and it is the one that
+decides.
+
+The full method, the failure modes it walked into, and every per-arm figure are in
+[`measure/README.md`](measure/README.md). Every artifact carries a provenance block
+naming the instrument that produced it, because one of these results was written by a
+version of the code that no longer existed in the tree.
+
+An essay about what went wrong on the way to these numbers:
+[*Your models agreed with each other. They were agreeing with themselves.*](https://dev.to/ilya_mozerov_867dbdd91feb/your-models-agreed-with-each-other-they-were-agreeing-with-themselves-3jb0)
 
 ## Philosophical Grounding
 - No text carries meaning inherently.

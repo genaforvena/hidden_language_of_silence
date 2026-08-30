@@ -7,6 +7,7 @@
     body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
     textarea, input, select, button { width: 100%; margin: 0.5rem 0; padding: 0.5rem; }
     .section { margin-bottom: 2rem; }
+    .hint { font-size: 0.85rem; color: #555; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -21,55 +22,52 @@
 
   <div class="section">
     <h2>Reader</h2>
-    <textarea id="readerInstruction" placeholder="Enter Groq instruction prompt...">You will decode a series of symbol clusters into a sentence. Each cluster's length equals a word length. Example: ◼◼◼ ◼◼◼◼ = 'the road'. Use coherent words that match the structure.</textarea>
+    <textarea id="readerInstruction" placeholder="Enter Groq instruction prompt...">You will decode a series of symbol clusters into a sentence. Each cluster's length equals a word length. Example: ◼︎◼︎◼︎ ◼︎◼︎◼︎◼︎ = 'the road'. Use coherent words that match the structure.</textarea>
     <textarea id="readerInput" placeholder="Enter silent language input..."></textarea>
     <select id="modelSelect">
-      <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
-      <option value="qwen-qwq-32b">qwen-qwq-32b</option>
-      <option value="deepseek-r1-distill-qwen-32b">deepseek-r1-distill-qwen-32b</option>
-      <option value="mistral-saba-24b">mistral-saba-24b</option>
-      <option value="gemma2-9b-it">gemma2-9b-it</option>
+      <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
+      <option value="openai/gpt-oss-20b">openai/gpt-oss-20b</option>
+      <option value="qwen/qwen3.8-27b">qwen/qwen3.8-27b</option>
+      <option value="qwen/qwen3.6-27b">qwen/qwen3.6-27b</option>
+      <option value="groq/compound-mini">groq/compound-mini</option>
+      <option value="allam-2-7b">allam-2-7b</option>
     </select>
+    <label>readings <input id="nReads" type="number" value="1" min="1" max="8" style="width:4rem"></label>
     <button onclick="callGroqReader()">Read with Groq</button>
-    <textarea id="readerOutput" readonly placeholder="Groq response..."></textarea>
+    <p class="hint">Set readings above 1 to take several <em>independent</em> readings of the same
+    input. They will disagree. That disagreement is the subject of this project — and when
+    independent readings <em>do</em> agree, that is not evidence they recovered anything.
+    See <a href="https://github.com/genaforvena/hidden_language_of_silence/tree/main/measure">measure/</a>.</p>
+    <textarea id="readerOutput" readonly rows="8" placeholder="Groq response..."></textarea>
   </div>
 
   <script>
-    // Every symbol is pinned to TEXT presentation with U+FE0E. Without it a font is free
-    // to render U+25FC (and friends) as a colour emoji at double width, which swallows the
-    // single space between clusters -- the word boundaries stop being visible, and word
-    // boundaries are the entire channel.
-    // U+2601 CLOUD and U+2717 BALLOT X were removed outright: the protocol says symbol
-    // choice carries no message, and a picture of a cloud and a rejection mark both do.
-    const TEXT = '\uFE0E';
-    const SYMBOLS = ['\u25FC', '\u25C6', '\u2726', '\u2794', '\u2756', '\u23C3', '\u25B3', '\u2A3F', '\u25C7', '\u25BD']
+    // Symbols are pinned to TEXT presentation with U+FE0E. Several of these -- U+25FC above
+    // all -- have DEFAULT emoji presentation, so a font may draw them coloured and at double
+    // width, which swallows the single space between clusters. Word boundaries are the whole
+    // channel; a reader who cannot see them got a different message, not a shorter one.
+    // U+2601 CLOUD and U+2717 BALLOT X were dropped outright: the protocol says symbol choice
+    // carries no message, and a cloud and a rejection mark both carry one.
+    const TEXT = '︎';
+    const SYMBOLS = ['◼', '◆', '✦', '➔', '❖', '⏃', '△', '⨿', '◇', '▽']
       .map(c => c + TEXT);
     let GROQ_API_KEY = null;
 
     function generateSilent() {
       const input = document.getElementById('writerInput').value.trim();
+      if (!input) return;
       const words = input.split(/\s+/);
       const clusters = words.map(word => {
+        // Random per word, independent of length. A symbol chosen BY length would restate
+        // the one thing the channel transmits, and the reader could skip counting.
         const symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
         return symbol.repeat(word.length);
       });
       document.getElementById('writerOutput').value = clusters.join(' ');
+      document.getElementById('readerInput').value = clusters.join(' ');
     }
 
-    async function callGroqReader() {
-      if (!GROQ_API_KEY) {
-        GROQ_API_KEY = prompt("Enter your Groq API key:");
-        if (!GROQ_API_KEY) {
-          alert("Groq API key is required.");
-          return;
-        }
-      }
-
-      const instruction = document.getElementById('readerInstruction').value;
-      const silentInput = document.getElementById('readerInput').value;
-      const model = document.getElementById('modelSelect').value;
-      const fullPrompt = `${instruction.trim()}\n\n${silentInput.trim()}`;
-
+    async function oneReading(model, fullPrompt) {
       try {
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
           method: "POST",
@@ -79,17 +77,47 @@
           },
           body: JSON.stringify({
             model: model,
-            messages: [
-              { role: "user", content: fullPrompt }
-            ]
+            temperature: 1.0,
+            messages: [{ role: "user", content: fullPrompt }]
           })
         });
-
         const data = await response.json();
-        const output = data.choices?.[0]?.message?.content || "Error: no response";
-        document.getElementById('readerOutput').value = output;
+        if (!response.ok) {
+          // Name WHICH failure this is. A retired model id and a bad key used to render
+          // identically here, and every model this page used to offer had been retired
+          // by Groq -- so the demo failed silently and looked like a key problem.
+          return `[HTTP ${response.status}] ${data.error?.message || "unknown error"}`;
+        }
+        return data.choices?.[0]?.message?.content?.trim() || "[no response]";
       } catch (err) {
-        document.getElementById('readerOutput').value = `Error: ${err.message}`;
+        return `[${err.message}]`;
+      }
+    }
+
+    async function callGroqReader() {
+      if (!GROQ_API_KEY) {
+        GROQ_API_KEY = prompt("Enter your Groq API key:");
+        if (!GROQ_API_KEY) return;
+      }
+      const instruction = document.getElementById('readerInstruction').value;
+      const silentInput = document.getElementById('readerInput').value;
+      const model = document.getElementById('modelSelect').value;
+      const n = Math.max(1, Math.min(8, parseInt(document.getElementById('nReads').value) || 1));
+      const out = document.getElementById('readerOutput');
+      if (!silentInput.trim()) { out.value = "[nothing to read]"; return; }
+      const fullPrompt = `${instruction.trim()}\n\n${silentInput.trim()}`;
+
+      out.value = `reading ${n}x ...`;
+      // Each reading is its OWN request. Asking one call for a list of n guesses is one
+      // reading of a list, not n independent readings -- the whole measurement in measure/
+      // turns on that distinction.
+      const results = await Promise.all(
+        Array.from({ length: n }, () => oneReading(model, fullPrompt))
+      );
+      out.value = results.map((r, i) => `${i + 1}. ${r}`).join("\n");
+      if (n > 1) {
+        const distinct = new Set(results.map(r => r.toLowerCase().replace(/[^a-z ]/g, "").trim())).size;
+        out.value += `\n\n${distinct} distinct out of ${n} readings of the same input.`;
       }
     }
   </script>
