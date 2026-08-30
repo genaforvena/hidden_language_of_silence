@@ -66,6 +66,21 @@ Own rhythm so cold
 - Visual installations where text structures remain static but readings rotate.
 - Evidence of my insanity.
 
+## Rendering
+
+Every symbol in this project must be pinned to **text presentation** with `U+FE0E`.
+
+Several of the glyphs used here — `U+25FC BLACK MEDIUM SQUARE` above all — have *default
+emoji presentation* in Unicode. A font is then free to draw them as full-colour, double-width
+emoji, and at double width the single space between clusters is visually swallowed. Word
+boundaries stop being visible, and word boundaries are the entire channel: a reader who cannot
+see where one cluster ends has not been given a shorter message, they have been given a
+different one.
+
+Two glyphs were removed from the symbol set outright rather than re-rendered: `U+2601 CLOUD`
+and `U+2717 BALLOT X`. The protocol says symbol choice carries no message. A picture of a cloud
+and a rejection mark both carry one.
+
 ## Interactive Demo
 
 https://genaforvena.github.io/hidden_language_of_silence/

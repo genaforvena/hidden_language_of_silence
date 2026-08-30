@@ -2,22 +2,25 @@ import json
 import re
 from datasets import load_dataset
 
-# Define a symbol mapping for lengths (up to length 12)
-SYMBOL_MAP = {
-    1: '@',
-    2: '#',
-    3: '$',
-    4: '%',
-    5: '&',
-    6: '*',
-    7: '+',
-    8: '°',
-    9: '*',
-}
+# The protocol says the symbol carries no message and is chosen at random.
+# The old SYMBOL_MAP broke that in two ways at once:
+#   1. it keyed the symbol on the WORD LENGTH, so the symbol restated the one thing the
+#      channel is supposed to be -- a reader could recover length from the glyph alone,
+#      without counting. That is a side channel in a project whose whole claim is that
+#      length is the only channel.
+#   2. it was not even injective: 3 and 9 both mapped to '*', so the side channel was
+#      also ambiguous.
+# Symbols are now drawn at random per word, independent of length, and pinned to TEXT
+# presentation (U+FE0E) so no font renders one as a double-width colour emoji and eats
+# the space between clusters.
+import random
+
+TEXT = "\uFE0E"
+SYMBOLS = [c + TEXT for c in "\u25FC\u25C6\u2726\u2794\u2756\u23C3\u25B3\u2A3F\u25C7\u25BD"]
 
 def text_to_shapes(sentence):
     words = re.findall(r'\b\w+\b', sentence)
-    return [SYMBOL_MAP.get(len(word), '^') * len(word) for word in words]
+    return [random.choice(SYMBOLS) * len(word) for word in words]
 
 # Load smaller dataset
 print("Loading dataset...")

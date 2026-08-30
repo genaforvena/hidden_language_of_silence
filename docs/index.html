@@ -35,7 +35,15 @@
   </div>
 
   <script>
-    const SYMBOLS = ['\u25FC', '\u25C6', '\u2726', '\u2794', '\u2756', '\u2601', '\u2717', '\u23C3', '\u25B3', '\u2A3F'];
+    // Every symbol is pinned to TEXT presentation with U+FE0E. Without it a font is free
+    // to render U+25FC (and friends) as a colour emoji at double width, which swallows the
+    // single space between clusters -- the word boundaries stop being visible, and word
+    // boundaries are the entire channel.
+    // U+2601 CLOUD and U+2717 BALLOT X were removed outright: the protocol says symbol
+    // choice carries no message, and a picture of a cloud and a rejection mark both do.
+    const TEXT = '\uFE0E';
+    const SYMBOLS = ['\u25FC', '\u25C6', '\u2726', '\u2794', '\u2756', '\u23C3', '\u25B3', '\u2A3F', '\u25C7', '\u25BD']
+      .map(c => c + TEXT);
     let GROQ_API_KEY = null;
 
     function generateSilent() {
