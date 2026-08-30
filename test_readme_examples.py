@@ -13,7 +13,8 @@ import re
 import sys
 
 BLOCK = re.compile(r"```\n([^\n]+)\n\n((?:\S.*\n)+?)```")
-ROW = re.compile(r"^(\S+)\s+(·+)\s+(\d+)\s*$")
+MARK = "\u2581"   # taken from silent.py, never restated -- see the test below
+ROW = re.compile(r"^(\S+)\s+(" + MARK + r"+)\s+(\d+)\s*$")
 
 
 def check(path="README.md"):
@@ -35,13 +36,13 @@ def check(path="README.md"):
             failures += 1
             continue
         for word, m in zip(words, rows):
-            shown_word, dots, num = m.group(1), m.group(2), int(m.group(3))
+            shown_word, marks, num = m.group(1), m.group(2), int(m.group(3))
             checked += 1
             if shown_word != word:
                 print(f"FAIL: row says {shown_word!r}, sentence says {word!r}")
                 failures += 1
-            elif len(dots) != len(word):
-                print(f"FAIL: {word!r} is {len(word)} letters, drawn with {len(dots)}")
+            elif len(marks) != len(word):
+                print(f"FAIL: {word!r} is {len(word)} letters, drawn with {len(marks)}")
                 failures += 1
             elif num != len(word):
                 print(f"FAIL: {word!r} is {len(word)} letters, labelled {num}")
@@ -57,5 +58,18 @@ def check(path="README.md"):
     return 0
 
 
+def check_mark_matches_the_implementation():
+    """The README must be drawn with the mark silent.py actually ships. A worked example
+    in a notation the code does not use is the exact defect this file exists to catch,
+    one level up: not a wrong count, a wrong protocol."""
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import silent
+    if silent.MARK != MARK:
+        print(f"FAIL: silent.py ships {silent.MARK!r}, README examples are drawn with {MARK!r}")
+        return 1
+    return 0
+
+
 if __name__ == "__main__":
-    sys.exit(check(*sys.argv[1:]))
+    sys.exit(check(*sys.argv[1:]) or check_mark_matches_the_implementation())

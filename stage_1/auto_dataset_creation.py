@@ -2,25 +2,21 @@ import json
 import re
 from datasets import load_dataset
 
-# The protocol says the symbol carries no message and is chosen at random.
-# The old SYMBOL_MAP broke that in two ways at once:
-#   1. it keyed the symbol on the WORD LENGTH, so the symbol restated the one thing the
-#      channel is supposed to be -- a reader could recover length from the glyph alone,
-#      without counting. That is a side channel in a project whose whole claim is that
-#      length is the only channel.
-#   2. it was not even injective: 3 and 9 both mapped to '*', so the side channel was
-#      also ambiguous.
-# Symbols are now drawn at random per word, independent of length, and pinned to TEXT
-# presentation (U+FE0E) so no font renders one as a double-width colour emoji and eats
-# the space between clusters.
-import random
+# The notation is silent.py's, imported rather than restated. It used to be a private
+# SYMBOL list in this file, and that is how the training lane ended up learning a channel
+# the repository had already replaced: the protocol moved to a single mark and this
+# generator kept minting per-word symbol clusters for months. A second copy of a
+# declaration drifts the day either side is fixed.
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from silent import encode as encode_silent  # noqa: E402
 
-TEXT = "\uFE0E"
-SYMBOLS = [c + TEXT for c in "\u25FC\u25C6\u2726\u2794\u2756\u23C3\u25B3\u2A3F\u25C7\u25BD"]
 
 def text_to_shapes(sentence):
-    words = re.findall(r'\b\w+\b', sentence)
-    return [random.choice(SYMBOLS) * len(word) for word in words]
+    """One run per word, one mark per letter. The channel is the lengths."""
+    return encode_silent(" ".join(re.findall(r'\b\w+\b', sentence))).split(" ")
+
 
 # Load smaller dataset
 print("Loading dataset...")
@@ -40,7 +36,7 @@ for item in dataset:
             shapes = text_to_shapes(clean_sentence)
             example = {
                 "id": f"{idx:03}",
-                "language": "abstract-silence",
+                "language": "silent-language",
                 "shape": " ".join(shapes),
                 "text": clean_sentence
             }

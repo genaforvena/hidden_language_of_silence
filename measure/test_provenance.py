@@ -62,17 +62,26 @@ def clone(dst):
     subprocess.run(["git", "clone", "-q", REPO, dst], check=True, capture_output=True)
     # The working copy may be ahead of HEAD; test the instrument as it stands on disk.
     #
-    # EVERY .py in measure/, not just silent_channel.py. It used to be just that one
-    # file, and that was correct only while the instrument WAS one file: the day the
-    # provenance block moved into provenance.py, a one-file copy would have run the
-    # working-tree instrument against the COMMITTED helper -- a hybrid that exists
-    # nowhere, reported as "the instrument as it stands on disk". A brand-new helper
-    # would not have been in the clone at all and the run would have died; a helper
-    # merely EDITED is the quiet case, and is the one this guards.
-    for f in sorted(os.listdir(HERE)):
-        if f.endswith(".py"):
-            subprocess.run(["cp", os.path.join(HERE, f),
-                            os.path.join(dst, "measure", f)], check=True)
+    # EVERY tracked .py in the repository, not a named file. This has now been widened
+    # twice, for the same reason each time, and the reason is worth keeping: the
+    # "instrument" is whatever the run imports, and that set GROWS. It was one file until
+    # the provenance block moved into measure/provenance.py; it reached outside measure/
+    # entirely when silent_channel.py started importing the repo-root silent.py. Each
+    # time, a narrower copy left the working-tree script running against COMMITTED
+    # helpers -- a hybrid that exists nowhere, reported as "the instrument on disk".
+    #
+    # A brand-new helper is the loud case (ImportError). A helper merely EDITED is the
+    # quiet one, and it is what this guards: the second widening was forced by an
+    # AttributeError, i.e. by luck, on a change that could as easily have been silent.
+    root = os.path.dirname(HERE)
+    tracked = subprocess.run(["git", "-C", root, "ls-files", "--cached", "--others", "--exclude-standard", "*.py"],
+                             capture_output=True, text=True).stdout.split()
+    for rel in tracked:
+        src = os.path.join(root, rel)
+        if not os.path.exists(src):
+            continue
+        os.makedirs(os.path.dirname(os.path.join(dst, rel)) or dst, exist_ok=True)
+        subprocess.run(["cp", src, os.path.join(dst, rel)], check=True)
     git(dst, "add", "-A")
     git(dst, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "baseline")
     return git(dst, "rev-parse", "HEAD").stdout.strip()

@@ -104,6 +104,9 @@ SCRIPT = os.path.abspath(__file__)
 # own numbers. The script path is therefore an argument, taken once at import.
 sys.path.insert(0, os.path.dirname(SCRIPT))
 from provenance import Instrument   # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.dirname(SCRIPT)))
+import silent                       # noqa: E402
+from silent import encode as silent_encode   # noqa: E402
 
 _INSTRUMENT = Instrument(SCRIPT)
 
@@ -131,10 +134,18 @@ def lengths_of(text):
     return [len(w) for w in words_of(text)]
 
 
-def encode(text, rng):
-    """The repo's protocol: one freely chosen symbol per word, repeated word-length
-    times. Symbol choice carries no message, so it is drawn fresh every time."""
-    return " ".join(rng.choice(SYMBOLS) * n for n in lengths_of(text))
+def encode(text, rng=None):
+    """The repo's protocol, taken from silent.py rather than restated: one run per word,
+    one fixed mark per letter.
+
+    THE STORED ARTIFACTS WERE PRODUCED UNDER THE OLD SYMBOL NOTATION, and that does not
+    invalidate them. The prompt spells the word lengths out in digits beside the encoded
+    line, so what the reader is conditioned on is the length sequence either way -- which
+    is the claim this whole directory rests on. `rng` is accepted and ignored, because
+    there is no longer a choice to make; the parameter stays so the call sites and the
+    saved argv keep meaning what they did.
+    """
+    return silent_encode(text)
 
 
 def profile_matches(text, lens):
@@ -162,7 +173,7 @@ def read_once(lens, rng, tries=4, relay=None):
     """One INDEPENDENT reading. Each call is its own process with no shared context,
     which is what makes the N readings independent rather than a single sampled list.
     Returns (text, attempts) or (None, attempts) if the reader never hit the profile."""
-    encoded = " ".join(rng.choice(SYMBOLS) * n for n in lens)
+    encoded = " ".join(silent.MARK * n for n in lens)
     prompt = PROMPT.format(encoded=encoded, lens=" ".join(map(str, lens)), n=len(lens))
     for attempt in range(1, tries + 1):
         try:

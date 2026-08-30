@@ -20,11 +20,11 @@
     <h2>Writer</h2>
     <textarea id="writerInput" placeholder="Enter natural language text..."></textarea>
     <button onclick="generateSilent()">Generate Silent Language</button>
-    <textarea id="writerOutput" readonly placeholder="(whitespace only — there is nothing to see)"></textarea>
+    <textarea id="writerOutput" readonly placeholder="the encoded message appears here"></textarea>
     <pre id="writerPreview" class="preview"></pre>
-    <p class="hint">The box above holds the real message: spaces for letters, tabs between
-    words. It looks empty because it <em>is</em> whitespace. The line under it is a debug
-    rendering with a dot per space — the dots are not part of the encoding.</p>
+    <p class="hint">The box above holds the whole message: one ▁ per letter, a space
+    between words. The line under it is the word lengths, which is all the channel
+    carries.</p>
   </div>
 
   <div class="section">
@@ -49,23 +49,21 @@
   </div>
 
   <script>
-    // A word is a run of SPACES, one per letter. Words are separated by a TAB.
-    // The encoded message is entirely whitespace -- there is nothing to look at, which
-    // is the point and what the project's name always claimed.
-    //
-    // The separator must not be a space. If it were, 6 + gap + 8 would be fifteen spaces
-    // in a row and one fifteen-letter word could not be told from two words: the channel
-    // would stop being decodable, which is worse than being hard to read.
-    const WORD_SEP = "\t";
+    // A word is a run of MARK, one per letter. Words are separated by a space.
+    // One mark, so the writer makes no choice, and a choice nobody makes cannot smuggle
+    // a message. U+2581 and not an ASCII underscore because that was MEASURED: a line of
+    // underscores and spaces is a horizontal rule in markdown, and a run of literal
+    // spaces collapses in flowed HTML to one space -- a well-formed one-letter word, so
+    // the reader gets a different message and cannot tell. See measure/transport.py.
+    const MARK = "\u2581";
+    const WORD_SEP = " ";
 
     function encode(sentence) {
-      return sentence.trim().split(/\s+/).map(w => " ".repeat(w.length)).join(WORD_SEP);
+      return sentence.trim().split(/\s+/).map(w => MARK.repeat(w.length)).join(WORD_SEP);
     }
 
-    // Debug rendering ONLY, never the channel. A visible stand-in for a space is a symbol
-    // again, and symbols are what this encoding exists to remove.
-    function visible(encoded) {
-      return encoded.split(WORD_SEP).map(c => "·".repeat(c.length)).join("  ");
+    function lengths(encoded) {
+      return encoded.split(WORD_SEP).filter(c => c.length).map(c => c.length);
     }
 
     let GROQ_API_KEY = null;
@@ -74,11 +72,9 @@
       const input = document.getElementById('writerInput').value.trim();
       if (!input) return;
       const enc = encode(input);
-      // The textarea preserves whitespace; the preview beside it exists because a run of
-      // spaces is invisible, so without it the writer cannot tell success from a no-op.
       document.getElementById('writerOutput').value = enc;
       document.getElementById('writerPreview').textContent =
-        visible(enc) + "   (" + enc.split(WORD_SEP).map(c => c.length).join(", ") + ")";
+        "(" + lengths(enc).join(", ") + ")";
       document.getElementById('readerInput').value = enc;
     }
 
@@ -124,7 +120,7 @@
       // round trip through a chat API reliably, and a prompt that LOOKS empty gets an
       // answer about emptiness -- which would be the reader hallucinating about our bug
       // rather than about the message.
-      const lens = silentInput.split(WORD_SEP).map(c => c.length);
+      const lens = lengths(silentInput);
       const fullPrompt = `${instruction.trim()}\n\nWord lengths: ${lens.join(", ")}`;
 
       out.value = `reading ${n}x ...`;

@@ -1,92 +1,86 @@
-# Silent Language — Project README
+# Silent Language
 
-## Overview
-Silent Language is a deliberately incomplete writing system. It encodes sentences as sequences of arbitrary non-linguistic symbols, each symbol cluster’s length corresponding to a word length. The system rejects stable meaning. Writers provide rhythm; readers hallucinate content. No reading is definitive. Every interpretation is ephemeral.
+A deliberately incomplete writing system. A sentence is transmitted as its word lengths
+and nothing else. The writer supplies rhythm; the reader supplies everything else, and
+`measure/ceiling.py` says how much everything else is: about 8.42 bits per word, roughly
+343 equiprobable words per slot. No reading is a decoding, because the sentence is not in
+the channel.
+
+The normative document is [`SPEC.md`](SPEC.md). This file is the tour.
 
 ## Protocol
-### Encoding (Writer)
-- Each word becomes a run of **spaces**, one space per letter.
-- Words are separated by a **tab**.
-- Nothing else is written. The encoded message is entirely whitespace.
 
-The channel is the sequence of word lengths and nothing else — not because the symbols
-were chosen to carry no meaning, but because **there are no symbols**. A reader receives
-a shape of silence.
-
-The separator has to be something other than a space. If the gaps between words were
-spaces too, `6 + gap + 8` would be fifteen spaces in a row, and one fifteen-letter word
-would be indistinguishable from two words. That is not a legibility problem, it is the
-channel ceasing to be decodable.
-
-Example. The dot column is what is actually transmitted, with `·` standing in for each
-space — **the dots are not part of the encoding**; a real run of spaces cannot be shown on
-a page. The number is that run's length, which is the entire channel.
-
-```
-Silent language fails beautifully
-
-Silent        ······         6
-language      ········       8
-fails         ·····          5
-beautifully   ···········   11
-```
-
-Another:
+- A word becomes a run of `▁` (U+2581), one per letter.
+- Words are separated by a single space.
+- Nothing else is written.
 
 ```
 The night is long
 
-The     ···      3
-night   ·····    5
-is      ··       2
-long    ····     4
+The     ▁▁▁      3
+night   ▁▁▁▁▁    5
+is      ▁▁       2
+long    ▁▁▁▁     4
 ```
 
-Reference implementation: [`silent.py`](silent.py). `encode()` returns the real
-whitespace; `visible()` is a debug rendering only. A visible stand-in for a space is a
-symbol again, and symbols are what this encoding exists to remove.
+On the wire that is one line: `▁▁▁ ▁▁▁▁▁ ▁▁ ▁▁▁▁`
 
-**A note on displaying it.** HTML and Markdown collapse consecutive spaces, so a raw
-encoded message pasted into a web page renders as a single space and looks like nothing
-at all. Anything that shows the channel must preserve whitespace — a fenced code block, a
-`<textarea>`, or `white-space: pre`. This is a property of the medium, not a defect in the
-encoding, but it will bite anyone who forgets it.
+Another, with a longer word so the runs are worth counting:
 
-### Decoding (Reader)
-- The reader uses only length to guess words.
-- No semantic hint comes from symbols.
-- LLMs or humans fill blanks with context-dependent hallucinations.
-- Re-encoding produces new symbol sets each cycle.
+```
+Rain fell across the empty parking structure
 
-## Usage
-- Encode text with the writer.
-- Submit encoded strings to the reader.
-- Capture interpretations.
-- Compare multiple readings for diversity.
+Rain        ▁▁▁▁          4
+fell        ▁▁▁▁          4
+across      ▁▁▁▁▁▁        6
+the         ▁▁▁           3
+empty       ▁▁▁▁▁         5
+parking     ▁▁▁▁▁▁▁       7
+structure   ▁▁▁▁▁▁▁▁▁     9
+```
 
-## Example
-Original:
-```
-The night is long
+There is **one mark**, so the writer makes no choice, and a choice nobody makes cannot
+smuggle a message. Earlier versions let the writer pick a symbol per word and that
+freedom carried meaning — `U+2601 CLOUD` and `U+2717 BALLOT X` were struck from the set
+for exactly that.
 
-The    ···  3
-night  ·····  5
-is     ··  2
-long   ····  4
+The mark is `▁` and not an underscore because that was **measured**, not preferred: a
+line of ASCII underscores and spaces is a *horizontal rule* in markdown, so on GitHub the
+message does not arrive at all. Runs of literal spaces — the previous protocol, and the
+bracket form `(   )` that replaced it — collapse in flowed HTML to `( )`, a well-formed
+one-letter word, so the reader gets a different message and cannot tell. The full
+six-notation table is in [`SPEC.md`](SPEC.md#why-this-mark) and
+[`measure/result-transport.json`](measure/result-transport.json).
+
+The separator has to differ from the mark. Were both the same, `6 + gap + 8` would be
+fourteen marks in a row and one fourteen-letter word would be indistinguishable from two
+— not a legibility problem, the channel ceasing to be decodable.
+
+Reference implementation: [`silent.py`](silent.py) — `encode()` and `lengths()`, which is
+the whole surface.
+
+## Decoding
+
+The reader gets a list of word lengths. That is the whole input. They write a sentence
+with exactly those lengths, in that order — a language model, a person, anything that
+generates text. Nothing else is supplied and nothing else is checked.
+
+A reading can be encoded again and passed on. Nothing survives the cycle except the
+length sequence, which is the point.
+
 ```
-△︎△︎△︎ ◇︎◇︎◇︎◇︎◇︎ ◎︎◎︎ ◇︎◇︎◇︎◇︎
- 3    5   2   4
+The night is long   ->   ▁▁▁ ▁▁▁▁▁ ▁▁ ▁▁▁▁   ->   Own rhythm so cold
 ```
-Reader interpretation:
-```
-Own rhythm so cold
-```
+
+Both sentences encode to that same line. Neither is the decoding of the other, because
+there is no decoding: those four runs admit an enormous number of English sentences, and
+these are two of them.
 
 ## Why LLMs?
-- LLMs act as reflection engines.
-- They generate from structure and bias.
-- They demonstrate linguistic drift.
-- Their outputs embody unpredictable projections.
+
+A model will always produce a fluent sentence at the requested lengths, so it turns the
+gap between "a reading" and "the message" into something measurable instead of arguable:
+hand the same skeleton to twenty independent processes and the spread is the evidence.
 
 This section used to also assert **"they never recover intended meaning."** It was the
 most interesting sentence in the repository and nobody had ever checked it, so
@@ -174,34 +168,32 @@ backwards until a test caught it: [`measure/README.md`](measure/README.md#the-ce
 Artifact: [`measure/result-ceiling.json`](measure/result-ceiling.json). No model, no
 network — this arm cannot be wrong about a reader, because it never asks one.
 
-## Philosophical Grounding
-- No text carries meaning inherently.
-- Meaning is projection, hallucination, negotiation.
-- The protocol is a stage for constraint and chaos.
-- Every reading is proof that language fails.
-- Symbol choice randomness is the clearest admission of this.
+## What the project claims, and what it has stopped claiming
 
-## Potential Directions
-- Interactive playgrounds for encoded structures.
-- Public galleries showcasing diverse hallucinations.
-- Recursion experiments (reader → writer → reader cycles).
-- Visual installations where text structures remain static but readings rotate.
-- Evidence of my insanity.
+Standing:
 
-## Rendering
+- Meaning here is projection. The reader is not recovering, they are composing under a
+  constraint, and the numbers above say how loose the constraint is.
+- No reading is authoritative, and re-encoding a reading loses everything but the shape.
+- **The single mark is the admission.** The writer is given nothing to express with —
+  earlier versions let them pick a symbol per word, and that freedom quietly carried
+  meaning, which is why it was removed rather than celebrated.
 
-Every symbol in this project must be pinned to **text presentation** with `U+FE0E`.
+Withdrawn, because it was measured and did not survive contact:
 
-Several of the glyphs used here — `U+25FC BLACK MEDIUM SQUARE` above all — have *default
-emoji presentation* in Unicode. A font is then free to draw them as full-colour, double-width
-emoji, and at double width the single space between clusters is visually swallowed. Word
-boundaries stop being visible, and word boundaries are the entire channel: a reader who cannot
-see where one cluster ends has not been given a shorter message, they have been given a
-different one.
+- *"Interception by outsiders is effectively impossible."* Backwards — the channel is
+  weak, not strong. See [`ENCRYPTION_USECASE.md`](ENCRYPTION_USECASE.md).
+- *"Symbol choice randomness is the clearest admission."* There is no symbol choice now.
+- The grandiosity about symbol sets and how to render them, which described a protocol
+  this repository no longer uses. [`SPEC.md`](SPEC.md#history) keeps the three forms and
+  what each cost, instead of the prose.
 
-Two glyphs were removed from the symbol set outright rather than re-rendered: `U+2601 CLOUD`
-and `U+2717 BALLOT X`. The protocol says symbol choice carries no message. A picture of a cloud
-and a rejection mark both carry one.
+## Where it could go
+
+- A public gallery of readings of one skeleton, shown side by side.
+- Reader → writer → reader cycles: how fast does the shape itself drift?
+- `stage_1/` trains a model on lengths alone. The target is not "did it work" but **how
+  close to 3.42 bits per word it gets**, against a control given no input at all.
 
 ## Interactive Demo
 

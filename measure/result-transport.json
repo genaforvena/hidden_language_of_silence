@@ -1,0 +1,292 @@
+{
+ "sentence": "The night is long",
+ "lengths": [
+  3,
+  5,
+  2,
+  4
+ ],
+ "browser": "/home/mesh-home/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell",
+ "forms": {
+  "symbols": {
+   "file (control)": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <p>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <pre>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, at the wire": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, as read": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   }
+  },
+  "spaces": {
+   "file (control)": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <p>": {
+    "verdict": "corrupted-silently",
+    "lengths": []
+   },
+   "html <pre>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, at the wire": {
+    "verdict": "na",
+    "lengths": null
+   },
+   "github md, as read": {
+    "verdict": "corrupted-silently",
+    "lengths": []
+   }
+  },
+  "brackets": {
+   "file (control)": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <p>": {
+    "verdict": "corrupted-silently",
+    "lengths": [
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "html <pre>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, at the wire": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, as read": {
+    "verdict": "corrupted-silently",
+    "lengths": [
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  },
+  "dots": {
+   "file (control)": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <p>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <pre>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, at the wire": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, as read": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   }
+  },
+  "underscore": {
+   "file (control)": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <p>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <pre>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, at the wire": {
+    "verdict": "na",
+    "lengths": null
+   },
+   "github md, as read": {
+    "verdict": "corrupted-silently",
+    "lengths": []
+   }
+  },
+  "block": {
+   "file (control)": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <p>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "html <pre>": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, at the wire": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   },
+   "github md, as read": {
+    "verdict": "intact",
+    "lengths": [
+     3,
+     5,
+     2,
+     4
+    ]
+   }
+  }
+ },
+ "provenance": {
+  "at_start": {
+   "utc": "2026-08-30T15:46:39+00:00",
+   "script_sha256": "e04cb98b88dbc1ae6299463684b5a17dc686885fa8cd5076a49c093c5f20bb6b",
+   "git_head": "ec1f01a4ae610f621d3ff487352f2c131eab6a24",
+   "instrument_dirty": true,
+   "tree_dirty_files": 9
+  },
+  "at_write": {
+   "utc": "2026-08-30T15:46:49+00:00",
+   "script_sha256": "e04cb98b88dbc1ae6299463684b5a17dc686885fa8cd5076a49c093c5f20bb6b",
+   "git_head": "ec1f01a4ae610f621d3ff487352f2c131eab6a24",
+   "instrument_dirty": true,
+   "tree_dirty_files": 9
+  },
+  "changed_mid_run": false,
+  "tree_moved_mid_run": false,
+  "note": "instrument identical at start and at write",
+  "argv": [
+   "measure/transport.py"
+  ],
+  "python": "3.12.3"
+ }
+}
