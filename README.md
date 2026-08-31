@@ -6,7 +6,9 @@ and nothing else. The writer supplies rhythm; the reader supplies everything els
 253 equiprobable words per slot. No reading is a decoding, because the sentence is not in
 the channel.
 
-The normative document is [`SPEC.md`](SPEC.md). This file is the tour.
+The normative document is [`SPEC.md`](SPEC.md); [`GOAL.md`](GOAL.md) is the one-page
+summary — what this is, what has been established, and what is still open. This file is
+the tour.
 
 ## Protocol
 
